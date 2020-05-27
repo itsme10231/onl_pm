@@ -23,14 +23,10 @@
 		<result property="sosflag" column="SOSFLAG"/>
 		<result property="location" column="LOCATION"/>
 		<result property="selector" column="SELECTOR"/>
-		<collection property="locationDto" resultMap="LocationDtoMap"/>
+<!-- 		<collection property="locationDto" resultMap="LocationDtoMap"/> -->
 	</resultMap>
 	<!--  -->
-	<resultMap type="com.nl.onl.dtos.LocationDto" id="LocationDtoMap">
-		<result property="loc_code" column="LOC_CODE"/>
-		<result property="loc_name" column="LOC_NAME"/>
-<!-- 		<collection property="ScheduleDto" resultMap="appylistDtoMap"/> -->
-	</resultMap>
+
 	
 <!-- 	내가 쓴 글 전체 보기 -->
 	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="String">
