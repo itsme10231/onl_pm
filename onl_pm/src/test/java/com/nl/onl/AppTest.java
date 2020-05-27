@@ -34,7 +34,7 @@ public class AppTest {
 		List<WantedDto> list = sqlSession.selectList("com.nl.onl.schedule.worked", id);
 		
 		for(WantedDto wdto:list) {
-			System.out.println(wdto);
+			System.out.println("1. "+wdto);
 		}
 
 		
@@ -47,7 +47,7 @@ public class AppTest {
 		List<WantedDto> wdto2 = sqlSession.selectList("com.nl.onl.myPage.applyList", map);
 		
 		for(WantedDto wdto:wdto2) {
-			System.out.println(wdto2);
+			System.out.println("2. "+wdto2);
 		}
 	}
 	

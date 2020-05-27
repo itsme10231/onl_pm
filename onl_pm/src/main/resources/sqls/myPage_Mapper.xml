@@ -23,17 +23,39 @@
 		<result property="sosflag" column="SOSFLAG"/>
 		<result property="location" column="LOCATION"/>
 		<result property="selector" column="SELECTOR"/>
-<!-- 		<collection property="locationDto" resultMap="LocationDtoMap"/> -->
+		<collection property="applyDto" resultMap="ApplyDtoMap"/>
 	</resultMap>
-	<!--  -->
+	<resultMap type="com.nl.onl.dtos.ApplyDto" id="ApplyDtoMap">
+		<result property="seq" column="SEQ"/>
+		<result property="id" column="ID"/>
+		<result property="wanted_seq" column="WANTED_SEQ"/>
+		<result property="regdate" column="REGDATE"/>
+<!-- 		<collection property="ScheduleDto" resultMap="appylistDtoMap"/> -->
+	</resultMap>
 
 	
 <!-- 	내가 쓴 글 전체 보기 -->
-	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="String">
-		SELECT wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME, 
-		wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG
-		FROM WANTED_POST wp, LOCATION_CODE lc
-		WHERE id=#{id} AND wp.LOCATION = lc.LOC_CODE
+<!-- 	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="String"> -->
+<!-- 		SELECT wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME,  -->
+<!-- 		wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG -->
+<!-- 		FROM WANTED_POST wp, LOCATION_CODE lc -->
+<!-- 		WHERE id=#{id} AND wp.LOCATION = lc.LOC_CODE -->
+<!-- 	</select> -->
+
+<!-- 	내가 쓴 글 전체 보기(페이징) -->
+	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="map">
+		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOC_NAME, wp.SALARY, wp.STATE
+		FROM 
+			(SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME, 
+			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE
+			FROM WANTED_POST wp join LOCATION_CODE lc ON  wp.LOCATION = lc.LOC_CODE
+			WHERE id=#{id}) wp
+		WHERE CEIL(RN/10)=#{pnum}
+	</select>
+	
+	
+	<select id="pcount" resultType="int">
+		SELECT CEIL(COUNT(*)/10) FROM WANTED_POST wp join LOCATION_CODE lc ON wp.LOCATION = lc.LOC_CODE
 	</select>
 	
 <!-- 	공고 상세보기 -->
@@ -77,29 +99,101 @@
 	</select>
 
 <!-- 	지원자 중 구직자 목록 -->
-	<select id="applyList" resultMap="WantedDtoMap" parameterType="map">
+	<select id="applylist" resultMap="WantedDtoMap" parameterType="map">
 		SELECT a.SEQ, a.ID, a.WANTED_SEQ, a.REGDATE, w.ID, NVL(l.TYPE,'N') AS listtype
 		FROM APPLYLIST a, WANTED_POST w, (SELECT ID, LIST_ID, "TYPE" FROM USERLIST WHERE ID = #{id}) l
 		WHERE  a.WANTED_SEQ = w.SEQ AND l.list_id(+) = a.ID AND NVL(l.TYPE, 'N')!='B' AND w.SEQ = #{seq}
 	</select>
 	
 <!-- 	구직자 선택/변경 -->
-	<update id="selector" parameterType="WantedDto">
+	<update id="selector" parameterType="map">
 		UPDATE WANTED_POST SET 
 		SELECTOR = #{selector} 
 		WHERE SEQ = #{seq}
 	</update>
 	
 <!-- 	구직자 취소 -->
-	<update id="selectorCancel" parameterType="int">
+	<update id="changeSelector" parameterType="int">
 		UPDATE WANTED_POST SET 
 		SELECTOR = NULL 
 		WHERE SEQ = #{seq}
 	</update>
 	
+<!-- 	금액 변경 -->
+	<update id="changeSalary" parameterType="map">
+		UPDATE WANTED_POST 
+		SET SALARY = #{salary} WHERE SEQ = #{seq}
+	</update>
 	
+<!-- 	지원 취소 -->
+	<delete id="applyCancel" parameterType="int">
+		DELETE FROM APPLYLIST 
+		WHERE SEQ = #{seq}
+	</delete>
 	
+<!-- 	모집 취소 -->
+	<update id="cancelWanted" parameterType="int"> 
+		UPDATE WANTED_POST SET DELFLAG ='N' WHERE SEQ = #{seq}
+	</update>
 	
+<!-- 	내 평가보기(평가한거) -->
+	<select id="getReview" parameterType="map" resultType="ReviewDto">
+		SELECT SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
+		FROM REVIEW_POST
+		WHERE ID = #{id} AND "TYPE" = #{type}
+	</select>
 	
+<!-- 	내 평가보기(평가받은거) -->
+	<select id="receiveReview" parameterType="map">
+		SELECT SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
+		FROM REVIEW_POST
+		WHERE TARGET_ID = #{id} AND "TYPE" = #{type}
+	</select>
 	
+<!-- 	찜글보기 -->
+	<select id="getWishlist" parameterType="String">
+		SELECT SEQ, ID, WANTED_SEQ 
+		FROM WISHLIST 
+		WHERE ID = #{id}
+	</select>
+	
+<!-- 	찜글삭제 -->
+	<delete id="delWishlist" parameterType="int">
+		DELETE FROM WISHLIST 
+		WHERE SEQ = #{seq}
+	</delete>
+	
+<!-- 	유저리스트 -->
+	<select id="getUserlist" parameterType="String">
+		SELECT SEQ, ID, LIST_ID, "TYPE" 
+		FROM USERLIST  
+		WHERE ID = #{id}
+	</select>
+	
+<!-- 	유저리스트삭제 -->
+	<delete id="delUserlist" parameterType="int">
+		DELETE FROM USERLIST 
+		WHERE SEQ = #{seq}	
+	</delete>
+	
+<!-- 	블랙/화이트리스트 변경 -->
+	<update id="changeUserlist">
+		UPDATE USERLIST 
+		SET "TYPE" = #{type} 
+		WHERE SEQ = #{seq}
+	</update>
+	
+<!-- 	블랙리스트 -->
+	<select id="blackList">
+		SELECT SEQ, LIST_ID
+		FROM USERLIST 
+		WHERE "TYPE" = 'B'
+	</select>
+	
+<!-- 	화이트리스트 -->
+	<select id="whiteList">
+		SELECT SEQ, LIST_ID
+		FROM USERLIST 
+		WHERE "TYPE" = 'W'
+	</select>
 </mapper>
