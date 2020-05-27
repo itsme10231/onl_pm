@@ -164,10 +164,20 @@
 	</delete>
 	
 <!-- 	유저리스트 -->
-	<select id="getUserlist" parameterType="String">
+	<select id="getUserlist" parameterType="map">
 		SELECT SEQ, ID, LIST_ID, "TYPE" 
 		FROM USERLIST  
 		WHERE ID = #{id}
+		<if test="type!=null">
+			<choose>
+				<when test="type.equals('B')">
+					AND "TYPE" = 'B'
+				</when>
+				<otherwise>
+					AND "TYPE" = 'W'
+				</otherwise>
+			</choose>
+		</if>
 	</select>
 	
 <!-- 	유저리스트삭제 -->
@@ -184,16 +194,16 @@
 	</update>
 	
 <!-- 	블랙리스트 -->
-	<select id="blackList">
-		SELECT SEQ, LIST_ID
-		FROM USERLIST 
-		WHERE "TYPE" = 'B'
-	</select>
+<!-- 	<select id="blackList"> -->
+<!-- 		SELECT SEQ, LIST_ID -->
+<!-- 		FROM USERLIST  -->
+<!-- 		WHERE "TYPE" = 'B' -->
+<!-- 	</select> -->
 	
 <!-- 	화이트리스트 -->
-	<select id="whiteList">
-		SELECT SEQ, LIST_ID
-		FROM USERLIST 
-		WHERE "TYPE" = 'W'
-	</select>
+<!-- 	<select id="whiteList"> -->
+<!-- 		SELECT SEQ, LIST_ID -->
+<!-- 		FROM USERLIST  -->
+<!-- 		WHERE "TYPE" = 'W' -->
+<!-- 	</select> -->
 </mapper>
