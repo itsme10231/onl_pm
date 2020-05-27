@@ -15,19 +15,23 @@
 		<result property="process" column="PROCESS" />
 		<result property="category_name" column="CATEGORY_NAME" />
 	</resultMap>
-	<select id="getAllListQna" resultMap="QnaDtoMap">
-	SELECT q.SEQ , q.ID ,c.CATEGORY_NAME ,q.TITLE ,q.PROCESS ,q.REGDATE
-	FROM QNA q ,QNA_CATEGORY c
-	WHERE q.QNA_CODE = c.QNA_CODE AND q.SEQ=q."REF"
+	
+<!-- 	QNA목록보기 -->
+	<select id="getAllListQna" resultMap="QnaDtoMap"
+	 parameterType="String">
+		 SELECT SEQ,ID, CATEGORY_NAME,TITLE,PROCESS,REGDATE
+			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
+				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME 
+					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE )
+			    WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
-<!-- 	<select id="detailQna" resultMap="QnaDtoMap" -->
-<!-- 	 parameterType="int"> -->
-<!-- 		SELECT SEQ,QNA_CODE,TITLE,CONTENT,ID -->
-<!-- 		FROM QNA -->
-<!-- 		WHERE SEQ=#{seq} -->
-<!-- 	</select> -->
-
+<!-- 	QNA페이징 -->
+	<select id="pcountQna" resultType="int">
+		SELECT CEIL(COUNT(*)/10) FROM QNA
+	</select>
+	
+<!-- 	QNA상세보기 -->
 	<select id="detailQna" resultMap="QnaDtoMap"
 		 parameterType="int">
 		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE
@@ -35,6 +39,7 @@
 		WHERE q.QNA_CODE = c.QNA_CODE AND SEQ=#{seq}
 		</select>
 
+<!-- 	QNA쓰기 -->
 	<insert id="insertQna" parameterType="QnaDto">
 		INSERT INTO QNA
 		VALUES (QNA_SEQ.NEXTVAL
@@ -42,18 +47,65 @@
 		 		,#{ref},#{process})
 	</insert>
 	
+<!-- 	QNA수정 -->
 	<update id="updateQna" parameterType="QnaDto">
 		UPDATE QNA SET QNA_CODE=#{qna_code},TITLE=#{title},CONTENT=#{content}
 		, REGDATE=SYSDATE WHERE SEQ=#{seq} 
 	</update>
 	
+<!-- 	QNA삭제 -->
 	<delete id="deleteQna" parameterType="int">
 		DELETE FROM qna WHERE SEQ =#{seq}
 	
 	</delete>
 	
+	<resultMap type="com.nl.onl.dtos.NoticeDto" id="NoticeDtoMap">
+		<result property="seq" column="SEQ" />
+		<result property="noticeflag" column="NOTICEFLAG" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="regdate" column="REGDATE" />
+	</resultMap>
 	
+<!-- 	공지사항목록보기 -->
+	<select id="getAllListNotice" resultMap="NoticeDtoMap"
+	 parameterType="String">
+		 SELECT SEQ,ID,NOTICEFLAG,TITLE,PROCESS,REGDATE
+			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
+				    SEQ, NOTICEFLAG, TITLE, CONTENT, REGDATE 
+					FROM NOTICE )
+			    WHERE CEIL(RN/10)=#{pnum}
+	</select>
 	
+<!-- 	공지사항 페이징 -->
+	<select id="pcountNotice" resultType="int">
+		SELECT CEIL(COUNT(*)/10) FROM NOTICE
+	</select>
+	
+<!-- 	공지사항 상세보기 -->
+	<select id="detailNotice" resultMap="QnaDtoMap"
+		 parameterType="int">
+		SELECT TITLE , REGDATE ,CONTENT
+		FROM NOTICE 
+		WHERE seq=#{seq}
+		</select>
+
+<!-- 	공지사항 쓰기 -->
+	<insert id="insertNotice" parameterType="NoticeDto">
+		INSERT INTO NOTICE VALUES (notice_seq.nextval, #{noticeflag},#{title},#{content},SYSDATE)
+	</insert>
+	
+<!-- 	공지사항 수정 -->
+	<update id="updateNotice" parameterType="NoticeDto">
+		UPDATE NOTICE SET NOTICEFLAG =#{noticeflag}, TITLE=#{title}, CONTENT=#{content} WHERE SEQ=#{seq}
+	</update>
+	
+<!-- 	공지사항 삭제 -->
+	<delete id="deleteNotice" parameterType="int">
+		DELETE FROM NOTICE WHERE seq=#{seq}
+	
+	</delete>
+
 </mapper>
 
                    

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.nl.onl.dtos.QnaDto;
 import com.nl.onl.dtos.WantedDto;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,25 +31,27 @@ public class AppTest_Hyun {
 		System.out.println("Test");
 		System.out.println("sqlSession: " +sqlSession);
 		
-		String id = "onltest1";
-		List<WantedDto> list = sqlSession.selectList("com.nl.onl.schedule.worked", id);
-		
-		for(WantedDto wdto:list) {
-			System.out.println(wdto);
-		}
+		int seq=1;
+		List<QnaDto> list = sqlSession.selectOne("com.nl.onl.custom.deleteQna",seq);
 
 		
-		
-		Map<String, String> map=new HashMap<String, String>();
-		map.put("id", "onltest1");
-		map.put("seq", "1");
-		sqlSession.selectList("com.nl.onl.myPage.applyList", map);
-		
-		List<WantedDto> wdto2 = sqlSession.selectList("com.nl.onl.myPage.applyList", map);
-		
-		for(WantedDto wdto:wdto2) {
-			System.out.println(wdto2);
-		}
+//		List<QnaDto> list = sqlSession.selectList("com.nl.onl.custom.detailQna");
+//		for(WantedDto wdto:list) {
+//			System.out.println(wdto);
+//		}
+//
+//		
+//		
+//		Map<String, String> map=new HashMap<String, String>();
+//		map.put("id", "onltest1");
+//		map.put("seq", "1");
+//		sqlSession.selectList("com.nl.onl.myPage.applyList", map);
+//		
+//		List<WantedDto> wdto2 = sqlSession.selectList("com.nl.onl.myPage.applyList", map);
+//		
+//		for(WantedDto wdto:wdto2) {
+//			System.out.println(wdto2);
+//		}
 	}
 	
 }
