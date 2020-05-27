@@ -11,6 +11,8 @@
 		<typeAlias type="com.nl.onl.dtos.ReviewDto" alias="ReviewDto"/>
 		<typeAlias type="com.nl.onl.dtos.LocationDto" alias="LocationDto"/>
 		<typeAlias type="com.nl.onl.dtos.NoticeDto" alias="NoticeDto"/>
+		<typeAlias type="com.nl.onl.dtos.ChargeDto" alias="ChargeDto"/>
+		<typeAlias type="com.nl.onl.dtos.ReportDto" alias="ReportDto"/>
 	</typeAliases>
 
 	<mappers>
@@ -19,6 +21,8 @@
 		<mapper resource="./sqls/customer_Mapper.xml"/>
 		<mapper resource="./sqls/wanted_Mapper.xml"/>
 		<mapper resource="./sqls/myPage_Mapper.xml"/>
+		<mapper resource="./sqls/charge_Mapper.xml"/>
+		<mapper resource="./sqls/admin_Mapper.xml"/>
 	</mappers>
 	
 	
