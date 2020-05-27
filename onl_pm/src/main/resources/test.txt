@@ -1,0 +1,6 @@
+test for conflict
+conflict2
+test6
+
+test4
+

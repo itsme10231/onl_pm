@@ -1,0 +1,188 @@
+package com.nl.onl.dtos;
+
+import java.util.Date;
+
+public class WantedDto {
+	private int seq;
+	private String id;
+	private int category;
+	private String title;
+	private Date regdate;
+	private Date deadline;
+	private String sdate;
+	private String edate;
+	private int location;
+	private String stime;
+	private String etime;
+	private int salary;
+	private String content;
+	private String phone;
+	private int views;
+	private String state;
+	private String delflag;
+	private String sosflag;
+	private int selector;
+	
+	private String loc_name;
+	private String whitelist;
+	private String wishlist;
+	
+	public int getSelector() {
+		return selector;
+	}
+	public void setSelector(int selector) {
+		this.selector = selector;
+	}
+
+	private ApplyDto applyDto;
+	
+	public ApplyDto getApplyDto() {
+		return applyDto;
+	}
+	public void setApplyDto(ApplyDto applyDto) {
+		this.applyDto = applyDto;
+	}
+	public int getSeq() {
+		return seq;
+	}
+	public void setSeq(int seq) {
+		this.seq = seq;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public int getCategory() {
+		return category;
+	}
+	public void setCategory(int category) {
+		this.category = category;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public Date getRegdate() {
+		return regdate;
+	}
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
+	}
+	public Date getDeadline() {
+		return deadline;
+	}
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+	public String getSdate() {
+		return sdate;
+	}
+	public void setSdate(String sdate) {
+		this.sdate = sdate;
+	}
+	public String getEdate() {
+		return edate;
+	}
+	public void setEdate(String edate) {
+		this.edate = edate;
+	}
+	public int getLocation() {
+		return location;
+	}
+	public void setLocation(int location) {
+		this.location = location;
+	}
+	public String getStime() {
+		return stime;
+	}
+	public void setStime(String stime) {
+		this.stime = stime;
+	}
+	public String getEtime() {
+		return etime;
+	}
+	public void setEtime(String etime) {
+		this.etime = etime;
+	}
+	public int getSalary() {
+		return salary;
+	}
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public int getViews() {
+		return views;
+	}
+	public void setViews(int views) {
+		this.views = views;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getDelflag() {
+		return delflag;
+	}
+	public void setDelflag(String delflag) {
+		this.delflag = delflag;
+	}
+	public String getSosflag() {
+		return sosflag;
+	}
+	public void setSosflag(String sosflag) {
+		this.sosflag = sosflag;
+	}
+	
+	
+	
+	public String getLoc_name() {
+		return loc_name;
+	}
+	public void setLoc_name(String loc_name) {
+		this.loc_name = loc_name;
+	}
+	public String getWhitelist() {
+		return whitelist;
+	}
+	public void setWhitelist(String whitelist) {
+		this.whitelist = whitelist;
+	}
+	public String getWishlist() {
+		return wishlist;
+	}
+	public void setWishlist(String wishlist) {
+		this.wishlist = wishlist;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "WantedDto [seq=" + seq + ", id=" + id + ", category=" + category + ", title=" + title + ", regdate="
+				+ regdate + ", deadline=" + deadline + ", sdate=" + sdate + ", edate=" + edate + ", location="
+				+ location + ", stime=" + stime + ", etime=" + etime + ", salary=" + salary + ", content=" + content
+				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
+				+ sosflag + ", selector=" + selector + ", loc_name=" + loc_name + ", whitelist=" + whitelist
+				+ ", wishlist=" + wishlist + ", applyDto=" + applyDto + "]";
+	}
+	
+	
+	
+}

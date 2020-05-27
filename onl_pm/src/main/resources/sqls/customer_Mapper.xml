@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.custom">
+
+	<!-- 	resultMap: property(dto의 맴버필드), column(DB컬럼명) -->
+	<resultMap type="com.nl.onl.dtos.QnaDto" id="QnaDtoMap">
+		<result property="seq" column="SEQ" />
+		<result property="qna_code" column="QNA_CODE" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="id" column="ID" />
+		<result property="regdate" column="REGDATE" />
+		<result property="ref" column="REF" />
+		<result property="process" column="PROCESS" />
+		<result property="category_name" column="CATEGORY_NAME" />
+	</resultMap>
+	<select id="getAllListQna" resultMap="QnaDtoMap">
+	SELECT q.SEQ , q.ID ,c.CATEGORY_NAME ,q.TITLE ,q.PROCESS ,q.REGDATE
+	FROM QNA q ,QNA_CATEGORY c
+	WHERE q.QNA_CODE = c.QNA_CODE AND q.SEQ=q."REF"
+	</select>
+	
+<!-- 	<select id="detailQna" resultMap="QnaDtoMap" -->
+<!-- 	 parameterType="int"> -->
+<!-- 		SELECT SEQ,QNA_CODE,TITLE,CONTENT,ID -->
+<!-- 		FROM QNA -->
+<!-- 		WHERE SEQ=#{seq} -->
+<!-- 	</select> -->
+
+	<select id="detailQna" resultMap="QnaDtoMap"
+		 parameterType="int">
+		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE
+		FROM QNA q ,QNA_CATEGORY c
+		WHERE q.QNA_CODE = c.QNA_CODE AND SEQ=#{seq}
+		</select>
+
+	<insert id="insertQna" parameterType="QnaDto">
+		INSERT INTO QNA
+		VALUES (QNA_SEQ.NEXTVAL
+				,#{qna_code},#{title},#{content},#{id},SYSDATE  
+		 		,#{ref},#{process})
+	</insert>
+	
+	<update id="updateQna" parameterType="QnaDto">
+		UPDATE QNA SET QNA_CODE=#{qna_code},TITLE=#{title},CONTENT=#{content}
+		, REGDATE=SYSDATE WHERE SEQ=#{seq} 
+	</update>
+	
+	<delete id="deleteQna" parameterType="int">
+		DELETE FROM qna WHERE SEQ =#{seq}
+	
+	</delete>
+	
+	<insert id="insertQna" parameterType="QnaDto">
+		INSERT INTO QNA
+		VALUES (QNA_SEQ.NEXTVAL
+				,#{qna_code},#{title},#{content},#{id},SYSDATE  
+		 		,#{seq},'WAIT')
+	</insert>
+	
+	
+</mapper>
+
+                   
+
+
+
+
+
+
+
+
+
+
+
+

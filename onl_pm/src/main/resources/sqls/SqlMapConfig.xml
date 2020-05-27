@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.nl.onl.dtos.LoginDto" alias="LoginDto"/>
+		<typeAlias type="com.nl.onl.dtos.ProfileDto" alias="ProfileDto"/>
+		<typeAlias type="com.nl.onl.dtos.QnaDto" alias="QnaDto"/>
+		<typeAlias type="com.nl.onl.dtos.WantedDto" alias="WantedDto"/>
+		<typeAlias type="com.nl.onl.dtos.ApplyDto" alias="ApplyDto"/>
+		<typeAlias type="com.nl.onl.dtos.PayDto" alias="PayDto"/>
+		<typeAlias type="com.nl.onl.dtos.ReviewDto" alias="ReviewDto"/>
+		<typeAlias type="com.nl.onl.dtos.LocationDto" alias="LocationDto"/>
+		<typeAlias type="com.nl.onl.dtos.NoticeDto" alias="NoticeDto"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="./sqls/login_Mapper.xml"/>
+		<mapper resource="./sqls/schedule_Mapper.xml"/>
+		<mapper resource="./sqls/customer_Mapper.xml"/>
+		<mapper resource="./sqls/wanted_Mapper.xml"/>
+		<mapper resource="./sqls/myPage_Mapper.xml"/>
+	</mappers>
+	
+	
+</configuration>
+
+
+

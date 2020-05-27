@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.schedule">
+	<!-- 	resultMap : property(dto의 맴버필드), column(DB컬럼명) -->
+	<resultMap type="com.nl.onl.dtos.WantedDto" id="WantedDtoMap">
+		<result property="seq" column="SEQ"/>
+		<result property="id" column="ID"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="title" column="TITLE"/>
+		<result property="regdate" column="REGDATE"/>
+		<result property="deadline" column="DEADLINE"/>
+		<result property="sdate" column="SDATE"/>
+		<result property="edate" column="EDATE"/>
+		<result property="stime" column="STIME"/>
+		<result property="etime" column="ETIME"/>
+		<result property="salary" column="SALARY"/>
+		<result property="content" column="CONTENT"/>
+		<result property="phone" column="PHONE"/>
+		<result property="views" column="VIEWS"/>
+		<result property="state" column="STATE"/>
+		<result property="delflag" column="DELFLAG"/>
+		<result property="sosflag" column="SOSFLAG"/>
+		<result property="location" column="LOCATION"/>
+		<result property="selector" column="SELECTOR"/>
+		<collection property="applyDto" resultMap="ApplyDtoMap"/>
+	</resultMap>
+	<!--  -->
+	<resultMap type="com.nl.onl.dtos.ApplyDto" id="ApplyDtoMap">
+		<result property="seq" column="SEQ"/>
+		<result property="id" column="ID"/>
+		<result property="wanted_seq" column="WANTED_SEQ"/>
+		<result property="regdate" column="REGDATE"/>
+<!-- 		<collection property="ScheduleDto" resultMap="appylistDtoMap"/> -->
+	</resultMap>
+	
+<!-- 	했던 일 -->
+	<select id="worked" resultMap="WantedDtoMap" parameterType="String">
+		SELECT w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ
+		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
+		WHERE STATE ='COMPLETE' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND w.edate &lt; SYSDATE
+	</select>
+	
+<!-- 	하고있는 일 -->
+	<select id="working" resultMap="WantedDtoMap" parameterType="String">
+		SELECT  w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ
+		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
+		WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND SYSDATE BETWEEN w.SDATE AND w.EDATE
+	</select>
+	
+<!-- 	할 일 -->
+	<select id="plan" resultMap="WantedDtoMap" parameterType="String">
+		SELECT  w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ AS
+		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
+		WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND SYSDATE &lt; w.SDATE ;
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

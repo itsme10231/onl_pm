@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.nl.onl">
+
+	<!-- 	resultMap: property(dto의 맴버필드), column(DB컬럼명) -->
+	<resultMap type="com.nl.onl.dtos" id="QnaMap">
+		<result property="seq" column="SEQ" />
+		<result property="qna_code" column="QNA_CODE" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="id" column="ID" />
+		<result property="regdate" column="REGDATE" />
+		<result property="ref" column="REF" />
+		<result property="process" column="PROCESS" />
+<!-- 		<collection property="loginDto" resultMap="loginDtoMap" /> -->
+	</resultMap>
+
+	<select id="getAllListQna" resultMap="QnaDto"
+	 parameterType="Map">
+		 SELECT SEQ,ID,QNA_CODE,TITLE,PROCESS,REGDATE
+			    FROM QNA
+			    ORDER BY SEQ DESC
+	</select>
+	
+<!-- 	<select id="getBoard" resultMap="AnsDtoMap" -->
+<!-- 	 parameterType="int"> -->
+<!-- 		SEQ,ID,TITLE,CONTENT,REGDATE,REFER,STEP,DEPTH,  -->
+<!-- 			    READCOUNT,DELFLAG   -->
+<!-- 		FROM ANSWERBOARD -->
+<!-- 		WHERE SEQ=#{seq}  -->
+<!-- 	</select> -->
+
+	<insert id="insertQna" parameterType="QnaDto">
+		INSERT INTO QNA
+		VALUES (QNA_SEQ.NEXTVAL
+				,#{qna_code},#{title},#{content},#{id},SYSDATE  
+		 		,#{ref},#{process})
+	</insert>
+	
+	<update id="UpdateQna" parameterType="QnaDto">
+		UPDATE QNA SET QNA_CODE=#{qna_code},TITLE=#{title},CONTENT=#{content}
+		, REGDATE=SYSDATE WHERE SEQ=#{seq} 
+	</update>
+	
+	<update id="delQna" parameterType="map">
+		UPDATE QNA SET DELFLAG='Y'
+		WHERE SEQ=#{seq}
+	</update>
+	<update id="readCount" parameterType="int">
+		 UPDATE ANSWERBOARD SET READCOUNT=READCOUNT+1  
+				  WHERE SEQ=#{seq} 
+	</update>
+	
+	<update id="replyUpdate" parameterType="AnsDto">
+		 UPDATE ANSWERBOARD SET STEP=STEP+1  
+		 WHERE REFER=(SELECT REFER FROM ANSWERBOARD WHERE SEQ=#{seq}) 
+		 AND STEP > (SELECT STEP FROM ANSWERBOARD WHERE SEQ=#{seq}) 
+	</update>
+	
+	<insert id="replyInsert" parameterType="AnsDto">
+		 INSERT INTO ANSWERBOARD  
+		 VALUES (ANSWERBOARD_SEQ.nextval,#{id},#{title},#{content},SYSDATE  
+				,(SELECT REFER FROM ANSWERBOARD WHERE SEQ=#{seq})   
+				,(SELECT STEP FROM ANSWERBOARD WHERE SEQ=#{seq})+1  
+				,(SELECT DEPTH FROM ANSWERBOARD WHERE SEQ=#{seq})+1  
+				,0,'N')
+	</insert>	
+	
+	
+</mapper>
+
+                   
+
+
+
+
+
+
+
+
+
+
+
+

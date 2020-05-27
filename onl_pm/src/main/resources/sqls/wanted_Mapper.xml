@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.wanted">
+	
+	<!-- 검색기능 쿼리 -->
+	
+	<!-- 비로그인 구인글 목록보기 -->
+	<select id="getWantedList" resultType="WantedDto">
+		SELECT w.SEQ , w.CATEGORY , w.TITLE , w.REGDATE , w.DEADLINE , l.LOC_NAME , w.SALARY , w.VIEWS , w.SOSFLAG 
+		FROM WANTED_POST w, LOCATION_CODE l
+		WHERE w.DELFLAG = 'N' AND w.STATE = 'WANTED' AND w.DEADLINE &gt;= SYSDATE AND w.LOCATION = l.LOC_CODE ORDER BY w.REGDATE DESC	</select>
+	
+	<!-- 로그인 구인글 목록보기 -->
+	<select id="getWantedListLogin" parameterType="String" resultType="WantedDto">
+		SELECT wp.SEQ , wp.CATEGORY , wp.TITLE , wp.REGDATE , wp.DEADLINE , lc.LOC_NAME , wp.SALARY , wp.VIEWS, wp.ID , wp.SOSFLAG ,
+			CASE
+			WHEN EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'W' AND ul.LIST_ID = wp.ID) THEN 'Y'
+			ELSE 'N'
+			END AS WHITELIST,
+			CASE
+			WHEN EXISTS (SELECT 1 FROM WISHLIST w WHERE w.ID = #{id} AND w.WANTED_SEQ = wp.SEQ) THEN 'Y'
+			ELSE 'N'
+			END AS WISHLIST
+		FROM WANTED_POST wp, LOCATION_CODE lc
+		WHERE wp.DELFLAG = 'N' AND wp.STATE = 'WANTED' AND wp.DEADLINE >= SYSDATE AND wp.LOCATION = lc.LOC_CODE AND
+		NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'B' AND ul.LIST_ID = wp.ID) AND 
+		NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.LIST_ID = #{id} AND ul."TYPE" = 'B' AND ul.ID = wp.ID)
+		ORDER BY wp.REGDATE DESC
+	</select>
+	
+	<!-- 비로그인 검색 -->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 비로그인 구인글 상세보기 -->
+	<select id="getWantedDetail" parameterType="int" resultType="WantedDto">
+		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, 
+				wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, 
+				lc.LOC_NAME, wp.STIME, wp.ETIME, wp.SALARY, 
+				wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.SOSFLAG
+		FROM WANTED_POST wp, LOCATION_CODE lc
+		WHERE wp.SEQ = #{seq} AND wp.LOCATION = lc.LOC_CODE
+	</select>
+	
+	<!-- 로그인 구인글 상세보기 -->
+	<select id="getWantedDetailLogin" parameterType="int" resultType="WantedDto">
+		
+	</select>
+	
+	<!-- 구인글 상세보기 공통(조회수 증가) -->
+	<update id="increaseView" parameterType="int">
+		UPDATE WANTED_POST 
+		SET VIEWS = VIEWS+1 
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<!-- ........................................................................... -->
+	<!-- 구인글 작성 -->
+	<insert id="insertWanted" parameterType="WantedDto">
+		INSERT INTO WANTED_POST (SEQ, ID, CATEGORY, TITLE, REGDATE, DEADLINE, SDATE, EDATE, LOCATION, STIME, ETIME, SALARY, CONTENT, PHONE, VIEWS, STATE, DELFLAG, SOSFLAG, SELECTOR)
+		VALUES (
+				WANTED_POST_SEQ.NEXTVAL, #{id}, #{category}, 
+				#{title}, SYSDATE, #{deadline}, #{sdate}, 
+				#{edate}, #{location}, #{stime}, #{etime}, #{salary}, 
+				#{content}, #{phone}, #{views}, #{status}, #{delflag}, #{sosflag}, NULL
+				)
+	</insert>
+	
+	<!-- 구인글 수정 -->
+	<update id="updateWanted" parameterType="WantedDto">
+		UPDATE WANTED_POST 
+		SET CATEGORY = #{category},
+			TITLE = #{title},
+			REGDATE = SYSDATE,
+			DEADLINE = #{deadline},
+			SDATE = #{sdate},
+			EDATE = #{edate},
+			LOCATION = #{location},
+			STIME = #{stime},
+			ETIME = #{etime},
+			SALARY = #{salary},
+			CONTENT = #{content},
+			SOSFLAG = #{sosflag}
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<!-- 구인글 삭제 -->
+	<update id="deleteWanted" parameterType="String">
+		UPDATE WANTED_POST
+		SET DELFLAG = 'Y'
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<!-- 구인글 지원 -->
+	<insert id="insertApply" parameterType="ApplyDto">
+		INSERT INTO APPLYLIST 
+		VALUES (
+				APPLYLIST_SEQ.NEXTVAL, #{id}, #{wanted_seq}, SYSDATE
+				)
+	</insert>
+	
+	<!-- 지원 취소 -->
+	<delete id="deleteApply" parameterType="int">
+		DELETE FROM APPLYLIST WHERE SEQ = #{seq}
+	</delete>
+	
+	<!-- 취소하려는 지원이 이미 선정된 구직자의 지원이었다면 -->
+	<update id="cancelSelector" parameterType="int">
+		UPDATE WANTED_POST 
+		SET SELECTOR = NULL
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<!-- 지원자 선정 -->
+	<update id="pickSelector" parameterType="map">
+		UPDATE WANTED_POST 
+		SET SELECTOR = #{seq}, STATUS = 'PROCESS'
+		WHERE SEQ = #{wanted_seq}
+	</update>
+	
+	<!-- 일 완료 -->
+	<update id="updateStatus" parameterType="int">
+		UPDATE WANTED_POST 
+		SET STATUS = 'COMPLETE'
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<!-- 후기 작성 -->
+	<insert id="insertReview" parameterType="ReviewDto">
+		INSERT INTO REVIEW_POST
+		VALUES (
+				REVIEW_POST_SEQ.NEXTVAL, #{id}, #{target_id}, #{type}, 
+				#{content}, #{score}, #{wanted_seq}, SYSDATE, 'N'
+				)
+	</insert>
+	
+	<!-- 후기 삭제 -->
+	<update id="deleteReview" parameterType="int">
+		UPDATE REVIEW_POST
+		SET DELFLAG = 'Y'
+		WHERE SEQ = ${seq}
+	</update>
+</mapper>

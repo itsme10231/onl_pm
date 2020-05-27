@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.login">
+	
+	<!-- 회원가입 -->
+	<insert id="insertMember" parameterType="LoginDto">
+		INSERT INTO MEMBER 
+		VALUES (
+				#{id}, #{password}, #{name}, #{address_1}, #{address_2}, #{address_3}, #{email}, 
+				<choose>
+					<when test="nickname!=null">
+					#{nickname}, 
+					</when>
+					<otherwise>
+					#{name}, 
+					</otherwise>
+				</choose>
+				#{birth},
+				#{delflag}, SYSDATE, #{role}, #{phone}
+				)
+	</insert>
+	
+	<!-- 아이디 중복검사 -->
+	<select id="checkId" parameterType="String" resultType="String">
+		SELECT ID FROM MEMBER WHERE ID = #{id}
+	</select>
+	
+	<!-- 로그인 -->
+	<select id="login" parameterType="map">
+		SELECT ID, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE ID = #{id} AND PASSWORD = #{password}
+	</select>
+	
+	<!-- 정보수정 -->
+	<update id="updateInfo" parameterType="LoginDto">
+		UPDATE MEMBER 
+		SET <if test="password!=null">PASSWORD = #{password},</if>
+			ADDRESS_1 = #{address_1},
+			ADDRESS_2 = #{address_2},
+			ADDRESS_3 = #{address_3},
+			EMAIL = #{email},
+			NICKNAME = #{nickname},
+			BIRTH = #{birth},
+			PHONE = #{phone}
+	</update>
+	
+	<!-- 탈퇴 및 정지 -->
+	<update id="updateDelflag" parameterType="String">
+		UPDATE MEMBER
+		SET DELFLAG = 'Y' AND REGDATE = SYSDATE 
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 회원정보 영구삭제 -->
+	<delete id="deleteMember">
+		DELETE MEMBER 
+		WHERE DELFLAG = 'Y' AND (SYSDATE-REGDATE) >= 180
+	</delete>
+	
+	<!-- 프로필 작성 -->
+	<insert id="insertProfile" parameterType="ProfileDto">
+		INSERT INTO PROFILE
+		VALUES (
+				PROFILE_SEQ.NEXTVAL, #{id}, #{intro}, #{location_able}
+				)
+	</insert>
+	
+	<!-- 프로필 보기 -->
+	<select id="getProfile" parameterType="String" resultType="ProfileDto">
+		SELECT m.ID , m.NICKNAME , NVL(p.INTRO, '아직 작성하지 않았습니다.') , NVL(p.LOCATION_ABLE, '아직 선택된 지역이 없습니다.')
+			CASE 
+			WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID  = rp.TARGET_ID ) THEN 0
+			ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID = rp.TARGET_ID GROUP BY rp.SCORE)
+			END AS search_score,
+			CASE 
+			WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'OFFER' AND m.ID  = rp.TARGET_ID ) THEN 0
+			ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'OFFER' AND m.ID = rp.TARGET_ID GROUP BY rp.SCORE)
+			END AS offer_score
+		FROM "MEMBER" m , PROFILE p 
+		WHERE m.ID = #{id} AND m.ID = p.ID(+)
+	</select>
+	
+	<!-- 프로필 수정 -->
+	<update id="updateProfile" parameterType="ProfileDto">
+		UPDATE PROFILE
+		SET INTRO = #{intro},
+			LOCATION_ABLE = #{location_able}
+		WHERE ID = #{id}
+	</update>
+	
+	
+</mapper>

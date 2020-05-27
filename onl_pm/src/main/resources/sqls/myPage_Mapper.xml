@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.myPage">
+	<!-- 	resultMap : property(dto의 맴버필드), column(DB컬럼명) -->
+	<resultMap type="com.nl.onl.dtos.WantedDto" id="WantedDtoMap">
+		<result property="seq" column="SEQ"/>
+		<result property="id" column="ID"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="title" column="TITLE"/>
+		<result property="regdate" column="REGDATE"/>
+		<result property="deadline" column="DEADLINE"/>
+		<result property="sdate" column="SDATE"/>
+		<result property="edate" column="EDATE"/>
+		<result property="stime" column="STIME"/>
+		<result property="etime" column="ETIME"/>
+		<result property="salary" column="SALARY"/>
+		<result property="content" column="CONTENT"/>
+		<result property="phone" column="PHONE"/>
+		<result property="views" column="VIEWS"/>
+		<result property="state" column="STATE"/>
+		<result property="delflag" column="DELFLAG"/>
+		<result property="sosflag" column="SOSFLAG"/>
+		<result property="location" column="LOCATION"/>
+		<result property="selector" column="SELECTOR"/>
+		<collection property="locationDto" resultMap="LocationDtoMap"/>
+	</resultMap>
+	<!--  -->
+	<resultMap type="com.nl.onl.dtos.LocationDto" id="LocationDtoMap">
+		<result property="loc_code" column="LOC_CODE"/>
+		<result property="loc_name" column="LOC_NAME"/>
+<!-- 		<collection property="ScheduleDto" resultMap="appylistDtoMap"/> -->
+	</resultMap>
+	
+<!-- 	내가 쓴 글 전체 보기 -->
+	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="String">
+		SELECT wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME, 
+		wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG
+		FROM WANTED_POST wp, LOCATION_CODE lc
+		WHERE id=#{id} AND wp.LOCATION = lc.LOC_CODE
+	</select>
+	
+<!-- 	공고 상세보기 -->
+	<select id="detail" resultMap="WantedDtoMap" parameterType="String">
+		SELECT w.TITLE, w.REGDATE, w.DEADLINE, w.CONTENT, l.LOC_NAME, w.SALARY, w2.co
+		FROM WANTED_POST w, LOCATION_CODE l, (SELECT COUNT(a.ID) co, w.SEQ 
+			FROM APPLYLIST a, WANTED_POST w 
+			WHERE w.ID = #{id} AND a.WANTED_SEQ = w.SEQ 
+			GROUP BY w.SEQ ) w2
+		WHERE l.LOC_CODE = w.LOCATION AND w.SEQ = w2.seq  AND w.ID = #{id}
+	</select>
+	
+<!-- 	현재 활성화 된 글 -->
+	<select id="activation" resultMap="WantedDtoMap" parameterType="String">
+		SELECT SEQ,ID,CATEGORY,TITLE,REGDATE,DEADLINE,SDATE,EDATE,LOCATION,STIME,ETIME,SALARY,CONTENT,PHONE,VIEWS,STATE,DELFLAG,SOSFLAG
+		FROM WANTED_POST 
+		WHERE ID =#{id} AND STATE ='WANTED' AND  DEADLINE > SYSDATE
+	</select>
+	
+	
+<!-- 	기간이 만료된 글 -->
+	<select id="expiration" resultMap="WantedDtoMap" parameterType="String">
+		SELECT SEQ,ID,CATEGORY,TITLE,REGDATE,DEADLINE,SDATE,EDATE,LOCATION,STIME,ETIME,SALARY,CONTENT,PHONE,VIEWS,STATE,DELFLAG,SOSFLAG
+		FROM WANTED_POST 
+		WHERE DEADLINE &lt; SYSDATE
+	</select>
+	
+<!-- 	내가 지원한 구인 글 -->
+	<select id="myApply" resultMap="WantedDtoMap" parameterType="String">
+	 	SELECT SEQ, ID, WANTED_SEQ, REGDATE
+		FROM APPLYLIST 
+		WHERE id=#{id}
+	</select>
+	
+<!-- 	구인글 별 지원자 수 -->
+	<select id="applyCount" resultMap="WantedDtoMap" parameterType="int">
+		SELECT a.WANTED_SEQ, COUNT(a.seq)
+		FROM APPLYLIST a, (SELECT w.SEQ FROM WANTED_POST w WHERE w.STATE = 'WANTED' AND w.SEQ = #{seq})
+		WHERE a.WANTED_SEQ = #{seq}
+		GROUP BY a.WANTED_SEQ 
+	</select>
+
+<!-- 	지원자 중 구직자 목록 -->
+	<select id="applyList" resultMap="WantedDtoMap" parameterType="map">
+		SELECT a.SEQ, a.ID, a.WANTED_SEQ, a.REGDATE, w.ID, NVL(l.TYPE,'N') AS listtype
+		FROM APPLYLIST a, WANTED_POST w, (SELECT ID, LIST_ID, "TYPE" FROM USERLIST WHERE ID = #{id}) l
+		WHERE  a.WANTED_SEQ = w.SEQ AND l.list_id(+) = a.ID AND NVL(l.TYPE, 'N')!='B' AND w.SEQ = #{seq}
+	</select>
+	
+<!-- 	구직자 선택/변경 -->
+	<update id="selector" parameterType="WantedDto">
+		UPDATE WANTED_POST SET 
+		SELECTOR = #{selector} 
+		WHERE SEQ = #{seq}
+	</update>
+	
+<!-- 	구직자 취소 -->
+	<update id="selectorCancel" parameterType="int">
+		UPDATE WANTED_POST SET 
+		SELECTOR = NULL 
+		WHERE SEQ = #{seq}
+	</update>
+	
+	
+	
+	
+	
+	
+</mapper>
