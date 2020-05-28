@@ -8,6 +8,7 @@ public class ApplyDto {
 	private String id;
 	private int wanted_seq;
 	private Date regdate;
+	private int acount;
 	
 	public int getSeq() {
 		return seq;
@@ -34,9 +35,18 @@ public class ApplyDto {
 		this.regdate = regdate;
 	}
 	
+	public int getAcount() {
+		return acount;
+	}
+	public void setAcount(int acount) {
+		this.acount = acount;
+	}
+	
+	
 	@Override
 	public String toString() {
-		return "ApplyDto [seq=" + seq + ", id=" + id + ", wanted_seq=" + wanted_seq + ", regdate=" + regdate + "]";
+		return "ApplyDto [seq=" + seq + ", id=" + id + ", wanted_seq=" + wanted_seq + ", regdate=" + regdate
+				+ ", acount=" + acount + "]";
 	}
 	
 	

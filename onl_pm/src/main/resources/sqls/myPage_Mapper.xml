@@ -23,6 +23,7 @@
 		<result property="sosflag" column="SOSFLAG"/>
 		<result property="location" column="LOCATION"/>
 		<result property="selector" column="SELECTOR"/>
+		<result property="whitelist" column="WHITELIST"/>
 		<collection property="applyDto" resultMap="ApplyDtoMap"/>
 	</resultMap>
 	<resultMap type="com.nl.onl.dtos.ApplyDto" id="ApplyDtoMap">
@@ -102,16 +103,16 @@
 			FROM APPLYLIST aa, WANTED_POST wan, LOCATION_CODE lc,
 				(SELECT  a.WANTED_SEQ, COUNT(a.seq) co
 				FROM APPLYLIST a
-				GROUP BY a.WANTED_SEQ)ac
+				GROUP BY a.WANTED_SEQ) ac
 			WHERE aa.WANTED_SEQ = ac.WANTED_SEQ AND aa.WANTED_SEQ = wan.SEQ AND wan.LOCATION = lc.LOC_CODE AND aa.id=#{id}) aaa
 		WHERE CEIL (RN/10)=#{pnum}
 	</select>	
 	
 <!-- 	지원자 중 구직자 목록 페이징-->
 	<select id="applylist" resultMap="WantedDtoMap" parameterType="map">
-		SELECT ac.RN, ac.SEQ, ac.ID, ac.WANTED_SEQ, ac.REGDATE, listtype
+		SELECT ac.RN, ac.SEQ, ac.ID, ac.WANTED_SEQ, ac.REGDATE, whitelist
 		FROM 
-			(SELECT ROW_NUMBER() OVER(ORDER BY a.SEQ DESC) AS RN, a.SEQ, a.ID, a.WANTED_SEQ, a.REGDATE, NVL(l.TYPE,'N') AS listtype
+			(SELECT ROW_NUMBER() OVER(ORDER BY a.SEQ DESC) AS RN, a.SEQ, a.ID, a.WANTED_SEQ, a.REGDATE, NVL(l.TYPE,'N') AS whitelist
 			FROM APPLYLIST a, WANTED_POST w, 
 				(SELECT ID, LIST_ID, "TYPE" FROM USERLIST WHERE ID = #{id}) l
 			WHERE a.WANTED_SEQ = w.SEQ AND l.list_id(+) = a.ID AND NVL(l.TYPE, 'N')!='B' AND w.SEQ = #{seq}) ac
@@ -146,16 +147,20 @@
 	
 <!-- 	모집 취소 -->
 	<update id="cancelWanted" parameterType="int"> 
-		UPDATE WANTED_POST SET DELFLAG ='N' WHERE SEQ = #{seq}
+		UPDATE WANTED_POST SET DELFLAG ='Y' WHERE SEQ = #{seq}
 	</update>
 	
 <!-- 	내 평가보기(평가한거) 페이징-->
-	<select id="getReview" resultType="ReviewDto" parameterType="map" >
+	<select id="getReview" parameterType="map" resultType="map">
 		SELECT RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 			FROM REVIEW_POST
-			WHERE ID = #{id} AND "TYPE" = #{type})
+			WHERE ID = #{id}
+			<if test="type!=null">
+			 AND "TYPE" = #{type}
+			</if>
+			)
 		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
@@ -165,7 +170,11 @@
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 			FROM REVIEW_POST
-			WHERE TARGET_ID = #{id} AND "TYPE" = #{type})
+			WHERE TARGET_ID = #{id} 
+			<if test="type!=null">
+			 AND "TYPE" = #{type}
+			</if>
+			)
 		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
@@ -199,21 +208,20 @@
 	<select id="getUserlist" parameterType="map">
 		SELECT RN, SEQ, ID, LIST_ID, "TYPE"
 		FROM 
-			SELECT SEQ, ID, LIST_ID, "TYPE" 
+			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE" 
 			FROM USERLIST  
 			WHERE ID = #{id}
+				<if test="type!=null">
+					<choose>
+						<when test="type.equals('B')">
+							AND "TYPE" = 'B'
+						</when>
+						<otherwise>
+							AND "TYPE" = 'W'
+						</otherwise>
+					</choose>
+				</if>)
 		WHERE CEIL(RN/10)=#{pnum}	
-			<if test="type!=null">
-				<choose>
-					<when test="type.equals('B')">
-						AND "TYPE" = 'B'
-					</when>
-					<otherwise>
-						AND "TYPE" = 'W'
-					</otherwise>
-				</choose>
-			</if>
-
 	</select>
 	
 <!-- 	유저리스트삭제 -->
@@ -230,14 +238,14 @@
 	</update>
 
 <!-- 	블랙리스트 페이징-->
-	<select id="blackList" parameterType="int">
-		SELECT RN, SEQ, LIST_ID
-		FROM 
-			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN, SEQ, LIST_ID
-			FROM USERLIST 
-			WHERE "TYPE" = 'B')
-		WHERE CEIL (RN/10)=#{pnum}
-	</select>
+<!-- 	<select id="blackList" parameterType="int"> -->
+<!-- 		SELECT RN, SEQ, LIST_ID -->
+<!-- 		FROM  -->
+<!-- 			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN, SEQ, LIST_ID -->
+<!-- 			FROM USERLIST  -->
+<!-- 			WHERE "TYPE" = 'B') -->
+<!-- 		WHERE CEIL (RN/10)=#{pnum} -->
+<!-- 	</select> -->
 
 <!-- 	블랙리스트 -->
 <!-- 	<select id="blackList"> -->
@@ -247,14 +255,14 @@
 <!-- 	</select> -->
 
 <!-- 	화이트리스트 페이징-->
-	<select id="whiteList" parameterType="int">
-		SELECT RN, SEQ, LIST_ID
-		FROM 
-			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN,SEQ, LIST_ID
-			FROM USERLIST 
-			WHERE "TYPE" = 'W')
-		WHERE CEIL (RN/10)=#{pnum}
-	</select>
+<!-- 	<select id="whiteList" parameterType="int"> -->
+<!-- 		SELECT RN, SEQ, LIST_ID -->
+<!-- 		FROM  -->
+<!-- 			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN,SEQ, LIST_ID -->
+<!-- 			FROM USERLIST  -->
+<!-- 			WHERE "TYPE" = 'W') -->
+<!-- 		WHERE CEIL (RN/10)=#{pnum} -->
+<!-- 	</select> -->
 
 <!-- 	화이트리스트 -->
 <!-- 	<select id="whiteList"> -->
