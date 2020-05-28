@@ -36,7 +36,9 @@ public class AppTest_Hyun {
 
 		
 //		List<QnaDto> list = sqlSession.selectList("com.nl.onl.custom.getAllListQna","1");
-		List<QnaDto> list = sqlSession.selectList("com.nl.onl.admin.adminDetailUser","onltest2");
+//		List<QnaDto> list = sqlSession.selectOne("com.nl.onl.admin.pcountReport");
+//		int pcount = sqlSession.selectOne("com.nl.onl.admin.pcountReport");
+		
 		
 		
 //		for(WantedDto wdto:list) {
@@ -45,10 +47,10 @@ public class AppTest_Hyun {
 //
 //		
 //		
-//		Map<String, String> map=new HashMap<String, String>();
-//		map.put("id", "onltest1");
-//		map.put("seq", "1");
-//		sqlSession.selectList("com.nl.onl.myPage.applyList", map);
+		Map<String, String> map=new HashMap<>();
+		map.put("process", "COMPLETE");
+		map.put("seq", "2");
+		sqlSession.selectList("com.nl.onl.admin.updateReport", map);
 //		
 //		List<WantedDto> wdto2 = sqlSession.selectList("com.nl.onl.myPage.applyList", map);
 //		
