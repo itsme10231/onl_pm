@@ -45,45 +45,58 @@ public class AppTest_tae {
 		List<WantedDto> list = sqlSession.selectList("com.nl.onl.myPage.detail", id);
 		
 		for(WantedDto wdto:list) {
-			System.out.println("1. "+wdto);
+			System.out.println("2. "+wdto);
 		}
-		
-		
+	}
+	@Test
+	public void test3() {	
 		Map<String, String> map=new HashMap<String, String>();
 		map.put("id", "onltest1");
 		map.put("pnum", "1");
 		sqlSession.selectList("com.nl.onl.myPage.getAllMyList", map);
 		
-		List<WantedDto> wdto2 = sqlSession.selectList("com.nl.onl.myPage.getAllMyList", map);
+		List<WantedDto> wdto3 = sqlSession.selectList("com.nl.onl.myPage.getAllMyList", map);
 		
-		for(WantedDto wdto:wdto2) {
-			System.out.println("2. "+wdto2);
+		for(WantedDto wdto:wdto3) {
+			System.out.println("3. "+wdto);
 		}
 	}	
 	
 	@Test
-	public void test3() {
+	public void test4() {
 		Map<String, Integer> map=new HashMap<String, Integer>();
 		map.put("selector", 1);
 		map.put("seq", 1);
 		
-		List<WantedDto> wdto3 = sqlSession.selectList("com.nl.onl.myPage.selector", map);
+		List<WantedDto> wdto4 = sqlSession.selectList("com.nl.onl.myPage.selector", map);
 		
-		for(WantedDto wdto:wdto3) {
-			System.out.println("3. "+wdto3);
+		for(WantedDto wdto:wdto4) {
+			System.out.println("4. "+wdto);
 		}
 	}
 	
 	@Test
-	public void test4() {
+	public void test5() {
 		Map<String, String> map=new HashMap<String, String>();
 		map.put("id", "onltest1");
-		map.put("type", "OFFER");
+		map.put("type", "SEARCH");
+		map.put("pnum", "1");
 		
-		List<ReviewDto> wdto4 = sqlSession.selectList("com.nl.onl.myPage.getReview", map);
+		List<ReviewDto> wdto5 = sqlSession.selectList("com.nl.onl.myPage.getReview", map);
 		
-		for(ReviewDto wdto:wdto4) {
-			System.out.println("4. "+wdto4);
+		for(ReviewDto wdto:wdto5) {
+			System.out.println("5. "+wdto);
 		}
+	}
+	@Test
+	public void test6() {
+		
+		int pcount = sqlSession.selectOne("com.nl.onl.myPage.pcount");
+		
+		System.out.println("6." +pcount);
+		
+//		for(WantedDto wdto:wdto6) {
+//			System.out.println("6. "+wdto);
+//		}
 	}
 }

@@ -46,7 +46,7 @@
 	
 <!-- 	페이징 -->
 	<select id="pcount" resultType="int">
-		SELECT CEIL(COUNT(*)/10) FROM WANTED_POST wp join LOCATION_CODE lc ON wp.LOCATION = lc.LOC_CODE
+		SELECT CEIL(COUNT(seq)/10) FROM WANTED_POST 
 	</select>
 	
 <!-- 	공고 상세보기 -->
@@ -60,23 +60,23 @@
 	</select>
 	
 <!-- 	현재 활성화 된 글 페이징-->	
-	<select id="activation" resultMap="WantedDtoMap" parameterType="String">
+	<select id="activation" resultMap="WantedDtoMap" parameterType="map">
 		SELECT ac.RN, ac.SEQ, ac.ID, ac.CATEGORY, ac.TITLE, ac.REGDATE, ac.DEADLINE, ac.SDATE, ac.EDATE, ac.LOCATION, ac.STIME, ac.ETIME, ac.SALARY, ac.CONTENT, ac.PHONE, ac.VIEWS, ac.STATE, ac.DELFLAG, ac.SOSFLAG
 		FROM WANTED_POST w, 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ,ID,CATEGORY,TITLE,REGDATE,DEADLINE,SDATE,EDATE,LOCATION,STIME,ETIME,SALARY,CONTENT,PHONE,VIEWS,STATE,DELFLAG,SOSFLAG
 			FROM WANTED_POST
 			WHERE ID =#{id} AND STATE ='WANTED' AND  DEADLINE &gt; SYSDATE) ac
-		WHERE CEIL(RN/10)=1 AND ac.SEQ = w.SEQ 
+		WHERE CEIL(RN/10)=#{pnum} AND ac.SEQ = w.SEQ 
 	</select>
 		
 <!-- 	기간이 만료된 글 페이징-->
-	<select id="expiration" resultMap="WantedDtoMap" parameterType="String">
+	<select id="expiration" resultMap="WantedDtoMap" parameterType="map">
 		SELECT ac.RN, ac.SEQ, ac.ID, ac.CATEGORY, ac.TITLE, ac.REGDATE, ac.DEADLINE, ac.SDATE, ac.EDATE, ac.LOCATION, ac.STIME, ac.ETIME, ac.SALARY, ac.CONTENT, ac.PHONE, ac.VIEWS, ac.STATE, ac.DELFLAG, ac.SOSFLAG
 		FROM WANTED_POST w, 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ,ID,CATEGORY,TITLE,REGDATE,DEADLINE,SDATE,EDATE,LOCATION,STIME,ETIME,SALARY,CONTENT,PHONE,VIEWS,STATE,DELFLAG,SOSFLAG
 			FROM WANTED_POST
 			WHERE ID =#{id} AND STATE ='WANTED' AND  DEADLINE &lt; SYSDATE) ac
-		WHERE CEIL(RN/10)=1 AND ac.SEQ = w.SEQ 
+		WHERE CEIL(RN/10)=#{pnum} AND ac.SEQ = w.SEQ 
 	</select>
 	
 <!--미사용 	내가 지원한 구인 글 -->
@@ -95,7 +95,7 @@
 <!-- 	</select> -->
 
 <!-- 내가 지원한 구인글 별 지원자 수 페이징 -->
-	<select id="myApplyCount" resultType="ApplyDto" parameterType="String">
+	<select id="myApplyCount" resultType="ApplyDto" parameterType="map">
 		SELECT aaa.RN, aaa.ID, aaa.WANTED_SEQ, aaa.co as acount, aaa.REGDATE, aaa.TITLE, aaa.DEADLINE, aaa.SDATE, aaa.EDATE, aaa.SALARY, aaa.STATE, aaa.LOC_NAME
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY aa.WANTED_SEQ DESC) AS RN, aa.ID, aa.WANTED_SEQ, aa.REGDATE, ac.co, wan.TITLE, wan.DEADLINE, wan.SDATE, wan.EDATE, wan.SALARY, wan.STATE, lc.LOC_NAME 
@@ -104,7 +104,7 @@
 				FROM APPLYLIST a
 				GROUP BY a.WANTED_SEQ)ac
 			WHERE aa.WANTED_SEQ = ac.WANTED_SEQ AND aa.WANTED_SEQ = wan.SEQ AND wan.LOCATION = lc.LOC_CODE AND aa.id=#{id}) aaa
-		WHERE CEIL (RN/10)=1
+		WHERE CEIL (RN/10)=#{pnum}
 	</select>	
 	
 <!-- 	지원자 중 구직자 목록 페이징-->
@@ -115,7 +115,7 @@
 			FROM APPLYLIST a, WANTED_POST w, 
 				(SELECT ID, LIST_ID, "TYPE" FROM USERLIST WHERE ID = #{id}) l
 			WHERE a.WANTED_SEQ = w.SEQ AND l.list_id(+) = a.ID AND NVL(l.TYPE, 'N')!='B' AND w.SEQ = #{seq}) ac
-		WHERE CEIL(RN/10)=1 
+		WHERE CEIL(RN/10)=#{pnum} 
 	</select>
 	
 <!-- 	구직자 선택/변경 -->
@@ -156,7 +156,7 @@
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 			FROM REVIEW_POST
 			WHERE ID = #{id} AND "TYPE" = #{type})
-		WHERE CEIL(RN/10)=1
+		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
 <!-- 	내 평가보기(평가받은거) 페이징-->
@@ -166,17 +166,17 @@
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 			FROM REVIEW_POST
 			WHERE TARGET_ID = #{id} AND "TYPE" = #{type})
-		WHERE CEIL(RN/10)=1
+		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
 <!-- 	찜글보기 페이징-->
-	<select id="getWishlist" parameterType="String">
+	<select id="getWishlist" parameterType="map">
 		SELECT RN, SEQ, ID, WANTED_SEQ
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, WANTED_SEQ 
 			FROM WISHLIST 
 			WHERE ID = #{id})
-		WHERE CEIL(RN/10)=1
+		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
 <!-- 	찜글삭제 -->
@@ -185,31 +185,34 @@
 		WHERE SEQ = #{seq}
 	</delete>
 	
+<!--미사용 	유저리스트 페이징-->
+<!-- 	<select id="getUserlist" parameterType="String"> -->
+<!-- 		SELECT RN, SEQ, ID, LIST_ID, "TYPE" -->
+<!-- 		FROM  -->
+<!-- 			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE"  -->
+<!-- 			FROM USERLIST   -->
+<!-- 			WHERE ID = #{id}) -->
+<!-- 		WHERE CEIL(RN/10)=1 -->
+<!-- 	</select> -->
+	
 <!-- 	유저리스트 페이징-->
-	<select id="getUserlist" parameterType="String">
+	<select id="getUserlist" parameterType="map">
 		SELECT RN, SEQ, ID, LIST_ID, "TYPE"
 		FROM 
-			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE" 
+			SELECT SEQ, ID, LIST_ID, "TYPE" 
 			FROM USERLIST  
-			WHERE ID = #{id})
-		WHERE CEIL(RN/10)=1
-	</select>
-	
-<!-- 	유저리스트 -->
-	<select id="getUserlist" parameterType="map">
-		SELECT SEQ, ID, LIST_ID, "TYPE" 
-		FROM USERLIST  
-		WHERE ID = #{id}
-		<if test="type!=null">
-			<choose>
-				<when test="type.equals('B')">
-					AND "TYPE" = 'B'
-				</when>
-				<otherwise>
-					AND "TYPE" = 'W'
-				</otherwise>
-			</choose>
-		</if>
+			WHERE ID = #{id}
+		WHERE CEIL(RN/10)=#{pnum}	
+			<if test="type!=null">
+				<choose>
+					<when test="type.equals('B')">
+						AND "TYPE" = 'B'
+					</when>
+					<otherwise>
+						AND "TYPE" = 'W'
+					</otherwise>
+				</choose>
+			</if>
 
 	</select>
 	
@@ -227,13 +230,13 @@
 	</update>
 
 <!-- 	블랙리스트 페이징-->
-	<select id="blackList">
+	<select id="blackList" parameterType="int">
 		SELECT RN, SEQ, LIST_ID
 		FROM 
 			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN, SEQ, LIST_ID
 			FROM USERLIST 
 			WHERE "TYPE" = 'B')
-		WHERE CEIL (RN/10)=1
+		WHERE CEIL (RN/10)=#{pnum}
 	</select>
 
 <!-- 	블랙리스트 -->
@@ -244,13 +247,13 @@
 <!-- 	</select> -->
 
 <!-- 	화이트리스트 페이징-->
-	<select id="whiteList">
+	<select id="whiteList" parameterType="int">
 		SELECT RN, SEQ, LIST_ID
 		FROM 
 			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN,SEQ, LIST_ID
 			FROM USERLIST 
 			WHERE "TYPE" = 'W')
-		WHERE CEIL (RN/10)=1
+		WHERE CEIL (RN/10)=#{pnum}
 	</select>
 
 <!-- 	화이트리스트 -->
