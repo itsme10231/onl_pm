@@ -13,6 +13,8 @@
 		<typeAlias type="com.nl.onl.dtos.NoticeDto" alias="NoticeDto"/>
 		<typeAlias type="com.nl.onl.dtos.ChargeDto" alias="ChargeDto"/>
 		<typeAlias type="com.nl.onl.dtos.ReportDto" alias="ReportDto"/>
+		<typeAlias type="com.nl.onl.dtos.CategoryDto" alias="CategoryDto"/>
+		<typeAlias type="com.nl.onl.dtos.ChatDto" alias="ChatDto"/>
 	</typeAliases>
 
 	<mappers>
@@ -23,6 +25,7 @@
 		<mapper resource="./sqls/myPage_Mapper.xml"/>
 		<mapper resource="./sqls/charge_Mapper.xml"/>
 		<mapper resource="./sqls/admin_Mapper.xml"/>
+		<mapper resource="./sqls/chat_Mapper.xml"/>
 	</mappers>
 	
 	

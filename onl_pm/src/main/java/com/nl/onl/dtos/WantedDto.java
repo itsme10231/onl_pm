@@ -26,7 +26,29 @@ public class WantedDto {
 	private String loc_name;
 	private String whitelist;
 	private String wishlist;
+	private int apply_c;
+	private String category_name1;
+	private String category_name2;
 	
+	
+	public String getCategory_name1() {
+		return category_name1;
+	}
+	public void setCategory_name1(String category_name1) {
+		this.category_name1 = category_name1;
+	}
+	public String getCategory_name2() {
+		return category_name2;
+	}
+	public void setCategory_name2(String category_name2) {
+		this.category_name2 = category_name2;
+	}
+	public int getApply_c() {
+		return apply_c;
+	}
+	public void setApply_c(int apply_c) {
+		this.apply_c = apply_c;
+	}
 	public int getSelector() {
 		return selector;
 	}
@@ -180,9 +202,9 @@ public class WantedDto {
 				+ location + ", stime=" + stime + ", etime=" + etime + ", salary=" + salary + ", content=" + content
 				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
 				+ sosflag + ", selector=" + selector + ", loc_name=" + loc_name + ", whitelist=" + whitelist
-				+ ", wishlist=" + wishlist + ", applyDto=" + applyDto + "]";
+				+ ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1=" + category_name1
+				+ ", category_name2=" + category_name2 + ", applyDto=" + applyDto + "]";
 	}
-	
 	
 	
 }
