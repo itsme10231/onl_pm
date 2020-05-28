@@ -3,7 +3,21 @@
 
 <mapper namespace="com.nl.onl.chat">
 	
-
+<!-- 메시지 받아오기(현재 접속한 유저는 onltest1) -->
+	<select id="getMessage" resultType="ChatDto" parameterType="map">	
+		SELECT SEQ , CONTENT , CHATDATE, CHKFLAG 
+		FROM CHAT_LOG 
+		WHERE RECEIVE_ID = #{receive_id} AND SEND_ID = #{send_id} AND DELFLAG = 'N' ORDER BY CHATDATE ASC
+	</select>
 	
+<!-- 메시지 받아오면 chkflag 'Y'로 변경 -->
+	<update id="checkChkflag" parameterType="map">	
+		UPDATE CHAT_LOG SET CHKFLAG = #{chkflag} WHERE RECEIVE_ID = #{receive_id} AND CHKFLAG = 'N'
+	</update>
 	
+<!-- 메시지 보내기	 -->
+	<insert id="sendMessage" parameterType="ChatDto">
+		INSERT INTO CHAT_LOG VALUES
+		(chat_log_SEQ.nextval, #{receive_id}, #{send_id}, #{content}, sysdate, #{chkflag}, #{delflag}, #{wanted_seq})
+	</insert>
 </mapper>

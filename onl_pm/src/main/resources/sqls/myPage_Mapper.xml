@@ -150,7 +150,7 @@
 	</update>
 	
 <!-- 	내 평가보기(평가한거) 페이징-->
-	<select id="getReview" parameterType="map" resultType="map">
+	<select id="getReview" resultType="ReviewDto" parameterType="map" >
 		SELECT RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
