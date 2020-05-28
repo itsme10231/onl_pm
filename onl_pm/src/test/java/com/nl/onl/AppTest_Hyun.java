@@ -31,11 +31,14 @@ public class AppTest_Hyun {
 		System.out.println("Test");
 		System.out.println("sqlSession: " +sqlSession);
 		
-		int seq=1;
-		List<QnaDto> list = sqlSession.selectOne("com.nl.onl.custom.deleteQna",seq);
+//		int seq=1;
+//		List<QnaDto> list = sqlSession.selectOne("com.nl.onl.custom.deleteQna",seq);
 
 		
-//		List<QnaDto> list = sqlSession.selectList("com.nl.onl.custom.detailQna");
+//		List<QnaDto> list = sqlSession.selectList("com.nl.onl.custom.getAllListQna","1");
+		List<QnaDto> list = sqlSession.selectList("com.nl.onl.admin.adminDetailUser","onltest2");
+		
+		
 //		for(WantedDto wdto:list) {
 //			System.out.println(wdto);
 //		}

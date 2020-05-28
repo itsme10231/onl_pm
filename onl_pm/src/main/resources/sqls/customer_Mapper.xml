@@ -19,10 +19,10 @@
 <!-- 	QNA목록보기 -->
 	<select id="getAllListQna" resultMap="QnaDtoMap"
 	 parameterType="String">
-		 SELECT SEQ,ID, CATEGORY_NAME,TITLE,PROCESS,REGDATE
+		 SELECT a.SEQ,a.ID, a.CATEGORY_NAME,a.TITLE,a.PROCESS,a.REGDATE
 			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
 				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME 
-					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE )
+					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE ) a
 			    WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	

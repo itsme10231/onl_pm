@@ -2,8 +2,83 @@
 <!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.nl.onl.admin">
-	
 
+	<resultMap type="com.nl.onl.dtos.ReportDto" id="ReportDtoMap">
+		<result property="seq" column="SEQ" />
+		<result property="id" column="ID" />
+		<result property="reported_id" column="REPORTED_ID" />
+		<result property="category_seq" column="CATEGORY_SEQ" />
+		<result property="c_content" column="C_CONTENT" />
+		<result property="process" column="PROCESS" />
+		<result property="regdate" column="REGDATE" />
+		<result property="content" column="CONTENT" />
+	</resultMap>
+	
+	<resultMap type="com.nl.onl.dtos.LoginDto" id="LoginDtoMap">
+		<result property="id" column="ID" />
+		<result property="password" column="NAME" />
+		<result property="name" column="NAME" />
+		<result property="address_1" column="ADDRESS_1" />
+		<result property="ADDRESS_2" column="ADDRESS_2" />
+		<result property="ADDRESS_3" column="ADDRESS_3" />
+		<result property="email" column="EMAIL" />
+		<result property="nickname" column="NICKNAME" />
+		<result property="birth" column="BIRTH" />
+		<result property="delflag" column="DELFLAG" />
+		<result property="regdate" column="REGDATE" />
+		<result property="role" column="ROLE" />
+		<result property="phone" column="PHONE" />
+		<collection property="reportDto" resultMap="ReportDtoMap"/>
+	</resultMap>
+
+<!-- 	신고목록보기 -->
+	<select id="getAllListReport" resultMap="ReportDtoMap"
+	 parameterType="String">
+	SELECT SEQ ,REGDATE ,CONTENT AS C_CONTENT ,ID ,REPORTED_ID ,PROCESS
+	FROM (
+			SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
+				r.SEQ ,r.REGDATE ,c.CONTENT ,r.ID ,r.REPORTED_ID ,r.PROCESS
+			FROM REPORTLIST r,REPORT_CATEGORY c 
+			WHERE r.CATEGORY_SEQ =c.CODE )
+	WHERE CEIL(RN/10)=#{pnum}
+	</select>
+	
+<!-- 	신고페이징 -->
+	<select id="pcountReport" resultType="int">
+		SELECT CEIL(COUNT(*)/10) FROM REPORTLIST
+	</select>
+	
+<!-- 	신고상세보기 -->
+	<select id="detailReport" resultMap="ReportDtoMap"
+		 parameterType="int">
+	SELECT c.CONTENT AS c_CONTENT,r.REGDATE ,r.ID ,r.REPORTED_ID ,r.CONTENT
+	FROM REPORTLIST r,REPORT_CATEGORY c
+	WHERE r.CATEGORY_SEQ =c.CODE AND SEQ=#{seq}
+		</select>
+	
+<!-- 	관리자페이지 회원 전체 목록 -->
+	<select id="getAllListAdmin" resultMap="LoginDtoMap">
+	SELECT RN, ID , ALLCOUNT, COMPLETE, DELFLAG
+	FROM (
+			SELECT ROW_NUMBER() OVER(ORDER BY m.REGDATE) AS rn, m.ID,NVL(cc.ALLCOUNT, 0) AS allcount, NVL(cc.COMPLETE, 0) AS complete ,m.DELFLAG
+			FROM (SELECT c.reported_id, c.allcount, COUNT(c.PROCESS) OVER(PARTITION BY c.PROCESS) AS COMPLETE
+					FROM (SELECT REPORTED_ID, COUNT(SEQ) OVER(PARTITION BY REPORTED_ID) AS allcount, PROCESS FROM REPORTLIST ) c
+					WHERE c.PROCESS = 'COMPLETE') cc , "MEMBER" m
+			WHERE m.ID = cc.REPORTED_ID(+))
+	WHERE CEIL(RN/20)=#{pnum}
+	</select>
+	
+<!-- 	관리자페이지 회원 상세보기 -->
+	<select id="adminDetailUser" resultMap="LoginDtoMap"
+		 parameterType="String">
+	SELECT m.ID ,m.DELFLAG ,ROW_NUMBER() OVER(ORDER BY NVL(r.regdate,'1111-11-11') DESC ) AS SEQ,
+																	 r.CONTENT,r.regdate,r.process
+	FROM 
+		(SELECT r1.REPORTED_ID, r1.CONTENT , r1.REGDATE , r1.PROCESS,r2.CONTENT AS C_CONTENT 
+		 FROM REPORTLIST r1, REPORT_CATEGORY r2 
+		 WHERE r1.CATEGORY_SEQ = r2.CODE) r, "MEMBER" m
+	WHERE m.ID = r.REPORTED_ID(+) AND m.ID =#{id}
+	</select>
 	
 	
 </mapper>

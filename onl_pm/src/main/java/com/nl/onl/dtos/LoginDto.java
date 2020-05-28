@@ -16,6 +16,13 @@ public class LoginDto {
 	private Date regdate;
 	private String role;
 	private String phone;
+	private ReportDto reportDto;
+	public ReportDto getReportDto() {
+		return reportDto;
+	}
+	public void setReportDto(ReportDto reportDto) {
+		this.reportDto = reportDto;
+	}
 	public String getId() {
 		return id;
 	}
