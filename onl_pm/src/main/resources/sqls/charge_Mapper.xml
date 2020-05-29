@@ -4,21 +4,93 @@
 <mapper namespace="com.nl.onl.charge">
 	
 	<!-- 지급동의 테이블 관련 쿼리 -->
-	<!-- 구인글 작성시 지급동의 테이블 insert -->
-
+	<!-- 구인글 매칭시 지급동의 테이블 insert -->
+	<insert id="insertAgree" parameterType="map">
+		INSERT INTO PAY_AGREE VALUES(
+			#{seq}, 'N', 'N', SYSDATE, #{salary}
+		)
+	</insert>
 	
-	<!-- 한쪽이 Y면서 최종수정일이 7일이상인 경우 자동결제 -->
+	<!-- 지원자 변경, 구인 취소시 지급동의 테이블 삭제 -->
+	<delete id="deleteAgree" parameterType="String">
+		DELETE FROM PAY_AGREE WHERE WANTED_SEQ = #{seq}
+	</delete>	
 	
+	<!-- 지급동의서 update(지급제안): 패러미터는 구인구직 식별자, 동의여부, 제안금액 -->
+	<update id="updateAgree" parameterType="map">
+		UPDATE 	PAY_AGREE 
+				SET
+				<if test="agree.equals('Y')">
+					<choose>
+					<when test="type.equals('search')">
+						SEARCH_AGREE = #{agree}, 
+					</when>
+					<otherwise>
+						OFFER_AGREE = #{agree}, 
+					</otherwise>
+				</choose>
+				</if>
+				<if test="agree.equals('N')">
+					<choose>
+					<when test="type.equals('search')">
+						SEARCH_AGREE = 'Y', 
+						OFFER_AGREE = 'N'
+					</when>
+					<otherwise>
+						OFFER_AGREE = 'Y',
+						SEARCH_AGREE = 'N' 
+					</otherwise>
+				</choose>
+				</if>
+				<if test="suggestion!=null">
+					SUGGESTION = #{suggestion}, 
+				</if>
+				REGDATE = SYSDATE
+		WHERE WANTED_SEQ = #{seq}
+	</update>
 	
+	<!-- 지급제안 보기 -->
+	<select id="getAgree" parameterType="String">
+		SELECT 	wp.TITLE, wp.CONTENT, pa.SUGGESTION
+		FROM 	PAY_AGREE pa, WANTED_POST wp
+		WHERE	wp.SEQ = #{seq}, wp.SEQ = pa.WANTED_SEQ
+	</select>
 	
-	<!-- 지급동의서 update -->
+	<!-- 한쪽이 Y면서 최종수정일이 7일이상인 경우(<-select문으로 목록 넘겨받기) 자동결제 -->
 	
-	
+	<select id="forceSelect" resultType="String">
+		SELECT	wp.SEQ
+		FROM	WANTED_POST wp, PAY_AGREE pa
+		WHERE	wp.SEQ = pa.WANTED_SEQ 
+				AND (pa.SEARCH_AGREE = 'Y' OR pa.SEARCH_AGREE = 'Y')
+				AND NOT (pa.SEARCH_AGREE = 'Y' AND pa.SEARCH_AGREE = 'Y')
+				AND REGDATE+7 &lt;= SYSDATE
+	</select>
+	<update id="forceUpdate" parameterType="map">
+		UPDATE 	PAY_AGREE
+				SET 
+				SEARCH_AGREE = 'Y',
+				OFFER_AGREE = 'Y'
+		WHERE	WANTED_SEQ IN
+				<foreach collection="array" open="(" close=")" separator="," item="wanted_seq">
+					#{wanted_seq}
+				</foreach>
+	</update>
 	
 	<!-- ..................................................................................................... -->
 	<!-- 예치금 관리용 쿼리 -->
+	<!-- 예치금 잔액 및 거래내역 조회 -->
+	
+	
+	
 	<!-- 예치금 입금(결제, 구인글 취소, 금액변동으로 차액발생) -->
 	
-	<!-- 예치금 출금 -->
+	
+	
+	
+	<!-- 예치금 출금(구인글 결제, 금액변동으로 차액발생, 환불) -->
+	
+	
+	
 	
 </mapper>
