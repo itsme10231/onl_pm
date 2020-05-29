@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nl.onl.dtos.ChatDto;
+import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ReviewDto;
 import com.nl.onl.dtos.WantedDto;
 
@@ -108,6 +109,7 @@ public class AppTest_tae {
 	
 	
 //	채팅테스트
+//메시지 받아오기(현재 접속한 유저는 onltest1)
 	@Test
 	public void test1() {
 		Map<String, String> map=new HashMap<String, String>();
@@ -121,6 +123,7 @@ public class AppTest_tae {
 		}
 	}
 	
+//메시지 받아오면 chkflag 'Y'로 변경	
 	@Test
 	public void test2() {
 		Map<String, String> map=new HashMap<String, String>();
@@ -129,11 +132,12 @@ public class AppTest_tae {
 		
 		List<ChatDto> wdto2 = sqlSession.selectList("com.nl.onl.chat.checkChkflag", map);
 		
-		for(ChatDto wdto:wdto2) {
-			System.out.println("2. "+wdto);
+		for(ChatDto cdto:wdto2) {
+			System.out.println("2. "+cdto);
 		}
 	}
 	
+//메시지 보내기
 	@Test
 	public void test3() {
 		ChatDto cdto=new ChatDto(0, "onltest1", "onltest3", "테스트1이 테스트3한테 전송", null, "N", "N", 5);
@@ -144,4 +148,26 @@ public class AppTest_tae {
 //			System.out.println("3. "+wdto);
 //		}
 	}
+	
+//받는 회원이 탈퇴이거나 정지상태인 경우 
+	@Test
+	public void test4() {
+		
+		String id = sqlSession.selectOne("com.nl.onl.chat.checkDelflag", "onltest1");
+		System.out.println("4. "+id);
+	}
+	
+//채팅리스트(onltest1) 
+//타겟아이디 | 구인글 번호 | 내가 확인안한 메시지 수 | 마지막메시지 | 마지막 메시지 시간 
+	@Test
+	public void test5() {
+		Map<String, String> map=new HashMap<>();
+		map.put("receive_id", "onltest1");
+		map.put("send_id", "onltest3");
+		
+		List<ChatDto> list = sqlSession.selectList("com.nl.onl.chat.chatList", map);
+	
+		System.out.println("5. "+list);
+	}
 }
+

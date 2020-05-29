@@ -20,4 +20,25 @@
 		INSERT INTO CHAT_LOG VALUES
 		(chat_log_SEQ.nextval, #{receive_id}, #{send_id}, #{content}, sysdate, #{chkflag}, #{delflag}, #{wanted_seq})
 	</insert>
+	
+<!-- 	받는 회원이 탈퇴이거나 정지상태인 경우 -->
+	<select id="checkDelflag" resultType="String" parameterType="String">
+		SELECT ID FROM MEMBER WHERE DELFLAG = 'Y' AND ID = #{id}
+	</select>
+	
+	
+<!-- 채팅리스트(onltest1) -->
+<!-- 타겟아이디 | 구인글 번호 | 내가 확인안한 메시지 수 | 마지막메시지 | 마지막 메시지 시간 -->
+	<select id="chatList" resultType="ChatDto" parameterType="map">
+		SELECT CASE l2.RECEIVE_ID WHEN #{receive_id} THEN l2.SEND_ID ELSE l2.RECEIVE_ID END AS target, l2.WANTED_SEQ, l2.TITLE, l2.NOTREAD_C, l2.CONTENT, l2.CHATDATE
+		FROM  
+			(SELECT ROW_NUMBER() OVER(PARTITION BY cl1.WANTED_SEQ ORDER BY CHATDATE DESC) AS rn, cl1.WANTED_SEQ, cl1.RECEIVE_ID , cl1.SEND_ID , NOTREAD_C, cl1.CONTENT , cl1.CHATDATE , wp.TITLE 
+			FROM CHAT_LOG cl1 ,  WANTED_POST wp ,
+				(SELECT SUM(NVL(NOTREAD_C, 0)) OVER(PARTITION BY c1.WANTED_SEQ ) AS notread_c, c1.WANTED_SEQ
+				FROM CHAT_LOG c1, 
+					(SELECT WANTED_SEQ, COUNT(*) AS notread_c, RECEIVE_ID FROM CHAT_LOG WHERE RECEIVE_ID = #{receive_id} AND CHKFLAG = 'N' GROUP BY WANTED_SEQ, RECEIVE_ID) c2 
+				WHERE (c1.RECEIVE_ID = #{receive_id} OR c1.SEND_ID = #{send_id}) AND c1.CHKFLAG = 'N' AND c1.WANTED_SEQ = c2.WANTED_SEQ(+) GROUP BY c1.WANTED_SEQ, NOTREAD_C) cl2
+			WHERE (RECEIVE_ID = #{receive_id} OR SEND_ID = #{send_id}) AND cl1.WANTED_SEQ  = cl2.WANTED_SEQ AND cl1.WANTED_SEQ = wp.SEQ ) l2
+		WHERE RN = 1 ORDER BY l2.CHATDATE DESC
+	</select> 	
 </mapper>
