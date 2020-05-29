@@ -140,7 +140,7 @@ public class AppTest_tae {
 //메시지 보내기
 	@Test
 	public void test3() {
-		ChatDto cdto=new ChatDto(0, "onltest1", "onltest3", "테스트1이 테스트3한테 전송", null, "N", "N", 5);
+		ChatDto cdto=new ChatDto(0, "onltest1", "onltest3", "테스트1이 테스트3한테 전송22", null, "N", "N", 5);
 		
 		int isS = sqlSession.insert("com.nl.onl.chat.sendMessage", cdto);
 		
