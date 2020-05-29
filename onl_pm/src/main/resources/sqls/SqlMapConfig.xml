@@ -15,6 +15,7 @@
 		<typeAlias type="com.nl.onl.dtos.ReportDto" alias="ReportDto"/>
 		<typeAlias type="com.nl.onl.dtos.CategoryDto" alias="CategoryDto"/>
 		<typeAlias type="com.nl.onl.dtos.ChatDto" alias="ChatDto"/>
+		<typeAlias type="com.nl.onl.dtos.ChatlistDto" alias="ChatlistDto"/>
 	</typeAliases>
 
 	<mappers>
