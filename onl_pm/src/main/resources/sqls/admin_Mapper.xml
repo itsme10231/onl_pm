@@ -58,9 +58,8 @@
 		
 <!-- 	신고 처리하기 -->
 	<update id="updateReport" parameterType="map">
-	UPDATE REPORTLIST SET PROCESS =#{process} WHERE SEQ =#{seq}
-		</update>
-		
+		UPDATE REPORTLIST SET PROCESS =#{process} WHERE SEQ =#{seq}
+	</update>
 		
 	
 <!-- 	관리자페이지 회원 전체 목록 -->

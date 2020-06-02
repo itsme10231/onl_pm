@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.file">
+	
+	<!-- 첨부파일 업로드 -->
+	<insert id="insertFile" parameterType="FileDto">
+		INSERT INTO UPLOAD_FILE VALUES(
+				UPLOAD_FILE.NEXTVAL, #{origin_name}, #{stored_name}, SYSDATE, 'N', #{board_type}, #{id}, #{post_seq}
+		)
+	</insert>
+	
+	<!-- 첨부파일 삭제 -->
+	<update id="delFile" parameterType="map">
+		UPDATE 	UPLOAD_FILE 
+		SET 	DELFLAG = 'Y'
+		WHERE 	BOARD_TYPE = #{board_type} AND POST_SEQ = #{post_seq}
+	</update>
+</mapper>

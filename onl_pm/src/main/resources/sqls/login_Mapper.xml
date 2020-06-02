@@ -27,8 +27,8 @@
 	</select>
 	
 	<!-- 로그인 -->
-	<select id="login" parameterType="map">
-		SELECT ID, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE ID = #{id} AND PASSWORD = #{password}
+	<select id="login" parameterType="String" resultType="LoginDto">
+		SELECT ID, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE ID = #{id}
 	</select>
 	
 	<!-- 정보수정 -->

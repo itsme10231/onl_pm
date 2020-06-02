@@ -1,8 +1,15 @@
 package com.nl.onl.dtos;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-public class LoginDto {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class LoginDto implements UserDetails {
 	private String id;
 	private String password;
 	private String name;
@@ -16,7 +23,9 @@ public class LoginDto {
 	private Date regdate;
 	private String role;
 	private String phone;
+	
 	private ReportDto reportDto;
+	
 	public ReportDto getReportDto() {
 		return reportDto;
 	}
@@ -29,9 +38,12 @@ public class LoginDto {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	@Override
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -110,6 +122,38 @@ public class LoginDto {
 				+ ", address_2=" + address_2 + ", address_3=" + address_3 + ", email=" + email + ", nickname="
 				+ nickname + ", birth=" + birth + ", delflag=" + delflag + ", regdate=" + regdate + ", role=" + role
 				+ ", phone=" + phone + "]";
+	}
+	
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		String roleGrant = "ROLE_"+role;
+		
+		GrantedAuthority gr = new SimpleGrantedAuthority(roleGrant);
+		
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		
+		return authorities;
+	}
+	@Override
+	public String getUsername() {
+		return id;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return delflag.equals("Y")?true:false;
 	}
 	
 	

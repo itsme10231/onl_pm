@@ -27,28 +27,6 @@ public class AppTest {
 	public void test() {
 		
 		
-		System.out.println("Test");
-		System.out.println("sqlSession: " +sqlSession);
-		
-		String id = "onltest1";
-		List<WantedDto> list = sqlSession.selectList("com.nl.onl.schedule.worked", id);
-		
-		for(WantedDto wdto:list) {
-			System.out.println("1. "+wdto);
-		}
-
-		
-		
-		Map<String, String> map=new HashMap<String, String>();
-		map.put("id", "onltest1");
-		map.put("seq", "1");
-		sqlSession.selectList("com.nl.onl.myPage.applyList", map);
-		
-		List<WantedDto> wdto2 = sqlSession.selectList("com.nl.onl.myPage.applyList", map);
-		
-		for(WantedDto wdto:wdto2) {
-			System.out.println("2. "+wdto2);
-		}
 	}
 	
 }

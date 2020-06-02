@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.nl.onl.charge">
+<mapper namespace="com.nl.onl.payment">
 	
 	<!-- 지급동의 테이블 관련 쿼리 -->
 	<!-- 구인글 매칭시 지급동의 테이블 insert -->
@@ -64,7 +64,7 @@
 		WHERE	wp.SEQ = pa.WANTED_SEQ 
 				AND (pa.SEARCH_AGREE = 'Y' OR pa.SEARCH_AGREE = 'Y')
 				AND NOT (pa.SEARCH_AGREE = 'Y' AND pa.SEARCH_AGREE = 'Y')
-				AND REGDATE+7 &lt;= SYSDATE
+				AND pa.REGDATE+7 &lt;= SYSDATE
 	</select>
 	<update id="forceUpdate" parameterType="map">
 		UPDATE 	PAY_AGREE
@@ -81,16 +81,37 @@
 	<!-- 예치금 관리용 쿼리 -->
 	<!-- 예치금 잔액 및 거래내역 조회 -->
 	
+	<select id="getPayment" parameterType="String" resultType="ChargeDto">
+		SELECT 	p1.SEQ, p1.MONEY, p1.REGDATE, p1.BALANCE, p1.CANCELFLAG, p1."TYPE", ALLBAL
+		FROM 	PREPAID p1,
+				(
+				SELECT	SUM(BALANCE) as ALLBAL, ID 
+				FROM	PREPAID
+				WHERE 	ID = #{id} AND CANCELFLAG = 'N'
+				GROUP BY ID
+				) p2
+		WHERE 	p1.ID = p2.ID
+	</select>
+	
+	<!-- 예치금 기록 생성 -->
+	
+	<insert id="insertPayment" parameterType="ChargeDto">
+		INSERT INTO PREPAID 
+		VALUES	(
+				PREPAID_SEQ.NEXTVAL, #{id}, #{money}, SYSDATE, #{balance}, 'N', #{type}
+		)
+	</insert>
 	
 	
-	<!-- 예치금 입금(결제, 구인글 취소, 금액변동으로 차액발생) -->
-	
-	
-	
-	
-	<!-- 예치금 출금(구인글 결제, 금액변동으로 차액발생, 환불) -->
-	
-	
+	<!-- 예치금 기록 변동(구인글 결제, 환불, 구인글 취소) -->
+	<update id="updatePayment" parameterType="map">
+		UPDATE 	PREPAID
+		SET 	BALANCE = #{balance}
+				<if test="cancelflag!=null">
+				CANCELFLAG = 'Y'
+				</if>
+		WHERE 	SEQ = #{seq}
+	</update>
 	
 	
 </mapper>

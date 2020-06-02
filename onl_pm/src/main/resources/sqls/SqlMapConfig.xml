@@ -16,6 +16,7 @@
 		<typeAlias type="com.nl.onl.dtos.CategoryDto" alias="CategoryDto"/>
 		<typeAlias type="com.nl.onl.dtos.ChatDto" alias="ChatDto"/>
 		<typeAlias type="com.nl.onl.dtos.ChatlistDto" alias="ChatlistDto"/>
+		<typeAlias type="com.nl.onl.dtos.FileDto" alias="FileDto"/>
 	</typeAliases>
 
 	<mappers>
@@ -24,9 +25,10 @@
 		<mapper resource="./sqls/customer_Mapper.xml"/>
 		<mapper resource="./sqls/wanted_Mapper.xml"/>
 		<mapper resource="./sqls/myPage_Mapper.xml"/>
-		<mapper resource="./sqls/charge_Mapper.xml"/>
+		<mapper resource="./sqls/payment_Mapper.xml"/>
 		<mapper resource="./sqls/admin_Mapper.xml"/>
 		<mapper resource="./sqls/chat_Mapper.xml"/>
+		<mapper resource="./sqls/file_Mapper.xml"/>
 	</mappers>
 	
 	
