@@ -12,15 +12,16 @@
 		<result property="process" column="PROCESS" />
 		<result property="regdate" column="REGDATE" />
 		<result property="content" column="CONTENT" />
+		<result property="nickname" column="NICKNAME" />
 	</resultMap>
 	
 	<resultMap type="com.nl.onl.dtos.LoginDto" id="LoginDtoMap">
 		<result property="id" column="ID" />
-		<result property="password" column="NAME" />
+		<result property="password" column="PASSWORD" />
 		<result property="name" column="NAME" />
 		<result property="address_1" column="ADDRESS_1" />
-		<result property="ADDRESS_2" column="ADDRESS_2" />
-		<result property="ADDRESS_3" column="ADDRESS_3" />
+		<result property="address_2" column="ADDRESS_2" />
+		<result property="address_3" column="ADDRESS_3" />
 		<result property="email" column="EMAIL" />
 		<result property="nickname" column="NICKNAME" />
 		<result property="birth" column="BIRTH" />
@@ -34,7 +35,7 @@
 <!-- 	신고목록보기 -->
 	<select id="getAllListReport" resultMap="ReportDtoMap"
 	 parameterType="String">
-	SELECT SEQ ,REGDATE ,CONTENT AS C_CONTENT ,ID ,REPORTED_ID ,PROCESS
+	SELECT SEQ ,REGDATE ,CONTENT AS C_CONTENT ,ID ,REPORTED_ID , NICKNAME, PROCESS
 	FROM (
 			SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
 				r.SEQ ,r.REGDATE ,c.CONTENT ,r.ID ,r.REPORTED_ID ,r.PROCESS
@@ -64,9 +65,9 @@
 	
 <!-- 	관리자페이지 회원 전체 목록 -->
 	<select id="getAllListAdmin" resultMap="LoginDtoMap">
-	SELECT RN, ID , ALLCOUNT, COMPLETE, DELFLAG
+	SELECT RN, ID , NICKNAME, ALLCOUNT, COMPLETE, DELFLAG
 	FROM (
-			SELECT ROW_NUMBER() OVER(ORDER BY m.REGDATE) AS rn, m.ID,NVL(cc.ALLCOUNT, 0) AS allcount, NVL(cc.COMPLETE, 0) AS complete ,m.DELFLAG
+			SELECT ROW_NUMBER() OVER(ORDER BY m.REGDATE) AS rn, m.ID, m.NICKNAME, NVL(cc.ALLCOUNT, 0) AS allcount, NVL(cc.COMPLETE, 0) AS complete ,m.DELFLAG
 			FROM (SELECT c.reported_id, c.allcount, COUNT(c.PROCESS) OVER(PARTITION BY c.PROCESS) AS COMPLETE
 					FROM (SELECT REPORTED_ID, COUNT(SEQ) OVER(PARTITION BY REPORTED_ID) AS allcount, PROCESS FROM REPORTLIST ) c
 					WHERE c.PROCESS = 'COMPLETE') cc , "MEMBER" m
@@ -77,7 +78,7 @@
 <!-- 	관리자페이지 회원 상세보기 -->
 	<select id="detailAdmin" resultMap="LoginDtoMap"
 		 parameterType="String">
-	SELECT m.ID ,m.DELFLAG ,ROW_NUMBER() OVER(ORDER BY NVL(r.regdate,'1111-11-11') DESC ) AS SEQ,
+	SELECT m.ID , m.NICKNAME, m.DELFLAG ,ROW_NUMBER() OVER(ORDER BY NVL(r.regdate,'1111-11-11') DESC ) AS SEQ,
 																	 r.CONTENT,r.regdate,r.process
 	FROM 
 		(SELECT r1.REPORTED_ID, r1.CONTENT , r1.REGDATE , r1.PROCESS,r2.CONTENT AS C_CONTENT 

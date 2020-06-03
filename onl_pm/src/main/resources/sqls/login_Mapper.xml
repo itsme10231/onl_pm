@@ -16,7 +16,7 @@
 					#{name}, 
 					</otherwise>
 				</choose>
-				#{birth},
+				#{birth,  jdbcType=DATE},
 				#{delflag}, SYSDATE, #{role}, #{phone}
 				)
 	</insert>

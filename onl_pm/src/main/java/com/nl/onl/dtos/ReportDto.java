@@ -13,6 +13,8 @@ public class ReportDto {
 	private Date regdate;
 	private String content;
 	
+	private String nickname;
+	
 	public ReportDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -28,6 +30,14 @@ public class ReportDto {
 		this.process = process;
 		this.regdate = regdate;
 		this.content = content;
+	}
+	
+	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public int getSeq() {
 		return seq;
@@ -77,12 +87,22 @@ public class ReportDto {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	@Override
-	public String toString() {
-		return "ReportDto [seq=" + seq + ", id=" + id + ", reported_id=" + reported_id + ", category_seq="
-				+ category_seq + ", c_content=" + c_content + ", process=" + process + ", regdate=" + regdate
-				+ ", content=" + content + "]";
+	
+	
+	public ReportDto(int seq, String id, String reported_id, String category_seq, String c_content, String process,
+			Date regdate, String content, String nickname) {
+		super();
+		this.seq = seq;
+		this.id = id;
+		this.reported_id = reported_id;
+		this.category_seq = category_seq;
+		this.c_content = c_content;
+		this.process = process;
+		this.regdate = regdate;
+		this.content = content;
+		this.nickname = nickname;
 	}
+	
 	
 	
 }

@@ -37,7 +37,7 @@
 		<result property="seq" column="SEQ"/>
 		<result property="id" column="ID"/>
 		<result property="wanted_seq" column="WANTED_SEQ"/>
-		<collection property="WantedDto" resultMap="WantedDtoMap"/>
+		<collection property="wantedDto" resultMap="WantedDtoMap"/>
 	</resultMap>
 
 <!-- 	내가 쓴 글 전체 보기(페이징) -->
@@ -102,7 +102,7 @@
 <!-- 	</select> -->
 
 <!-- 내가 지원한 구인글 별 지원자 수 페이징 -->
-	<select id="myApplyCount" resultType="WantedDtoMap" parameterType="map">
+	<select id="myApplyCount" resultMap="WantedDtoMap" parameterType="map">
 		SELECT aaa.RN, aaa.ID, aaa.WANTED_SEQ, aaa.co as acount, aaa.REGDATE, aaa.TITLE, aaa.DEADLINE, aaa.SDATE, aaa.EDATE, aaa.SALARY, aaa.STATE, aaa.LOC_NAME
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY aa.WANTED_SEQ DESC) AS RN, aa.ID, aa.WANTED_SEQ, aa.REGDATE, ac.co, wan.TITLE, wan.DEADLINE, wan.SDATE, wan.EDATE, wan.SALARY, wan.STATE, lc.LOC_NAME 

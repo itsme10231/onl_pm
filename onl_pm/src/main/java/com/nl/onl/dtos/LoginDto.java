@@ -26,6 +26,31 @@ public class LoginDto implements UserDetails {
 	
 	private ReportDto reportDto;
 	
+	
+	
+	public LoginDto() {
+
+	}
+	
+	
+	public LoginDto(String id, String password, String name, String address_1, String address_2, String address_3,
+			String email, String nickname, Date birth, String delflag, Date regdate, String role, String phone) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.address_1 = address_1;
+		this.address_2 = address_2;
+		this.address_3 = address_3;
+		this.email = email;
+		this.nickname = nickname;
+		this.birth = birth;
+		this.delflag = delflag;
+		this.regdate = regdate;
+		this.role = role;
+		this.phone = phone;
+	}
+
+
 	public ReportDto getReportDto() {
 		return reportDto;
 	}
