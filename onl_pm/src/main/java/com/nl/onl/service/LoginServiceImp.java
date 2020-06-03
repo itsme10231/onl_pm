@@ -76,5 +76,5 @@ public class LoginServiceImp implements UserDetailsService,ILoginService{
 	public boolean updateProfile(ProfileDto pdto) {
 		return loginDaoImp.updateProfile(pdto);
 	}
-
+	
 }

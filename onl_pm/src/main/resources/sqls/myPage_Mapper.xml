@@ -40,14 +40,13 @@
 		<collection property="wantedDto" resultMap="WantedDtoMap"/>
 	</resultMap>
 
-<!-- 	내가 쓴 글 전체 보기(페이징) -->
+<!-- 	내가 쓴 글 전체 보기- 지원자 수 표시(페이징) -->
 	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="map">
 		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOC_NAME, wp.SALARY, wp.STATE
-		FROM 
-			(SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME, 
+		FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME, 
 			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE
-			FROM WANTED_POST wp join LOCATION_CODE lc ON  wp.LOCATION = lc.LOC_CODE
-			WHERE id=#{id}) wp
+			FROM WANTED_POST wp join LOCATION_CODE lc ON  wp.LOCATION = lc.LOC_CODE, "MEMBER" m
+			WHERE wp.ID=#{id} AND wp.ID) wp
 		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
@@ -92,7 +91,7 @@
 <!-- 		FROM APPLYLIST  -->
 <!-- 		WHERE id=#{id} -->
 <!-- 	</select> -->
-	
+
 <!--미사용 	구인글 별 지원자 수 -->
 <!-- 	<select id="applyCount" resultMap="WantedDtoMap" parameterType="int"> -->
 <!-- 		SELECT a.WANTED_SEQ, COUNT(a.seq) -->
