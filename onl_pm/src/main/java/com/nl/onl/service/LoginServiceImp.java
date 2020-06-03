@@ -24,13 +24,13 @@ public class LoginServiceImp implements UserDetailsService,ILoginService{
 
 	
 	@Override
-	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		
-		return loginDaoImp.login(id);
+		return loginDaoImp.login(email);
 	}
 
 	@Override
-	public int insertMember(LoginDto ldto) {
+	public boolean insertMember(LoginDto ldto) {
 		String encodedPw = passwordEncoder.encode(ldto.getPassword());
 		
 		ldto.setPassword(encodedPw);
@@ -38,49 +38,43 @@ public class LoginServiceImp implements UserDetailsService,ILoginService{
 	}
 
 	@Override
-	public String checkId(String id) {
-		return loginDaoImp.checkId(id);
+	public String checkEmail(String email) {
+		return loginDaoImp.checkEmail(email);
 	}
 
 	@Override
-	public LoginDto login(String id) {
-		return loginDaoImp.login(id);
+	public LoginDto login(String email) {
+		return loginDaoImp.login(email);
 	}
 
 	@Override
-	public int updateInfo(LoginDto ldto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean updateInfo(LoginDto ldto) {
+		return loginDaoImp.updateInfo(ldto);
 	}
 
 	@Override
-	public int updateDelflag(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean updateDelflag(String id) {
+		return loginDaoImp.updateDelflag(id);
 	}
 
 	@Override
-	public int deleteMember() {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean deleteMember() {
+		return loginDaoImp.deleteMember();
 	}
 
 	@Override
-	public int insertProfile(ProfileDto pdto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean insertProfile(ProfileDto pdto) {
+		return loginDaoImp.insertProfile(pdto);
 	}
 
 	@Override
 	public ProfileDto getProfile(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return loginDaoImp.getProfile(id);
 	}
 
 	@Override
-	public int updateProfile(ProfileDto pdto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean updateProfile(ProfileDto pdto) {
+		return loginDaoImp.updateProfile(pdto);
 	}
 
 }

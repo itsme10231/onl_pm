@@ -19,21 +19,21 @@ public class OnlAuthProvider extends DaoAuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		String id = (String)authentication.getPrincipal();
+		String email = (String)authentication.getPrincipal();
 		String password = (String)authentication.getCredentials();
 		
-		LoginDto dto = (LoginDto) getUserDetailsService().loadUserByUsername(id);
+		LoginDto dto = (LoginDto) getUserDetailsService().loadUserByUsername(email);
 		
 		if (!((BCryptPasswordEncoder) getPasswordEncoder()).matches(password, dto.getPassword())) {
-			throw new BadCredentialsException(id);
+			throw new BadCredentialsException(email);
 		}
 		
 		if(!dto.isEnabled()) {
-			throw new DisabledException(id);
+			throw new DisabledException(email);
 		}
 		
 		List<GrantedAuthority> roles = (List<GrantedAuthority>) dto.getAuthorities();
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(id, password, roles);
+		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email, password, roles);
 		
 		return auth;
 	}

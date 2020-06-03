@@ -13,6 +13,8 @@ public class ChatDto {
 	private String delflag;
 	private int wanted_seq;
 	
+	private String nickname;
+	
 	public ChatDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -29,6 +31,16 @@ public class ChatDto {
 		this.chkflag = chkflag;
 		this.delflag = delflag;
 		this.wanted_seq = wanted_seq;
+	}
+	
+	
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public int getSeq() {
@@ -99,7 +111,9 @@ public class ChatDto {
 	public String toString() {
 		return "ChatDto [seq=" + seq + ", receive_id=" + receive_id + ", send_id=" + send_id + ", content=" + content
 				+ ", chatdate=" + chatdate + ", chkflag=" + chkflag + ", delflag=" + delflag + ", wanted_seq="
-				+ wanted_seq + "]";
+				+ wanted_seq + ", nickname=" + nickname + "]";
 	}
+
+	
 	
 }

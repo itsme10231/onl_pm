@@ -18,38 +18,38 @@ public class LoginDaoImp implements ILoginDao {
 	
 	
 	@Override
-	public int insertMember(LoginDto ldto) {
-		return sqlSession.insert(nameSpace+"insertMember", ldto);
+	public boolean insertMember(LoginDto ldto) {
+		return sqlSession.insert(nameSpace+"insertMember", ldto) > 0? true:false;
 	}
 
 	@Override
-	public String checkId(String id) {
-		return sqlSession.selectOne(nameSpace+"checkId", id);
+	public String checkEmail(String email) {
+		return sqlSession.selectOne(nameSpace+"checkEmail", email);
 	}
 
 	@Override
-	public LoginDto login(String id) {
-		return sqlSession.selectOne(nameSpace+"login", id);
+	public LoginDto login(String email) {
+		return sqlSession.selectOne(nameSpace+"login", email);
 	}
 
 	@Override
-	public int updateInfo(LoginDto ldto) {
-		return sqlSession.update(nameSpace+"updateInfo",ldto);
+	public boolean updateInfo(LoginDto ldto) {
+		return sqlSession.update(nameSpace+"updateInfo",ldto) > 0? true:false;
 	}
 
 	@Override
-	public int updateDelflag(String id) {
-		return sqlSession.update(nameSpace+"updateDelflag", id);
+	public boolean updateDelflag(String id) {
+		return sqlSession.update(nameSpace+"updateDelflag", id) > 0? true:false;
 	}
 
 	@Override
-	public int deleteMember() {
-		return sqlSession.delete(nameSpace+"deleteMember");
+	public boolean deleteMember() {
+		return sqlSession.delete(nameSpace+"deleteMember") > 0? true:false;
 	}
 
 	@Override
-	public int insertProfile(ProfileDto pdto) {
-		return sqlSession.insert(nameSpace+"insertProfile", pdto);
+	public boolean insertProfile(ProfileDto pdto) {
+		return sqlSession.insert(nameSpace+"insertProfile", pdto) > 0? true:false;
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class LoginDaoImp implements ILoginDao {
 	}
 
 	@Override
-	public int updateProfile(ProfileDto pdto) {
-		return sqlSession.update(nameSpace+"updateProfile", pdto);
+	public boolean updateProfile(ProfileDto pdto) {
+		return sqlSession.update(nameSpace+"updateProfile", pdto) > 0? true:false;
 	}
 
 }

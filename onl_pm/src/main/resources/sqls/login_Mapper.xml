@@ -21,14 +21,14 @@
 				)
 	</insert>
 	
-	<!-- 아이디 중복검사 -->
-	<select id="checkId" parameterType="String" resultType="String">
-		SELECT ID FROM MEMBER WHERE ID = #{id}
+	<!-- 이메일 중복검사 -->
+	<select id="checkEmail" parameterType="String" resultType="String">
+		SELECT ID FROM MEMBER WHERE EMAIL = #{email}
 	</select>
 	
 	<!-- 로그인 -->
 	<select id="login" parameterType="String" resultType="LoginDto">
-		SELECT ID, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE EMAIL = #{email}
+		SELECT ID, PASSWORD, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE EMAIL = #{email}
 	</select>
 	
 	<!-- 정보수정 -->

@@ -13,6 +13,9 @@ public class QnaDto {
 	private int ref;
 	private String process;
 	private String category_name;
+	
+	private String nickname;
+	
 	public QnaDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -29,6 +32,14 @@ public class QnaDto {
 		this.ref = ref;
 		this.process = process;
 		this.category_name = category_name;
+	}
+	
+	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public int getSeq() {
 		return seq;
@@ -88,8 +99,9 @@ public class QnaDto {
 	public String toString() {
 		return "QnaDto [seq=" + seq + ", qna_code=" + qna_code + ", title=" + title + ", content=" + content + ", id="
 				+ id + ", regdate=" + regdate + ", ref=" + ref + ", process=" + process + ", category_name="
-				+ category_name + "]";
+				+ category_name + ", nickname=" + nickname + "]";
 	}
+	
 	
 	
 }

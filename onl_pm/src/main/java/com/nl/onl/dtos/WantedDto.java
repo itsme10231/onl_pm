@@ -29,9 +29,17 @@ public class WantedDto {
 	private int apply_c;
 	private String category_name1;
 	private String category_name2;
+	private String nickname;
 	private ApplyDto applyDto;
 	
 	
+	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	public String getCategory_name1() {
 		return category_name1;
 	}
@@ -204,8 +212,9 @@ public class WantedDto {
 				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
 				+ sosflag + ", selector=" + selector + ", loc_name=" + loc_name + ", whitelist=" + whitelist
 				+ ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1=" + category_name1
-				+ ", category_name2=" + category_name2 + ", applyDto=" + applyDto + "]";
+				+ ", category_name2=" + category_name2 + ", nickname=" + nickname + ", applyDto=" + applyDto + "]";
 	}
+	
 	
 	
 }
