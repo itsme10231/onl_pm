@@ -33,6 +33,12 @@
 		<result property="regdate" column="REGDATE"/>
 <!-- 		<collection property="ScheduleDto" resultMap="appylistDtoMap"/> -->
 	</resultMap>
+	<resultMap type="com.nl.onl.dtos.WishDto" id="WishDtoMap">
+		<result property="seq" column="SEQ"/>
+		<result property="id" column="ID"/>
+		<result property="wanted_seq" column="WANTED_SEQ"/>
+		<collection property="WantedDto" resultMap="WantedDtoMap"/>
+	</resultMap>
 
 <!-- 	내가 쓴 글 전체 보기(페이징) -->
 	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="map">
@@ -127,7 +133,7 @@
 	</update>
 	
 <!-- 	구직자 취소 -->
-	<update id="changeSelector" parameterType="int">
+	<update id="cancelSelector" parameterType="int">
 		UPDATE WANTED_POST SET 
 		SELECTOR = NULL 
 		WHERE SEQ = #{seq}
@@ -178,15 +184,15 @@
 		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
-<!-- 	찜글보기 페이징-->
-<!-- 	<select id="getWishlist" resultType="" parameterType="map"> -->
-<!-- 		SELECT RN, SEQ, ID, WANTED_SEQ -->
-<!-- 		FROM  -->
-<!-- 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, WANTED_SEQ  -->
-<!-- 			FROM WISHLIST  -->
-<!-- 			WHERE ID = #{id}) -->
-<!-- 		WHERE CEIL(RN/10)=#{pnum} -->
-<!-- 	</select> -->
+<!-- 	찜글보기 페이징 수정-->
+	<select id="getWishlist" resultType="WishDto" parameterType="map">
+		SELECT ws.RN, ws.SEQ, ws.WANTED_SEQ, wp.TITLE, wp.ID, wp.DEADLINE, wp.SALARY, wp.STATE 
+		FROM WANTED_POST wp,
+			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, WANTED_SEQ 
+			FROM WISHLIST 
+			WHERE ID = #{id}) ws
+		WHERE CEIL(RN/10)=#{pnum} AND ws.WANTED_SEQ = wp.SEQ
+	</select>
 	
 <!-- 	찜글삭제 -->
 	<delete id="delWishlist" parameterType="int">
@@ -204,25 +210,25 @@
 <!-- 		WHERE CEIL(RN/10)=1 -->
 <!-- 	</select> -->
 	
-<!-- 	유저리스트 페이징     수정-->
-<!-- 	<select id="getUserlist" parameterType="map"> -->
-<!-- 		SELECT RN, SEQ, ID, LIST_ID, "TYPE" -->
-<!-- 		FROM  -->
-<!-- 			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE"  -->
-<!-- 			FROM USERLIST   -->
-<!-- 			WHERE ID = #{id} -->
-<!-- 				<if test="type!=null"> -->
-<!-- 					<choose> -->
-<!-- 						<when test="type.equals('B')"> -->
-<!-- 							AND "TYPE" = 'B' -->
-<!-- 						</when> -->
-<!-- 						<otherwise> -->
-<!-- 							AND "TYPE" = 'W' -->
-<!-- 						</otherwise> -->
-<!-- 					</choose> -->
-<!-- 				</if>) -->
-<!-- 		WHERE CEIL(RN/10)=#{pnum}	 -->
-<!-- 	</select> -->
+<!-- 	유저리스트 페이징     -->
+	<select id="getUserlist" resultType="UserlistDto" parameterType="map">
+		SELECT RN, SEQ, ID, LIST_ID, "TYPE"
+		FROM 
+			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE" 
+			FROM USERLIST  
+			WHERE ID = #{id}
+				<if test="type!=null">
+					<choose>
+						<when test="type.equals('B')">
+							AND "TYPE" = 'B'
+						</when>
+						<otherwise>
+							AND "TYPE" = 'W'
+						</otherwise>
+					</choose>
+				</if>)
+		WHERE CEIL(RN/10)=#{pnum}	
+	</select>
 	
 <!-- 	유저리스트삭제 -->
 	<delete id="delUserlist" parameterType="int">

@@ -6,242 +6,130 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.ReviewDto;
+import com.nl.onl.dtos.UserlistDto;
 import com.nl.onl.dtos.WantedDto;
+import com.nl.onl.dtos.WishDto;
 
 public class MyPageDaoImp implements IMyPageDao{
 
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	private String namespace = "com.nl.onl.mypage.";
+	
 	@Override
 	public List<WantedDto> getAllMyList(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectList(namespace+"getAllMyList", map);
 	}
 
 	@Override
-	public String pcount(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public int pcount(String id) {
+		
+		return sqlSession.selectOne(namespace+"pcount", id);
 	}
 
 	@Override
 	public WantedDto detail(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectOne(namespace+"detail", id);
 	}
 
 	@Override
 	public List<WantedDto> activation(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectList(namespace+"activation", map);
 	}
 
 	@Override
 	public List<WantedDto> expiration(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectList(namespace+"expiration", map);
 	}
 
 	@Override
 	public List<WantedDto> myApplyCount(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectList(namespace+"myApplyCount", map);
 	}
 
 	@Override
 	public List<WantedDto> applylist(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectList(namespace+"applylist", map);
+	}
+	
+	@Override
+	public boolean setSelector(Map<String, Integer> map) {
+		int count = sqlSession.update(namespace+"setSelector", map);
+		return count > 0? true:false;
 	}
 
 	@Override
-	public int setSelector(Map<String, Integer> map) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean cancelSelector(int seq) {
+		int count = sqlSession.update(namespace+"changeSelector", seq);
+		return count > 0? true:false;
 	}
 
 	@Override
-	public int changeSelector(int seq) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean changeSalary(Map<String, Integer> map) {
+		int count = sqlSession.update(namespace+"changeSalary", map);
+		return count > 0? true:false;
 	}
 
 	@Override
-	public int changeSalary(Map<String, Integer> map) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean applyCancel(int seq) {
+		int count = sqlSession.delete(namespace+"applyCancel", seq);
+		return count > 0? true:false;
 	}
 
 	@Override
-	public int applyCancel(int seq) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int cancelWanted(int seq) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean cancelWanted(int seq) {
+		int count = sqlSession.update(namespace+"cancelWanted");
+		return count > 0? true:false;
 	}
 
 	@Override
 	public List<ReviewDto> getReview(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectOne(namespace+"getReview", map);
 	}
 
 	@Override
 	public List<ReviewDto> receiveReview(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectOne(namespace+"receiveReview", map);
 	}
 
 	@Override
-	public String getWishlist(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<WishDto> getWishlist(Map<String, String> map) {
+		
+		return sqlSession.selectOne(namespace+"getWishlist", map);
 	}
 
 	@Override
-	public int delWishlist(int seq) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean delWishlist(int seq) {
+		int count = sqlSession.update(namespace+"delWishlist", seq);
+		return count > 0? true:false;
 	}
 
 	@Override
-	public String getUserlist(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<UserlistDto> getUserlist(Map<String, String> map) {
+		
+		return sqlSession.selectOne(namespace+"getUserlist", map);
 	}
 
 	@Override
-	public int delUserlist(int seq) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean delUserlist(int seq) {
+		int count = sqlSession.update(namespace+"delUserlist", seq);
+		return count > 0? true:false;
 	}
 
 	@Override
-	public String changeUserlist(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean changeUserlist(Map<String, String> map) {
+		int count = sqlSession.selectOne(namespace+"changeUserlist", map);
+		return count > 0? true:false;
 	}
-
-//	@Autowired
-//	private SqlSessionTemplate sqlSession;
-//	private String namespace = "com.nl.onl.mypage.";
-//	
-//	@Override
-//	public List<WantedDto> getAllMyList(Map<String, String> map) {
-//		
-//		return sqlSession.selectList(namespace+"getAllMyList", map);
-//	}
-//
-//	@Override
-//	public String pcount(String id) {
-//		
-//		return sqlSession.selectOne(namespace+"pcount", id);
-//	}
-//
-//	@Override
-//	public String detail(String id) {
-//		
-//		return sqlSession.selectOne(namespace+"detail", id);
-//	}
-//
-//	@Override
-//	public List<WantedDto> activation(Map<String, String> map) {
-//		
-//		return sqlSession.selectList(namespace+"activation", map);
-//	}
-//
-//	@Override
-//	public List<WantedDto> expiration(Map<String, String> map) {
-//		
-//		return sqlSession.selectList(namespace+"expiration", map);
-//	}
-//
-//	@Override
-//	public List<ApplyDto> myApplyCount(Map<String, String> map) {
-//		
-//		return sqlSession.selectList(namespace+"myApplyCount", map);
-//	}
-//
-//	@Override
-//	public List<WantedDto> applylist(Map<String, String> map) {
-//		
-//		return sqlSession.selectList(namespace+"applylist", map);
-//	}
-//	
-//	@Override
-//	public int selector(Map<Integer, Integer> map) {
-//		
-//		return sqlSession.update(namespace+"selector", map);
-//	}
-//
-//	@Override
-//	public int changeSelector() {
-//		
-//		return sqlSession.update(namespace+"changeSelector");
-//	}
-//
-//	@Override
-//	public int changeSalary(Map<Integer, Integer> map) {
-//		
-//		return sqlSession.update(namespace+"changeSalary", map);
-//	}
-//
-//	@Override
-//	public int applyCancel() {
-//		
-//		return sqlSession.update(namespace+"applyCancel");
-//	}
-//
-//	@Override
-//	public int cancelWanted() {
-//		
-//		return sqlSession.update(namespace+"cancelWanted");
-//	}
-//
-//	@Override
-//	public String getReview(Map<String, String> map) {
-//		
-//		return sqlSession.selectOne(namespace+"getReview", map);
-//	}
-//
-//	@Override
-//	public String receiveReview(Map<String, String> map) {
-//		
-//		return sqlSession.selectOne(namespace+"receiveReview", map);
-//	}
-//
-//	@Override
-//	public String getWishlist(Map<String, String> map) {
-//		
-//		return sqlSession.selectOne(namespace+"getWishlist", map);
-//	}
-//
-//	@Override
-//	public int delWishlist() {
-//		
-//		return sqlSession.update(namespace+"delWishlist");
-//	}
-//
-//	@Override
-//	public String getUserlist(Map<String, String> map) {
-//		
-//		return sqlSession.selectOne(namespace+"getUserlist", map);
-//	}
-//
-//	@Override
-//	public int delUserlist() {
-//		
-//		return sqlSession.update(namespace+"delUserlist");
-//	}
-//
-//	@Override
-//	public String changeUserlist(Map<String, String> map) {
-//		
-//		return sqlSession.selectOne(namespace+"changeUserlist", map);
-//	}
 
 }
