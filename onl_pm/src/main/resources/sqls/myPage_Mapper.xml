@@ -46,8 +46,8 @@
 	</select>
 	
 <!-- 	페이징 -->
-	<select id="pcount" resultType="int">
-		SELECT CEIL(COUNT(seq)/10) FROM WANTED_POST 
+	<select id="pcount" resultType="int" parameterType="String">
+		SELECT CEIL(COUNT(seq)/10) FROM WANTED_POST WHERE id=#{id}
 	</select>
 	
 <!-- 	공고 상세보기 -->
@@ -96,7 +96,7 @@
 <!-- 	</select> -->
 
 <!-- 내가 지원한 구인글 별 지원자 수 페이징 -->
-	<select id="myApplyCount" resultType="ApplyDto" parameterType="map">
+	<select id="myApplyCount" resultType="WantedDtoMap" parameterType="map">
 		SELECT aaa.RN, aaa.ID, aaa.WANTED_SEQ, aaa.co as acount, aaa.REGDATE, aaa.TITLE, aaa.DEADLINE, aaa.SDATE, aaa.EDATE, aaa.SALARY, aaa.STATE, aaa.LOC_NAME
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY aa.WANTED_SEQ DESC) AS RN, aa.ID, aa.WANTED_SEQ, aa.REGDATE, ac.co, wan.TITLE, wan.DEADLINE, wan.SDATE, wan.EDATE, wan.SALARY, wan.STATE, lc.LOC_NAME 
@@ -120,7 +120,7 @@
 	</select>
 	
 <!-- 	구직자 선택/변경 -->
-	<update id="selector" parameterType="map">
+	<update id="setSelector" parameterType="map">
 		UPDATE WANTED_POST SET 
 		SELECTOR = #{selector} 
 		WHERE SEQ = #{seq}
@@ -151,7 +151,7 @@
 	</update>
 	
 <!-- 	내 평가보기(평가한거) 페이징-->
-	<select id="getReview" parameterType="map" resultType="map">
+	<select id="getReview" resultType="ReviewDto" parameterType="map" >
 		SELECT RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
@@ -165,7 +165,7 @@
 	</select>
 	
 <!-- 	내 평가보기(평가받은거) 페이징-->
-	<select id="receiveReview" parameterType="map">
+	<select id="receiveReview" resultType="ReviewDto" parameterType="map">
 		SELECT RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
 		FROM 
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, TARGET_ID, "TYPE", CONTENT, SCORE, WANTED_SEQ, REGDATE, DELFLAG
@@ -179,14 +179,14 @@
 	</select>
 	
 <!-- 	찜글보기 페이징-->
-	<select id="getWishlist" parameterType="map">
-		SELECT RN, SEQ, ID, WANTED_SEQ
-		FROM 
-			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, WANTED_SEQ 
-			FROM WISHLIST 
-			WHERE ID = #{id})
-		WHERE CEIL(RN/10)=#{pnum}
-	</select>
+<!-- 	<select id="getWishlist" resultType="" parameterType="map"> -->
+<!-- 		SELECT RN, SEQ, ID, WANTED_SEQ -->
+<!-- 		FROM  -->
+<!-- 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, WANTED_SEQ  -->
+<!-- 			FROM WISHLIST  -->
+<!-- 			WHERE ID = #{id}) -->
+<!-- 		WHERE CEIL(RN/10)=#{pnum} -->
+<!-- 	</select> -->
 	
 <!-- 	찜글삭제 -->
 	<delete id="delWishlist" parameterType="int">
@@ -204,25 +204,25 @@
 <!-- 		WHERE CEIL(RN/10)=1 -->
 <!-- 	</select> -->
 	
-<!-- 	유저리스트 페이징-->
-	<select id="getUserlist" parameterType="map">
-		SELECT RN, SEQ, ID, LIST_ID, "TYPE"
-		FROM 
-			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE" 
-			FROM USERLIST  
-			WHERE ID = #{id}
-				<if test="type!=null">
-					<choose>
-						<when test="type.equals('B')">
-							AND "TYPE" = 'B'
-						</when>
-						<otherwise>
-							AND "TYPE" = 'W'
-						</otherwise>
-					</choose>
-				</if>)
-		WHERE CEIL(RN/10)=#{pnum}	
-	</select>
+<!-- 	유저리스트 페이징     수정-->
+<!-- 	<select id="getUserlist" parameterType="map"> -->
+<!-- 		SELECT RN, SEQ, ID, LIST_ID, "TYPE" -->
+<!-- 		FROM  -->
+<!-- 			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE"  -->
+<!-- 			FROM USERLIST   -->
+<!-- 			WHERE ID = #{id} -->
+<!-- 				<if test="type!=null"> -->
+<!-- 					<choose> -->
+<!-- 						<when test="type.equals('B')"> -->
+<!-- 							AND "TYPE" = 'B' -->
+<!-- 						</when> -->
+<!-- 						<otherwise> -->
+<!-- 							AND "TYPE" = 'W' -->
+<!-- 						</otherwise> -->
+<!-- 					</choose> -->
+<!-- 				</if>) -->
+<!-- 		WHERE CEIL(RN/10)=#{pnum}	 -->
+<!-- 	</select> -->
 	
 <!-- 	유저리스트삭제 -->
 	<delete id="delUserlist" parameterType="int">
@@ -231,7 +231,7 @@
 	</delete>
 	
 <!-- 	블랙/화이트리스트 변경 -->
-	<update id="changeUserlist">
+	<update id="changeUserlist" parameterType="map">
 		UPDATE USERLIST 
 		SET "TYPE" = #{type} 
 		WHERE SEQ = #{seq}

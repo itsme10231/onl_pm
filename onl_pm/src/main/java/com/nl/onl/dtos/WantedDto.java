@@ -29,6 +29,7 @@ public class WantedDto {
 	private int apply_c;
 	private String category_name1;
 	private String category_name2;
+	private ApplyDto applyDto;
 	
 	
 	public String getCategory_name1() {
@@ -56,7 +57,7 @@ public class WantedDto {
 		this.selector = selector;
 	}
 
-	private ApplyDto applyDto;
+	
 	
 	public ApplyDto getApplyDto() {
 		return applyDto;
