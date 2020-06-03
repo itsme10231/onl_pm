@@ -28,7 +28,7 @@
 	
 	<!-- 로그인 -->
 	<select id="login" parameterType="String" resultType="LoginDto">
-		SELECT ID, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE ID = #{id}
+		SELECT ID, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE EMAIL = #{email}
 	</select>
 	
 	<!-- 정보수정 -->

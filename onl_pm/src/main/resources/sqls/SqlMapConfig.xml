@@ -17,6 +17,8 @@
 		<typeAlias type="com.nl.onl.dtos.ChatDto" alias="ChatDto"/>
 		<typeAlias type="com.nl.onl.dtos.ChatlistDto" alias="ChatlistDto"/>
 		<typeAlias type="com.nl.onl.dtos.FileDto" alias="FileDto"/>
+		<typeAlias type="com.nl.onl.dtos.WishDto" alias="WishDto"/>
+		<typeAlias type="com.nl.onl.dtos.UserlistDto" alias="UserlistDto"/>
 	</typeAliases>
 
 	<mappers>

@@ -19,11 +19,11 @@ public class LoginController {
 	private ILoginService loginServiceImp;
 	
 	
-	@RequestMapping(value = "/member/login.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/login.do", method = {RequestMethod.POST, RequestMethod.GET})
 	public String login(Model model, String id, String pw) {
 		
 		
 		
-		return "home";
+		return "login";
 	}
 }

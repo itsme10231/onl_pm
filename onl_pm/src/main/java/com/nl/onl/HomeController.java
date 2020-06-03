@@ -22,8 +22,9 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/home.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+		System.out.println("Controller 접속");
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
@@ -36,4 +37,10 @@ public class HomeController {
 		return "home";
 	}
 	
+//	@RequestMapping(value = "/", method = RequestMethod.GET)
+//	public String toIndex() {
+//		System.out.println("Controller 접속");
+//		
+//		return "index";
+//	}
 }
