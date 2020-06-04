@@ -7,7 +7,7 @@
 	
 	<!-- 비로그인 구인글 목록보기&검색(timezone은 8자리의 숫자형태, String 타입) -->
 	<select id="getWantedList" resultType="WantedDto" parameterType="map">
-		SELECT 	w.SEQ , w.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, w.TITLE , w.REGDATE , w.DEADLINE , l.LOC_NAME , w.SALARY , w.VIEWS , w.SOSFLAG 
+		SELECT 	w.SEQ , w.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, w.TITLE , w.REGDATE , w.DEADLINE , l.LOC_NAME , w.LOC_DETAIL, w.SALARY , w.VIEWS , w.SOSFLAG 
 		FROM 	WANTED_POST w, LOCATION_CODE l, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2
 				<if test="score!=null">
 				,(SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
@@ -40,7 +40,7 @@
 	
 	<!-- 로그인 구인글 목록보기&검색 -->
 	<select id="getWantedListLogin" parameterType="map" resultType="WantedDto">
-		SELECT 	wp.SEQ , wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.REGDATE , wp.DEADLINE , lc.LOC_NAME , wp.SALARY , wp.VIEWS, wp.ID , wp.SOSFLAG ,
+		SELECT 	wp.SEQ , wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.REGDATE , wp.DEADLINE , lc.LOC_NAME , wc.LOC_DETAIL, wp.SALARY , wp.VIEWS, wp.ID , wp.SOSFLAG ,
 				CASE
 					WHEN EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'W' AND ul.LIST_ID = wp.ID) THEN 'Y'
 					ELSE 'N'
@@ -85,7 +85,7 @@
 	<select id="getWantedDetail" parameterType="int" resultType="WantedDto">
 		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, 
 				wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, 
-				lc.LOC_NAME, wp.STIME, wp.ETIME, wp.SALARY, 
+				lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, 
 				wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.SOSFLAG
 		FROM 	WANTED_POST wp, LOCATION_CODE lc, WANTED_CATEGORY1 wc
 		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE
@@ -93,7 +93,7 @@
 	
 	<!-- 로그인 구인글 상세보기 -->
 	<select id="getWantedDetailLogin" parameterType="map" resultType="WantedDto">
-		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG, APPLY_C, 
+		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG, APPLY_C, 
 				CASE 
 					WHEN EXISTS (SELECT 1 FROM APPLYLIST a WHERE a.ID = #{id} AND a.WANTED_SEQ = wp.SEQ) THEN 'Y'
 					ELSE 'N'
@@ -114,17 +114,18 @@
 		WHERE 	SEQ = #{seq}
 	</update>
 	
+	<!-- 지역별 공고 숫자 보기(미구현) -->
 	
 	
 	<!-- ........................................................................... -->
 	<!-- 구인글 작성 -->
 	<insert id="insertWanted" parameterType="WantedDto">
-		INSERT INTO WANTED_POST (SEQ, ID, CATEGORY, TITLE, REGDATE, DEADLINE, SDATE, EDATE, LOCATION, STIME, ETIME, SALARY, CONTENT, PHONE, VIEWS, STATE, DELFLAG, SOSFLAG, SELECTOR)
+		INSERT INTO WANTED_POST (SEQ, ID, CATEGORY, TITLE, REGDATE, DEADLINE, SDATE, EDATE, LOCATION, STIME, ETIME, SALARY, CONTENT, PHONE, VIEWS, STATE, DELFLAG, SOSFLAG, SELECTOR, LOC_DETAIL)
 		VALUES (
 				WANTED_POST_SEQ.NEXTVAL, #{id}, #{category}, 
 				#{title}, SYSDATE, #{deadline}, #{sdate}, 
 				#{edate}, #{location}, #{stime}, #{etime}, #{salary}, 
-				#{content}, #{phone}, #{views}, #{status}, #{delflag}, #{sosflag}, NULL
+				#{content}, #{phone}, #{views}, #{status}, #{delflag}, #{sosflag}, NULL, #{loc_detail}
 				)
 	</insert>
 	
@@ -156,7 +157,8 @@
 				ETIME = #{etime},
 				SALARY = #{salary},
 				CONTENT = #{content},
-				SOSFLAG = #{sosflag}
+				SOSFLAG = #{sosflag},
+				LOC_DETAIL = #{loc_detail}
 		WHERE 	SEQ = #{seq}
 	</update>
 	
@@ -214,6 +216,6 @@
 	<update id="deleteReview" parameterType="int">
 		UPDATE REVIEW_POST
 		SET DELFLAG = 'Y'
-		WHERE SEQ = ${seq}
+		WHERE SEQ = #{seq}
 	</update>
 </mapper>

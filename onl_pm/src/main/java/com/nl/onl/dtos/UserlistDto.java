@@ -7,6 +7,8 @@ public class UserlistDto {
 	private String list_id;
 	private String type;
 	
+	private String nickname;
+	
 	public UserlistDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -51,10 +53,22 @@ public class UserlistDto {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 
 	@Override
 	public String toString() {
-		return "UserlistDto [seq=" + seq + ", id=" + id + ", list_id=" + list_id + ", type=" + type + "]";
+		return "UserlistDto [seq=" + seq + ", id=" + id + ", list_id=" + list_id + ", type=" + type + ", nickname="
+				+ nickname + "]";
 	}
+
+	
 	
 }

@@ -11,6 +11,8 @@ public class ChatlistDto {
 	private String content;
 	private Date chatdate;
 	
+	private String nickname;
+	
 	public ChatlistDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -73,12 +75,24 @@ public class ChatlistDto {
 	public void setChatdate(Date chatdate) {
 		this.chatdate = chatdate;
 	}
+	
+	
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 
 	@Override
 	public String toString() {
 		return "ChatlistDto [target=" + target + ", wanted_seq=" + wanted_seq + ", title=" + title + ", notread_c="
-				+ notread_c + ", content=" + content + ", chatdate=" + chatdate + "]";
+				+ notread_c + ", content=" + content + ", chatdate=" + chatdate + ", nickname=" + nickname + "]";
 	}
+
+
 	
 }
 

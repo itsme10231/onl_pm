@@ -22,6 +22,7 @@ public class WantedDto {
 	private String delflag;
 	private String sosflag;
 	private int selector;
+	private String loc_detail;
 	
 	private String loc_name;
 	private String whitelist;
@@ -182,6 +183,13 @@ public class WantedDto {
 		this.sosflag = sosflag;
 	}
 	
+	public String getLoc_detail() {
+		return loc_detail;
+	}
+	public void setLoc_detail(String loc_detail) {
+		this.loc_detail = loc_detail;
+	}
+	
 	
 	
 	public String getLoc_name() {
@@ -210,11 +218,11 @@ public class WantedDto {
 				+ regdate + ", deadline=" + deadline + ", sdate=" + sdate + ", edate=" + edate + ", location="
 				+ location + ", stime=" + stime + ", etime=" + etime + ", salary=" + salary + ", content=" + content
 				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
-				+ sosflag + ", selector=" + selector + ", loc_name=" + loc_name + ", whitelist=" + whitelist
-				+ ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1=" + category_name1
-				+ ", category_name2=" + category_name2 + ", nickname=" + nickname + ", applyDto=" + applyDto + "]";
+				+ sosflag + ", selector=" + selector + ", loc_detail=" + loc_detail + ", loc_name=" + loc_name
+				+ ", whitelist=" + whitelist + ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1="
+				+ category_name1 + ", category_name2=" + category_name2 + ", nickname=" + nickname + ", applyDto="
+				+ applyDto + "]";
 	}
-	
 	
 	
 }

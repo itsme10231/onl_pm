@@ -10,6 +10,15 @@ public class ApplyDto {
 	private Date regdate;
 	private int acount;
 	
+	private String nickname;
+	
+	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	public int getSeq() {
 		return seq;
 	}
@@ -46,8 +55,10 @@ public class ApplyDto {
 	@Override
 	public String toString() {
 		return "ApplyDto [seq=" + seq + ", id=" + id + ", wanted_seq=" + wanted_seq + ", regdate=" + regdate
-				+ ", acount=" + acount + "]";
+				+ ", acount=" + acount + ", nickname=" + nickname + "]";
 	}
+	
+	
 	
 	
 }

@@ -7,7 +7,7 @@
 	<insert id="insertMember" parameterType="LoginDto">
 		INSERT INTO MEMBER 
 		VALUES (
-				#{id}, #{password}, #{name}, #{address_1}, #{address_2}, #{address_3}, #{email}, 
+				#{regflag}||MEMBER_SEQ.NEXTVAL, #{password}, #{name}, #{address_1}, #{address_2}, #{address_3}, #{email}, 
 				<choose>
 					<when test="nickname!=null">
 					#{nickname}, 
@@ -17,7 +17,7 @@
 					</otherwise>
 				</choose>
 				#{birth,  jdbcType=DATE},
-				#{delflag}, SYSDATE, #{role}, #{phone}
+				'N', SYSDATE, #{role}, #{phone}
 				)
 	</insert>
 	

@@ -24,6 +24,7 @@ public class LoginDto implements UserDetails {
 	private String role;
 	private String phone;
 	
+	private String regflag;
 	private ReportDto reportDto;
 	
 	
@@ -31,10 +32,12 @@ public class LoginDto implements UserDetails {
 	public LoginDto() {
 
 	}
-	
-	
+
+
 	public LoginDto(String id, String password, String name, String address_1, String address_2, String address_3,
-			String email, String nickname, Date birth, String delflag, Date regdate, String role, String phone) {
+			String email, String nickname, Date birth, String delflag, Date regdate, String role, String phone,
+			String regflag) {
+		super();
 		this.id = id;
 		this.password = password;
 		this.name = name;
@@ -48,7 +51,11 @@ public class LoginDto implements UserDetails {
 		this.regdate = regdate;
 		this.role = role;
 		this.phone = phone;
+		this.regflag = regflag;
 	}
+
+
+
 
 
 	public ReportDto getReportDto() {
@@ -141,15 +148,28 @@ public class LoginDto implements UserDetails {
 	
 	
 	
+	
+	public String getRegflag() {
+		return regflag;
+	}
+
+
+	public void setRegflag(String regflag) {
+		this.regflag = regflag;
+	}
+
+
+	
+	
 	@Override
 	public String toString() {
 		return "LoginDto [id=" + id + ", password=" + password + ", name=" + name + ", address_1=" + address_1
 				+ ", address_2=" + address_2 + ", address_3=" + address_3 + ", email=" + email + ", nickname="
 				+ nickname + ", birth=" + birth + ", delflag=" + delflag + ", regdate=" + regdate + ", role=" + role
-				+ ", phone=" + phone + "]";
+				+ ", phone=" + phone + ", regflag=" + regflag + ", reportDto=" + reportDto + "]";
 	}
-	
-	
+
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		String roleGrant = "ROLE_"+role;
