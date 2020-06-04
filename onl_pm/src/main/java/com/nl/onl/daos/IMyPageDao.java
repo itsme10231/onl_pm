@@ -32,19 +32,19 @@ public interface IMyPageDao {
 	public List<WantedDto> applylist(Map<String, String> map);
 	
 //	구직자 선택/변경
-	public boolean setSelector(Map<String, Integer> map);
+	public boolean setSelector(Map<String, String> map);
 	
 //	구직자 취소
-	public boolean cancelSelector(int seq);
+	public boolean cancelSelector(String seq);
 	
 //	금액 변경
-	public boolean changeSalary(Map<String, Integer> map);
+	public boolean changeSalary(Map<String, String> map);
 	
 //	지원 취소
-	public boolean applyCancel(int seq);
+	public boolean applyCancel(String seq);
 	
 //	모집 취소
-	public boolean cancelWanted(int seq);
+	public boolean cancelWanted(String seq);
 	
 //	내 평가보기(평가한거) 페이징
 	public List<ReviewDto> getReview(Map<String, String> map);
@@ -56,13 +56,13 @@ public interface IMyPageDao {
 	public List<WishDto> getWishlist(Map<String, String> map);
 	
 //	찜글삭제
-	public boolean delWishlist(int seq);
+	public boolean delWishlist(String seq);
 	
 //	유저리스트 페이징
 	public List<UserlistDto> getUserlist(Map<String, String> map);
 	
 //	유저리스트 삭제
-	public boolean delUserlist(int seq);
+	public boolean delUserlist(String seq);
 	
 //	블랙/화이트리스트 변경
 	public boolean changeUserlist(Map<String, String> map);

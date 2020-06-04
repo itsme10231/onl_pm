@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nl.onl.dtos.WantedDto;
 
-public class ScheduledDaoImp implements IScheduleDao{
+public class ScheduleDaoImp implements IScheduleDao{
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

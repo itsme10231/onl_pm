@@ -61,31 +61,31 @@ public class MyPageDaoImp implements IMyPageDao{
 	}
 	
 	@Override
-	public boolean setSelector(Map<String, Integer> map) {
+	public boolean setSelector(Map<String, String> map) {
 		int count = sqlSession.update(namespace+"setSelector", map);
 		return count > 0? true:false;
 	}
 
 	@Override
-	public boolean cancelSelector(int seq) {
+	public boolean cancelSelector(String seq) {
 		int count = sqlSession.update(namespace+"changeSelector", seq);
 		return count > 0? true:false;
 	}
 
 	@Override
-	public boolean changeSalary(Map<String, Integer> map) {
+	public boolean changeSalary(Map<String, String> map) {
 		int count = sqlSession.update(namespace+"changeSalary", map);
 		return count > 0? true:false;
 	}
 
 	@Override
-	public boolean applyCancel(int seq) {
+	public boolean applyCancel(String seq) {
 		int count = sqlSession.delete(namespace+"applyCancel", seq);
 		return count > 0? true:false;
 	}
 
 	@Override
-	public boolean cancelWanted(int seq) {
+	public boolean cancelWanted(String seq) {
 		int count = sqlSession.update(namespace+"cancelWanted");
 		return count > 0? true:false;
 	}
@@ -109,7 +109,7 @@ public class MyPageDaoImp implements IMyPageDao{
 	}
 
 	@Override
-	public boolean delWishlist(int seq) {
+	public boolean delWishlist(String seq) {
 		int count = sqlSession.update(namespace+"delWishlist", seq);
 		return count > 0? true:false;
 	}
@@ -121,7 +121,7 @@ public class MyPageDaoImp implements IMyPageDao{
 	}
 
 	@Override
-	public boolean delUserlist(int seq) {
+	public boolean delUserlist(String seq) {
 		int count = sqlSession.update(namespace+"delUserlist", seq);
 		return count > 0? true:false;
 	}

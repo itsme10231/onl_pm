@@ -59,31 +59,31 @@ public class MyPageServiceImp implements IMyPageService{
 	}
 
 	@Override
-	public boolean setSelector(Map<String, Integer> map) {
+	public boolean setSelector(Map<String, String> map) {
 		
 		return mypageDaoImp.setSelector(map);
 	}
 
 	@Override
-	public boolean cancelSelector(int seq) {
+	public boolean cancelSelector(String seq) {
 		
 		return mypageDaoImp.cancelSelector(seq);
 	}
 
 	@Override
-	public boolean changeSalary(Map<String, Integer> map) {
+	public boolean changeSalary(Map<String, String> map) {
 		
 		return mypageDaoImp.changeSalary(map);
 	}
 
 	@Override
-	public boolean applyCancel(int seq) {
+	public boolean applyCancel(String seq) {
 		
 		return mypageDaoImp.applyCancel(seq);
 	}
 
 	@Override
-	public boolean cancelWanted(int seq) {
+	public boolean cancelWanted(String seq) {
 		
 		return mypageDaoImp.cancelWanted(seq);
 	}
@@ -107,7 +107,7 @@ public class MyPageServiceImp implements IMyPageService{
 	}
 
 	@Override
-	public boolean delWishlist(int seq) {
+	public boolean delWishlist(String seq) {
 		
 		return mypageDaoImp.delWishlist(seq);
 	}
@@ -119,7 +119,7 @@ public class MyPageServiceImp implements IMyPageService{
 	}
 
 	@Override
-	public boolean delUserlist(int seq) {
+	public boolean delUserlist(String seq) {
 		
 		return mypageDaoImp.delUserlist(seq);
 	}
