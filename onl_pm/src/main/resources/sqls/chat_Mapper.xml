@@ -39,7 +39,7 @@
 	
 <!-- 채팅리스트(onltest1) -->
 <!-- 타겟아이디 | 구인글 번호 | 내가 확인안한 메시지 수 | 마지막메시지 | 마지막 메시지 시간 -->
-	<select id="chatList" resultType="ChatlistDto" parameterType="map">
+	<select id="getChatlist" resultType="ChatlistDto" parameterType="map">
 		SELECT 	list.TARGET, m.NICKNAME , list.WANTED_SEQ, list.TITLE, list.NOTREAD_C, list.CONTENT, list.CHATDATE
 		FROM 	"MEMBER" m,
 				(SELECT	ROW_NUMBER() OVER(ORDER BY l2.CHATDATE DESC) AS RO, CASE l2.RECEIVE_ID WHEN #{id} THEN l2.SEND_ID ELSE l2.RECEIVE_ID END AS target, l2.WANTED_SEQ, l2.TITLE, l2.NOTREAD_C, l2.CONTENT, l2.CHATDATE
@@ -53,7 +53,7 @@
 										 GROUP BY WANTED_SEQ, RECEIVE_ID) c2 
 								 WHERE (c1.RECEIVE_ID = #{id} OR c1.SEND_ID = #{id}) AND c1.CHKFLAG = 'N' AND c1.WANTED_SEQ = c2.WANTED_SEQ(+) 
 								 GROUP BY c1.WANTED_SEQ, NOTREAD_C) cl2
-						WHERE (RECEIVE_ID = 'onltest1' OR SEND_ID = 'onltest1') AND cl1.WANTED_SEQ  = cl2.WANTED_SEQ AND cl1.WANTED_SEQ = wp.SEQ ) l2
+						WHERE (RECEIVE_ID = #{id} OR SEND_ID = #{id}) AND cl1.WANTED_SEQ  = cl2.WANTED_SEQ AND cl1.WANTED_SEQ = wp.SEQ ) l2
 				 WHERE 	RN = 1
 				 ORDER BY l2.CHATDATE DESC) list
 		WHERE	list.TARGET = m.ID AND CEIL(list.RO/10) = #{pnum}

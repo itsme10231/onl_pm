@@ -32,7 +32,7 @@ public class WantedDto {
 	private String category_name2;
 	private String nickname;
 	private ApplyDto applyDto;
-	
+	private FileDto fileDto;
 	
 	
 	public String getNickname() {
@@ -68,6 +68,12 @@ public class WantedDto {
 
 	
 	
+	public FileDto getFileDto() {
+		return fileDto;
+	}
+	public void setFileDto(FileDto fileDto) {
+		this.fileDto = fileDto;
+	}
 	public ApplyDto getApplyDto() {
 		return applyDto;
 	}

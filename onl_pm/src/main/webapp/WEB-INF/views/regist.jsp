@@ -9,11 +9,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>로그인 페이지(login.jsp)</h1>
-	<form action="/auth">
-		이메일 <input type="email" name="email">
-		비밀번호 <input type="password" name="password">
-		<input type="submit" value="로그인">
-	</form>
+<h1>회원가입</h1>
 </body>
 </html>

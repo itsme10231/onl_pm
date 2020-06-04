@@ -10,6 +10,8 @@ public class ProfileDto {
 	private int offer_score;
 	private String nickname;
 	
+	private FileDto filedto;
+	
 	public String getNickname() {
 		return nickname;
 	}
@@ -56,10 +58,17 @@ public class ProfileDto {
 	
 	
 	
+	public FileDto getFiledto() {
+		return filedto;
+	}
+	public void setFiledto(FileDto filedto) {
+		this.filedto = filedto;
+	}
 	@Override
 	public String toString() {
 		return "ProfileDto [seq=" + seq + ", id=" + id + ", intro=" + intro + ", location_able=" + location_able
-				+ ", search_score=" + search_score + ", offer_score=" + offer_score + ", nickname=" + nickname + "]";
+				+ ", search_score=" + search_score + ", offer_score=" + offer_score + ", nickname=" + nickname
+				+ ", filedto=" + filedto + "]";
 	}
 	
 	

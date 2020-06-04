@@ -31,6 +31,13 @@
 		<result property="phone" column="PHONE" />
 		<collection property="reportDto" resultMap="ReportDtoMap"/>
 	</resultMap>
+	
+	<!-- 신고하기 -->
+	<insert id="insertReport" parameterType="ReportDto">
+	INSERT INTO REPORTLIST VALUES(
+		REPORTLIST_SEQ.NEXTVAL, #{id}, #{reported_id}, #{category_seq}, #{content}, 'WAIT', SYSDATE
+	)
+	</insert>
 
 <!-- 	신고목록보기 -->
 	<select id="getAllListReport" resultMap="ReportDtoMap"

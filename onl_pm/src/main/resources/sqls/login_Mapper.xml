@@ -3,6 +3,27 @@
 
 <mapper namespace="com.nl.onl.login">
 	
+	<resultMap type="ProfileDto" id="ProfileDtoMap">
+		<result column="SEQ" property="seq"/>
+		<result column="ID" property="id"/>
+		<result column="INTRO" property="intro"/>
+		<result column="LOCATION_ABLE" property="location_able"/>
+		<result column="SEARCH_SCORE" property="search_score"/>
+		<result column="OFFER_SCORE" property="offer_score"/>
+		<result column="NICKNAME" property="nickname"/>
+		<collection property="filedto" resultMap="FileDtoMap"/>
+	</resultMap>
+	
+	<resultMap type="FileDto" id="FileDtoMap">
+		<result column="SEQ" property="seq"/>
+		<result column="ORIGIN_NAME" property="stored_name"/>
+		<result column="STORED_NAME" property="stored_name"/>
+		<result column="REGDATE" property="regdate"/>
+		<result column="DELFLAG" property="delflag"/>
+		<result column="BOARD_TYPE" property="board_type"/>
+		<result column="ID" property="id"/>
+		<result column="POST_SEQ" property="post_seq"/>
+	</resultMap>
 	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="LoginDto">
 		INSERT INTO MEMBER 
@@ -28,7 +49,7 @@
 	
 	<!-- 로그인 -->
 	<select id="login" parameterType="String" resultType="LoginDto">
-		SELECT ID, PASSWORD, NICKNAME, DELFLAG, ROLE, PHONE FROM MEMBER WHERE EMAIL = #{email}
+		SELECT m.ID, m.PASSWORD, m.NICKNAME, m.DELFLAG, m.ROLE, m.PHONE FROM "MEMBER" m WHERE m.EMAIL = #{email}
 	</select>
 	
 	<!-- 정보수정 -->
@@ -67,17 +88,20 @@
 	
 	<!-- 프로필 보기 -->
 	<select id="getProfile" parameterType="String" resultType="ProfileDto">
-		SELECT m.ID , m.NICKNAME , NVL(p.INTRO, '아직 작성하지 않았습니다.') , NVL(p.LOCATION_ABLE, '아직 선택된 지역이 없습니다.')
-			CASE 
-			WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID  = rp.TARGET_ID ) THEN 0
-			ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID = rp.TARGET_ID GROUP BY rp.SCORE)
-			END AS search_score,
-			CASE 
-			WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'OFFER' AND m.ID  = rp.TARGET_ID ) THEN 0
-			ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'OFFER' AND m.ID = rp.TARGET_ID GROUP BY rp.SCORE)
-			END AS offer_score
-		FROM "MEMBER" m , PROFILE p 
-		WHERE m.ID = #{id} AND m.ID = p.ID(+)
+		SELECT	 m.ID , m.NICKNAME , NVL(p.INTRO, '아직 작성하지 않았습니다.') AS INTRO, NVL(p.LOCATION_ABLE, '아직 선택된 지역이 없습니다.') AS LOCATION_ABLE,
+				CASE 
+				WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID  = rp.TARGET_ID ) THEN 0
+				ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID = rp.TARGET_ID)
+				END AS search_score,
+				CASE 
+				WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'OFFER' AND m.ID  = rp.TARGET_ID ) THEN 0
+				ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'OFFER' AND m.ID = rp.TARGET_ID)
+				END AS offer_score, f.STORED_NAME
+		FROM 	"MEMBER" m , PROFILE p ,
+				(SELECT STORED_NAME, ID 
+				 FROM UPLOAD_FILE 
+				 WHERE BOARD_TYPE = 'PROFILE' AND ID = 'onltest1') f
+		WHERE 	m.ID = 'onltest1' AND m.ID = p.ID(+) AND m.ID = f.ID(+) 
 	</select>
 	
 	<!-- 프로필 수정 -->

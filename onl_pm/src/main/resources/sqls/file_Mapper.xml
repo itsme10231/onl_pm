@@ -3,17 +3,40 @@
 
 <mapper namespace="com.nl.onl.file">
 	
-	<!-- 첨부파일 업로드 -->
-	<insert id="insertFile" parameterType="FileDto">
-		INSERT INTO UPLOAD_FILE VALUES(
-				UPLOAD_FILE.NEXTVAL, #{origin_name}, #{stored_name}, SYSDATE, 'N', #{board_type}, #{id}, #{post_seq}
-		)
+	<!-- 첨부파일 업로드(미사용-멀티업로드 기능으로 병합) -->
+<!-- 	<insert id="insertFile" parameterType="FileDto"> -->
+<!-- 		INSERT INTO UPLOAD_FILE VALUES( -->
+<!-- 				UPLOAD_FILE_SEQ.NEXTVAL, #{origin_name}, #{stored_name}, SYSDATE, 'N', #{board_type}, #{id}, #{post_seq} -->
+<!-- 		) -->
+<!-- 	</insert> -->
+	
+	<!-- 첨부파일 여러장 한번에 업로드 -->
+	<insert id="insertMultiFile" parameterType="list">
+		INSERT ALL
+		<foreach collection="list" open="INTO UPLOAD_FILE VALUES(" close=")" separator=") INTO UPLOAD_FILE VALUES(" item="fdto">
+			UPLOAD_FILE_SEQ.NEXTVAL, #{fdto.origin_name}, #{fdto.stored_name}, SYSDATE, 'N', #{fdto.board_type}, #{fdto.id}, #{fdto.post_seq}
+		</foreach>
 	</insert>
 	
 	<!-- 첨부파일 삭제 -->
-	<update id="delFile" parameterType="map">
+	<update id="delFiles" parameterType="map">
 		UPDATE 	UPLOAD_FILE 
 		SET 	DELFLAG = 'Y'
-		WHERE 	BOARD_TYPE = #{board_type} AND POST_SEQ = #{post_seq}
+		WHERE 	SEQ IN
+				<foreach collection="array" open="(" close=")" separator="," item="seq">
+				#{seq}
+				</foreach>
 	</update>
+	
+	<!-- 첨부파일 불러오기(단독, join x) -->
+	<select id="getFiles" parameterType="map" resultType="FileDto">
+		SELECT  SEQ, ORIGIN_NAME, STORED_NAME, REGDATE
+		FROM 	UPLOAD_FILE 
+		WHERE 	BOARD_TYPE = #{board_type} AND
+				<if test="post_seq!=null">
+				POST_SEQ = #{post_seq} AND
+				</if> 
+				DELFLAG = 'N'
+	</select>
+	
 </mapper>
