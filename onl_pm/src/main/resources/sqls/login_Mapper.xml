@@ -16,7 +16,7 @@
 	
 	<resultMap type="FileDto" id="FileDtoMap">
 		<result column="SEQ" property="seq"/>
-		<result column="ORIGIN_NAME" property="stored_name"/>
+		<result column="ORIGIN_NAME" property="origin_name"/>
 		<result column="STORED_NAME" property="stored_name"/>
 		<result column="REGDATE" property="regdate"/>
 		<result column="DELFLAG" property="delflag"/>
@@ -38,7 +38,7 @@
 					</otherwise>
 				</choose>
 				#{birth,  jdbcType=DATE},
-				'N', SYSDATE, #{role}, #{phone}
+				'N', SYSDATE, #{role}, #{phone}, #{regflag}
 				)
 	</insert>
 	
@@ -49,7 +49,7 @@
 	
 	<!-- 로그인 -->
 	<select id="login" parameterType="String" resultType="LoginDto">
-		SELECT m.ID, m.PASSWORD, m.NICKNAME, m.DELFLAG, m.ROLE, m.PHONE FROM "MEMBER" m WHERE m.EMAIL = #{email}
+		SELECT m.ID, m.PASSWORD, m.NICKNAME, m.DELFLAG, m.ROLE, m.PHONE, m.EMAIL FROM "MEMBER" m WHERE m.EMAIL = #{email}
 	</select>
 	
 	<!-- 정보수정 -->

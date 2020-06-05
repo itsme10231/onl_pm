@@ -177,12 +177,13 @@ public class LoginDto implements UserDetails {
 		GrantedAuthority gr = new SimpleGrantedAuthority(roleGrant);
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(gr);
 		
 		return authorities;
 	}
 	@Override
 	public String getUsername() {
-		return id;
+		return email;
 	}
 	@Override
 	public boolean isAccountNonExpired() {
@@ -198,7 +199,7 @@ public class LoginDto implements UserDetails {
 	}
 	@Override
 	public boolean isEnabled() {
-		return delflag.equals("Y")?true:false;
+		return delflag.equals("N")?true:false;
 	}
 	
 	

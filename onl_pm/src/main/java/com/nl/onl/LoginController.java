@@ -34,4 +34,12 @@ public class LoginController {
 		
 		return "login";
 	}
+	
+	@RequestMapping(value = "/member/profile.do", method = {RequestMethod.POST, RequestMethod.GET})
+	public String userAuthProcessing(Model model, String id, String pw) {
+		
+		
+		
+		return "profile";
+	}
 }

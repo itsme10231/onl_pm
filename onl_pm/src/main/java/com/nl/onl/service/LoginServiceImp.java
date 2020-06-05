@@ -1,9 +1,7 @@
 package com.nl.onl.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +10,7 @@ import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
 
 @Service
-public class LoginServiceImp implements UserDetailsService,ILoginService{
+public class LoginServiceImp implements ILoginService{
 	
 	@Autowired
 	private ILoginDao loginDaoImp;
@@ -20,12 +18,13 @@ public class LoginServiceImp implements UserDetailsService,ILoginService{
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
-	
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		
-		return loginDaoImp.login(email);
-	}
+//	
+//	@Override
+//	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//		UserDetails ud = loginDaoImp.login(email);
+//		System.out.println("ud: "+ ud.getUsername());
+//		return ud;
+//	}
 
 	@Override
 	public boolean insertMember(LoginDto ldto) {
