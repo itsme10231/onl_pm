@@ -33,7 +33,7 @@
 	
 <!-- 	QNA상세보기 -->
 	<select id="detailQna" resultMap="QnaDtoMap"
-		 parameterType="int">
+		 parameterType="String">
 		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE
 		FROM QNA q ,QNA_CATEGORY c
 		WHERE q.QNA_CODE = c.QNA_CODE AND SEQ=#{seq}
@@ -54,7 +54,7 @@
 	</update>
 	
 <!-- 	QNA삭제 -->
-	<delete id="deleteQna" parameterType="int">
+	<delete id="deleteQna" parameterType="String">
 		DELETE FROM qna WHERE SEQ =#{seq}
 	
 	</delete>
@@ -84,7 +84,7 @@
 	
 <!-- 	공지사항 상세보기 -->
 	<select id="detailNotice" resultMap="QnaDtoMap"
-		 parameterType="int">
+		 parameterType="String">
 		SELECT TITLE , REGDATE ,CONTENT
 		FROM NOTICE 
 		WHERE seq=#{seq}
@@ -101,7 +101,7 @@
 	</update>
 	
 <!-- 	공지사항 삭제 -->
-	<delete id="deleteNotice" parameterType="int">
+	<delete id="deleteNotice" parameterType="String">
 		DELETE FROM NOTICE WHERE seq=#{seq}
 	
 	</delete>

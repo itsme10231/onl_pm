@@ -58,7 +58,7 @@
 	
 <!-- 	신고상세보기 -->
 	<select id="detailReport" resultMap="ReportDtoMap"
-		 parameterType="int">
+		 parameterType="String">
 	SELECT c.CONTENT AS c_CONTENT,r.REGDATE ,r.ID ,r.REPORTED_ID ,r.CONTENT
 	FROM REPORTLIST r,REPORT_CATEGORY c
 	WHERE r.CATEGORY_SEQ =c.CODE AND SEQ=#{seq}
@@ -98,7 +98,6 @@
 	<update id="flagAdmin" parameterType="map">
 	UPDATE "MEMBER" SET DELFLAG =#{delflag} WHERE ID =#{id}
 	</update>
-
 
 
 </mapper>
