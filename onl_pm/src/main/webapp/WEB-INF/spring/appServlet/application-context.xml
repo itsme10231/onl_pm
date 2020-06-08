@@ -39,4 +39,18 @@
 	
 	<!-- 어노테이션을 사용하여 transaction을 진행하겠다는 선언 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	
+	<!-- Mail 인증 관련 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="01028257766k@gmail.com" />
+		<property name="password" value="za45348600" />
+		<property name="javaMailProperties">
+			<props>
+					<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

@@ -7,10 +7,7 @@
 <!DOCTYPE>
 <html>
 <head>
-<%
-	String resultPass=(String)request.getAttribute("resultPass");
-	Util uran=new Util();
-%>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
@@ -27,14 +24,14 @@ function requestCode(){
 	var email=$("input[name='email']").val();
 	console.log(email);
 	$.ajax({
-		url:"regist.do",
+		url:"mailConfirm.do",
 		data:{"email":email},
 		method:"post",
 		dataType:"text",
 		success:function(result){
 			code=result;
 			console.log(result);
-			console.log(uran);
+// 			console.log(uran);
 		}
 	})
 }
@@ -45,6 +42,7 @@ function confirmCode(){
 	
 	if(code==confirm){
 		isS = true;
+		alert("인증코드가 일치합니다.");
 	}else{
 		alert("인증코드를 확인하세요.");
 	}
@@ -67,7 +65,7 @@ function confirmCode(){
 		</tr>
 		<tr>
 			<td>인증번호 확인</td>
-			<td><input type="text"></td>
+			<td><input type="text" name="confirm"></td>
 			<td><input type="button" value="인증번호 확인" required="required" onclick="confirmCode()"></td>
 		</tr>
 		<tr>
@@ -97,7 +95,7 @@ function confirmCode(){
 		<tr>
 			<td>주소</td>
 			<td>
-				<input type="button" value="주소찾기">
+				<input type="button" name="addressSearch" value="주소찾기" >
 				<input type="text" value="우편번호" readonly="readonly" style="width: 90px;">
 			</td>
 		</tr>
