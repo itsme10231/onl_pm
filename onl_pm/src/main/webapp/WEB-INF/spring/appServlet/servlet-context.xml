@@ -19,7 +19,7 @@
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-<!-- 	<resources mapping="/resources/**" location="/resources/" /> -->
+	<resources mapping="/resources/js/**" location="/resources/js/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -52,13 +52,15 @@
 	</beans:bean>
 	
 	
-
-	
 	
 	<!-- 실행될 method의 설정 -->
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="deleteApply" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="getWantedDetail" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="getWantedDetailLogin" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="InsertWanted" propagation="REQUIRED" rollback-for="Exception"/>
+			
 		</tx:attributes>
 	</tx:advice>
 	

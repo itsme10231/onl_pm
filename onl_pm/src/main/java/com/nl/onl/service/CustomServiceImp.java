@@ -12,56 +12,56 @@ import com.nl.onl.dtos.QnaDto;
 @Service
 public class CustomServiceImp implements ICustomService{
 
-	@Autowired ICustomDao CustomDao;
+	@Autowired ICustomDao customDaoImp;
 	
 	@Override
 	public List<QnaDto> getAllListQna(String pnum) {
-		return CustomDao.getAllListQna(pnum);
+		return customDaoImp.getAllListQna(pnum);
 	}
 
 	@Override
 	public QnaDto detailQna(String seq) {
-		return CustomDao.detailQna(seq);
+		return customDaoImp.detailQna(seq);
 	}
 
 	@Override
 	public boolean insertQna(QnaDto qdto) {
-		return CustomDao.insertQna(qdto);
+		return customDaoImp.insertQna(qdto);
 	}
 
 	@Override
 	public boolean updateQna(QnaDto qdto) {
-		return CustomDao.updateQna(qdto);
+		return customDaoImp.updateQna(qdto);
 	}
 
 	@Override
 	public boolean deleteQna(String seq) {
-		return CustomDao.deleteQna(seq);
+		return customDaoImp.deleteQna(seq);
 	}
 
 	@Override
 	public List<NoticeDto> getAllListNotice(String pnum) {
-		return CustomDao.getAllListNotice(pnum);
+		return customDaoImp.getAllListNotice(pnum);
 	}
 
 	@Override
 	public NoticeDto detailNotice(String seq) {
-		return CustomDao.detailNotice(seq);
+		return customDaoImp.detailNotice(seq);
 	}
 
 	@Override
 	public boolean insertNotice(NoticeDto ndto) {
-		return CustomDao.insertNotice(ndto);
+		return customDaoImp.insertNotice(ndto);
 	}
 
 	@Override
 	public boolean updateNotice(NoticeDto ndto) {
-		return CustomDao.updateNotice(ndto);
+		return customDaoImp.updateNotice(ndto);
 	}
 
 	@Override
 	public boolean deleteNotice(NoticeDto ndto) {
-		return CustomDao.deleteNotice(ndto);
+		return customDaoImp.deleteNotice(ndto);
 	}
 
 }

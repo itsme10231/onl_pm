@@ -169,9 +169,9 @@
 						<if test="score!=null">
 						,(SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
-				WHERE 	wp.DELFLAG = 'N' AND wp.STATE = 'WANTED' AND wp.DEADLINE >= SYSDATE AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
-						NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'B' AND ul.LIST_ID = wp.ID) AND 
-						NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.LIST_ID = #{id} AND ul."TYPE" = 'B' AND ul.ID = wp.ID)
+				WHERE 	wp.DELFLAG = 'N' AND wp.STATE = 'WANTED' AND wp.DEADLINE >= SYSDATE AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID
+						AND NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'B' AND ul.LIST_ID = wp.ID) 
+						AND NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.LIST_ID = #{id} AND ul."TYPE" = 'B' AND ul.ID = wp.ID)
 						<if test="score!=null">
 							AND wp.ID = r.TARGET_ID(+) AND NVL(r.SCORE, 0) &gt;= #{score}
 						</if>
@@ -195,13 +195,15 @@
 						</if>
 						<if test="location!=null">
 							AND lc.LOC_NAME = '%'||#{location}||'%'
-						</if>)
+						</if>
+						 AND wp.SEQ = f.POST_SEQ(+)
+						)
 		WHERE CEIL(RN/20) = #{pnum}
 	</select>
 	
 	
 	<!-- 비로그인 구인글 상세보기 -->
-	<select id="getWantedDetail" parameterType="int" resultMap="WantedDtoMap">
+	<select id="getWantedDetail" parameterType="String" resultMap="WantedDtoMap">
 		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, 
 				wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, 
 				lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, 
@@ -210,7 +212,7 @@
 				(SELECT STORED_NAME, POST_SEQ , REGDATE
 				 FROM UPLOAD_FILE 
 				 WHERE BOARD_TYPE = 'WANTED' AND DELFLAG = 'N') f
-		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.SEQ = f.POST_SEQ
+		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.SEQ = f.POST_SEQ(+)
 	</select>
 	
 	<!-- 로그인 구인글 상세보기 -->
@@ -223,14 +225,18 @@
 				CASE 
 					WHEN EXISTS (SELECT 1 FROM APPLYLIST a WHERE a.ID = #{id} AND a.SEQ = wp.SELECTOR ) THEN 'Y'
 					ELSE 'N'
-				END AS SELECTED
+				END AS SELECTED,
+				f.STORED_NAME , f.REGDATE AS F_REGDATE
 		FROM 	WANTED_POST wp, LOCATION_CODE lc, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2,
-				(SELECT COUNT(a2.ID) AS apply_c, a2.WANTED_SEQ FROM APPLYLIST a2 where a2.WANTED_SEQ = #{seq} GROUP BY a2.WANTED_SEQ ) a3
-		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION  = lc.LOC_CODE AND wp.SEQ = a3.WANTED_SEQ AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE
+				(SELECT COUNT(a2.ID) AS apply_c, a2.WANTED_SEQ FROM APPLYLIST a2 where a2.WANTED_SEQ = #{seq} GROUP BY a2.WANTED_SEQ ) a3,
+				(SELECT STORED_NAME, POST_SEQ , REGDATE
+				 FROM UPLOAD_FILE 
+				 WHERE BOARD_TYPE = 'WANTED' AND DELFLAG = 'N') f
+		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION  = lc.LOC_CODE AND wp.SEQ = a3.WANTED_SEQ AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.SEQ = f.POST_SEQ(+)
 	</select>
 	
 	<!-- 구인글 상세보기 공통(조회수 증가) -->
-	<update id="increaseView" parameterType="int">
+	<update id="increaseView" parameterType="String">
 		UPDATE 	WANTED_POST 
 		SET 	VIEWS = VIEWS+1 
 		WHERE 	SEQ = #{seq}
@@ -300,15 +306,15 @@
 	</insert>
 	
 	<!-- 지원 취소 -->
-	<delete id="deleteApply" parameterType="int">
+	<delete id="deleteApply" parameterType="String">
 		DELETE FROM APPLYLIST WHERE SEQ = #{seq}
 	</delete>
 	
 	<!-- 취소하려는 지원이 이미 선정된 구직자의 지원이었다면 -->
-	<update id="cancelSelector" parameterType="int">
+	<update id="cancelSelector" parameterType="map">
 		UPDATE 	WANTED_POST 
-		SET 	SELECTOR = NULL
-		WHERE 	SEQ = #{seq}
+		SET 	SELECTOR = NULL, STATUS = 'WANTED'
+		WHERE 	SEQ = #{seq} AND SELECTOR = #{selector}
 	</update>
 	
 	<!-- 지원자 선정 -->
@@ -319,7 +325,7 @@
 	</update>
 	
 	<!-- 일 완료 -->
-	<update id="updateStatus" parameterType="int">
+	<update id="updateStatus" parameterType="String">
 		UPDATE WANTED_POST 
 		SET STATUS = 'COMPLETE'
 		WHERE SEQ = #{seq}
@@ -335,7 +341,7 @@
 	</insert>
 	
 	<!-- 후기 삭제 -->
-	<update id="deleteReview" parameterType="int">
+	<update id="deleteReview" parameterType="String">
 		UPDATE REVIEW_POST
 		SET DELFLAG = 'Y'
 		WHERE SEQ = #{seq}

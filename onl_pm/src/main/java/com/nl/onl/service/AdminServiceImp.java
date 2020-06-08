@@ -13,36 +13,36 @@ import com.nl.onl.dtos.ReportDto;
 @Service
 public class AdminServiceImp implements IAdminService{
 
-	@Autowired private IAdminDao AdminDao;
+	@Autowired private IAdminDao admindao;
 	
 	@Override
 	public List<ReportDto> getAllListReport(String pnum) {
-		return AdminDao.getAllListReport(pnum);
+		return admindao.getAllListReport(pnum);
 	}
 
 	@Override
 	public ReportDto detailReport(String seq) {
-		return AdminDao.detailReport(seq);
+		return admindao.detailReport(seq);
 	}
 
 	@Override
 	public boolean updateReport(Map<String, String> map) {
-		return AdminDao.updateReport(map);
+		return admindao.updateReport(map);
 	}
 
 	@Override
 	public List<LoginDto> getAllListAdmin(String pnum) {
-		return AdminDao.getAllListAdmin(pnum);
+		return admindao.getAllListAdmin(pnum);
 	}
 
 	@Override
 	public LoginDto detailAdmin(String id) {
-		return AdminDao.detailAdmin(id);
+		return admindao.detailAdmin(id);
 	}
 
 	@Override
 	public boolean flagAdmin(Map<String, String> map) {
-		return AdminDao.flagAdmin(map);
+		return admindao.flagAdmin(map);
 	}
 
 }
