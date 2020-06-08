@@ -13,7 +13,7 @@
 		<security:intercept-url pattern="/member/**" access="hasRole('ROLE_USER')" />
 		<security:form-login login-page="/login.do" authentication-success-handler-ref="loginSuccessHandler" authentication-failure-handler-ref="loginFailureHandler" login-processing-url="/auth" username-parameter="email" password-parameter="password" /> 
 		<security:logout logout-url="/logout" invalidate-session="true" logout-success-url="/login?status=logout" /> 
-		<security:session-management invalid-session-url="/login"> 
+		<security:session-management invalid-session-url="/"> 
 			<security:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" /> 
 		</security:session-management> 
 	</security:http> 

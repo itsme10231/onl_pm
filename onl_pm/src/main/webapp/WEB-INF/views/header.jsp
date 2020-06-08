@@ -11,20 +11,41 @@
 <style type="text/css">
 	.outUl{
 		overflow: visible;
+		display: inline-block;
 	}
 	
 	.bigC{
 		list-style: none;
-		margin: 10px 30px;
-		padding: 5px;
+		margin: 0;
+		padding: 10px 30px;
 		float: left;
+		
+		position: relative;
+		z-index: 11;
 	}
 	
 	.innerUl{
 		display: none;
-		position: relative;
+		position: absolute;
 		z-index: 10;
 		list-style: none;
+		text-align: left;
+		padding-left: 10px;
+		background-color: white;
+
+		width: 150px;
+		margin-top: 10px;
+		top: 50px;
+		left: 1px;
+	}
+	
+	.innerLi{
+		
+	}
+	
+	.categoryfield{
+		margin: 0;
+		border-bottom: 1px solid gray;
 	}
 	
 	.clear{
@@ -52,11 +73,11 @@ $(function(){
 	});
 	
 	$("body").on("mouseenter", ".bigC", function(e){
-		$(this).find(".innerUl").stop().slideDown();
+		$(this).find(".innerUl").stop().show();
 	});
 	
 	$("body").on("mouseleave", ".bigC", function(e){
-		$(this).find(".innerUl").stop().slideUp();
+		$(this).find(".innerUl").stop().hide();
 	});
 	
 });
@@ -91,11 +112,11 @@ function makeCategory(cjson){
 				}else if(cjson[j].code1 != code){
 					runStatus = false;
 				}else{
-					var innerLi = document.createElement("li");
+					var innerLi = $("<li class='innerLi'></li>");
 					var stag = $("<a href='/category.do?code="+cjson[j].code2+"'>"+cjson[j].category_name2+"</a>");
 					
-					$(innerLi).append(stag);
-					$(innerUl).append(innerLi);
+					innerLi.append(stag);
+					innerUl.append(innerLi);
 					j++;
 				}
 			}
