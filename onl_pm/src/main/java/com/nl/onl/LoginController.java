@@ -19,7 +19,7 @@ public class LoginController {
 	private ILoginService loginServiceImp;
 	
 	
-	@RequestMapping(value = "/registform.do", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = "/registform.do", method = {RequestMethod.GET})
 	public String registForm(Model model, String id, String pw) {
 		
 		
