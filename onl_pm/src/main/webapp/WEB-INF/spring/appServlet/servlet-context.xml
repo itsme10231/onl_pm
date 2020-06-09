@@ -62,7 +62,7 @@
 			<tx:method name="deleteApply" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="getWantedDetail" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="getWantedDetailLogin" propagation="REQUIRED" rollback-for="Exception"/>
-			<tx:method name="InsertWanted" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="pickSelector" propagation="REQUIRED" rollback-for="Exception"/>
 			
 		</tx:attributes>
 	</tx:advice>

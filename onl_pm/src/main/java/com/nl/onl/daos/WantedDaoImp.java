@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.ReviewDto;
+import com.nl.onl.dtos.SearchDto;
 import com.nl.onl.dtos.WantedDto;
+import com.nl.onl.dtos.WishDto;
 
 @Repository
 public class WantedDaoImp implements IWantedDao{
@@ -21,13 +23,13 @@ public class WantedDaoImp implements IWantedDao{
 	private String nameSpace = "com.nl.onl.wanted.";
 
 	@Override
-	public List<WantedDto> getWantedList(Map<String, String> map) {
-		return sqlSession.selectList(nameSpace+"getWantedList", map);
+	public List<WantedDto> getWantedList(SearchDto sdto) {
+		return sqlSession.selectList(nameSpace+"getWantedList", sdto);
 	}
 
 	@Override
-	public List<WantedDto> getWantedListLogin(Map<String, String> map) {
-		return sqlSession.selectList(nameSpace+"getWantedListLogin", map);
+	public List<WantedDto> getWantedListLogin(SearchDto sdto) {
+		return sqlSession.selectList(nameSpace+"getWantedListLogin", sdto);
 	}
 
 	@Override
@@ -111,5 +113,9 @@ public class WantedDaoImp implements IWantedDao{
 		return isS > 0 ? true:false;
 	}
 	
-	
+	@Override
+	public boolean insertWish(WishDto wdto) {
+		int isS = sqlSession.insert(nameSpace +"insertWish", wdto);
+		return isS > 0 ? true:false;
+	}
 }

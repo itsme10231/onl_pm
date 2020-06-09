@@ -12,7 +12,9 @@ import com.nl.onl.daos.IWantedDao;
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.ReviewDto;
+import com.nl.onl.dtos.SearchDto;
 import com.nl.onl.dtos.WantedDto;
+import com.nl.onl.dtos.WishDto;
 
 @Service
 public class WantedServiceImp implements IWantedService{
@@ -24,13 +26,13 @@ public class WantedServiceImp implements IWantedService{
 	IPaymentDao paymentDaoImp;
 	
 	@Override
-	public List<WantedDto> getWantedList(Map<String, String> map) {
-		return wantedDaoImp.getWantedList(map);
+	public List<WantedDto> getWantedList(SearchDto sdto) {
+		return wantedDaoImp.getWantedList(sdto);
 	}
 
 	@Override
-	public List<WantedDto> getWantedListLogin(Map<String, String> map) {
-		return wantedDaoImp.getWantedListLogin(map);
+	public List<WantedDto> getWantedListLogin(SearchDto sdto) {
+		return wantedDaoImp.getWantedListLogin(sdto);
 	}
 
 	@Override
@@ -48,9 +50,8 @@ public class WantedServiceImp implements IWantedService{
 	}
 
 	@Override
-	public boolean insertWanted(WantedDto wdto, Map<String, String> map) {
-		wantedDaoImp.insertWanted(wdto);
-		boolean isS = paymentDaoImp.insertAgree(map);
+	public boolean insertWanted(WantedDto wdto) {
+		boolean isS = wantedDaoImp.insertWanted(wdto);
 		return isS;
 	}
 
@@ -100,5 +101,10 @@ public class WantedServiceImp implements IWantedService{
 	public boolean deleteReview(String seq) {
 		return wantedDaoImp.deleteReview(seq);
 	}
-
+	
+	
+	@Override
+	public boolean insertWish(WishDto wdto) {
+		return wantedDaoImp.insertWish(wdto);
+	}
 }

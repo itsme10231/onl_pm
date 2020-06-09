@@ -19,31 +19,5 @@ public class PageController {
 	@Autowired
 	IWantedService wantedServiceImp;
 	
-	@RequestMapping(value="/getcategory.do", method=RequestMethod.GET)
-	@ResponseBody
-	public JSONArray getCategory(Model model) {
-		
-		List<CategoryDto> clist = wantedServiceImp.getCategory();
-		
-		JSONArray cArray = new JSONArray();
-		
-		for(CategoryDto cdto:clist) {
-			cArray.add(cdto);
-		}
-		
-
-		return cArray;
-	}
 	
-	@RequestMapping(value="category.do", method=RequestMethod.GET)
-	public String getListByCategory(Model model) {
-		
-		return "wantedlist";
-	}
-	
-	@RequestMapping(value="writewanted.do", method=RequestMethod.GET)
-	public String wantedWriteForm(Model model) {
-		
-		return "wantedform";
-	}
 }

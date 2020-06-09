@@ -19,6 +19,8 @@
 		<typeAlias type="com.nl.onl.dtos.FileDto" alias="FileDto"/>
 		<typeAlias type="com.nl.onl.dtos.WishDto" alias="WishDto"/>
 		<typeAlias type="com.nl.onl.dtos.UserlistDto" alias="UserlistDto"/>
+		
+		<typeAlias type="com.nl.onl.dtos.SearchDto" alias="SearchDto"/>
 	</typeAliases>
 
 	<mappers>

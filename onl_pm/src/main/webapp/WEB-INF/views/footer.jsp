@@ -22,6 +22,7 @@
 	.copyright{
 		font-size: 12px;
 		text-align: center;
+		color: darkgray;
 	}
 	
 	.footerlinkfield{

@@ -48,7 +48,7 @@
 	<!-- 검색기능 쿼리 -->
 	
 	<!-- 비로그인 구인글 목록보기&검색(timezone은 8자리의 숫자형태, String 타입) -->
-	<select id="getWantedList" resultMap="WantedDtoMap" parameterType="map">
+	<select id="getWantedList" resultMap="WantedDtoMap" parameterType="SearchDto">
 		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOC_NAME , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
 		FROM	(SELECT ROW_NUMBER() OVER(
 							PARTITION BY w.SOSFLAG
@@ -94,9 +94,7 @@
 						<if test="score!=null">
 							AND w.ID = r.TARGET_ID(+) AND NVL(r.SCORE, 0) &gt;= #{score}
 						</if>
-						<if test="target_id!=null">
-							AND w.ID = '%'||#{target_id}||'%'
-						</if>
+
 						<if test="title!=null">
 							AND w.TITLE = '%'||#{title}||'%'
 						</if>
@@ -114,7 +112,8 @@
 						</if>
 						<if test="location!=null">
 							AND l.LOC_NAME = '%'||#{location}||'%'
-						</if>)
+						</if>
+						)
 		WHERE CEIL(RN/20) = #{pnum}
 	</select>
 	
@@ -253,7 +252,7 @@
 				WANTED_POST_SEQ.NEXTVAL, #{id}, #{category}, 
 				#{title}, SYSDATE, #{deadline}, #{sdate}, 
 				#{edate}, #{location}, #{stime}, #{etime}, #{salary}, 
-				#{content}, #{phone}, #{views}, #{status}, #{delflag}, #{sosflag}, NULL, #{loc_detail}
+				#{content}, #{views}, #{status}, #{delflag}, #{sosflag}, NULL, #{loc_detail}, #{phone}
 				)
 	</insert>
 	
@@ -346,4 +345,18 @@
 		SET DELFLAG = 'Y'
 		WHERE SEQ = #{seq}
 	</update>
+	
+	
+	<!-- 찜글 선택 -->
+	<insert id="insertWish" parameterType="WishDto">
+		INSERT INTO WISHLIST VALUES(
+			WISHLIST_SEQ.NEXTVAL, #{id}, #{wanted_seq}
+		)
+	</insert>
+	
+	<!-- 찜글 삭제 -->
+<!-- 	<delete id="delWishlist" parameterType="int"> -->
+<!-- 		DELETE FROM WISHLIST  -->
+<!-- 		WHERE ID = #{id} AND  -->
+<!-- 	</delete> -->
 </mapper>

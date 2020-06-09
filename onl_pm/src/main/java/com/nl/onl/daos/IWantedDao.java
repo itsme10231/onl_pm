@@ -6,13 +6,15 @@ import java.util.Map;
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.ReviewDto;
+import com.nl.onl.dtos.SearchDto;
 import com.nl.onl.dtos.WantedDto;
+import com.nl.onl.dtos.WishDto;
 
 public interface IWantedDao {
 	
-	public List<WantedDto> getWantedList(Map<String, String> map);
+	public List<WantedDto> getWantedList(SearchDto sdto);
 	
-	public List<WantedDto> getWantedListLogin(Map<String, String> map);
+	public List<WantedDto> getWantedListLogin(SearchDto sdto);
 	
 	//increaseView와 함께 트랜잭션 처리
 	public WantedDto getWantedDetail(String seq);
@@ -47,4 +49,6 @@ public interface IWantedDao {
 	public boolean insertReview(ReviewDto rdto);
 	
 	public boolean deleteReview(String seq);
+	
+	public boolean insertWish(WishDto wdto);
 }

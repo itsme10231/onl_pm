@@ -23,14 +23,14 @@
 	.outUl{
 		overflow: visible;
 		display: inline-block;
-		height: 70px;
+		height: 60px;
 		line-height: 45px;
 	}
 	
 	.bigC{
 		list-style: none;
 		margin: 0;
-		padding: 10px 30px;
+		padding: 5px 20px;
 		float: left;
 		
 		position: relative;
@@ -44,13 +44,15 @@
 		list-style: none;
 		text-align: left;
 		padding-left: 20px;
+		padding-bottom: 10px;
 		background-color: white;
 		border: 1px solid lightgray;
+		border-top: 0px;
 
 		width: 150px;
 		margin-top: 0px;
-		top: 70px;
-		left: 1px;
+		top: 60px;
+		left: 0px;
 	}
 	
 	.innerLi{
@@ -59,6 +61,7 @@
 	
 	.categoryfield{
 		margin: 0;
+		padding: 0;
 		border: 1px solid lightgray;
 		
 	}
@@ -72,9 +75,9 @@
 	
 	.searchbox{
 		position: relative;
-		display: inline-block;
+/* 		display: inline-block; */
 		height: 100px;
-		top: 40px;
+/* 		top: 40px; */
 	}
 	
 	.memberfield{
@@ -88,10 +91,14 @@
 	}
 	
 	.headerlogo{
+		position: absolute;
+		top: 50px;
+		left: 170px;
 		display: inline-block;
-		font-weight: 800;
-		left: 100px;
+		
 	}
+	
+	.headerlogo>
 	
 	.clear{
 		clear: both;
@@ -124,6 +131,35 @@
 
 	}
 	
+	.searchElement{
+		position: relative;
+		top: 50px;
+		margin: 0 auto;
+
+	}
+	
+	.searchbto{
+		height: 50px;
+		width: 50px;
+		border: 2px solid lightblue;
+	}
+	
+	.searchfield{
+		height: 50px;
+		width: 400px;
+	}
+	
+	.searchdetail{
+		clear: both;
+	
+	}
+	
+	.searchdetail>.downarrow{
+		font-size: 14px;
+		margin: 0;
+		padding: 0;
+	}
+	
 	header{
 		text-align: center;
 
@@ -138,6 +174,7 @@
 	
 	body{
 		font-family: source-han-sans-korean, sans-serif;
+		background-color: lightgray;
 	}
 </style>
 <script type="text/javascript" src="/onl/resources/js/jquery-3.5.1.min.js"></script>
@@ -183,7 +220,7 @@ function makeCategory(cjson){
 			var bigC = $("<li class='bigC'></li>");
 			var innerUl = $("<ul class='innerUl'></ul>");
 			
-			var btag = $("<a href='/categry.do?code="+cjson[i].code1+"'>"+cjson[i].category_name1+"</a>");
+			var btag = $("<a href='/search.do?code="+cjson[i].code1+"'>"+cjson[i].category_name1+"</a>");
 			
 			bigC.append(btag);
 			
@@ -200,7 +237,7 @@ function makeCategory(cjson){
 					runStatus = false;
 				}else{
 					var innerLi = $("<li class='innerLi'></li>");
-					var stag = $("<a href='/category.do?code="+cjson[j].code2+"'>"+cjson[j].category_name2+"</a>");
+					var stag = $("<a href='/search.do?code="+cjson[j].code2+"'>"+cjson[j].category_name2+"</a>");
 					
 					innerLi.append(stag);
 					innerUl.append(innerLi);
@@ -242,28 +279,31 @@ function makeCategory(cjson){
 		<div class="headerWrapper">
 		
 			
+			
 			<div class="searchbox">
-				
 				<div class="headerlogo">
 					<h2>ONL</h2> 			
 				</div>
-				<input type="text" placeholder="검색어를 입력하세요" name="searchval"><input type="button" name="searchbto" value="검색">
-				
+				<div class="searchElement">
+					<input class="searchfield" type="text" placeholder="검색어를 입력하세요" name="searchval"><input class="searchbto" type="button" name="searchbto" value="검색">
+				</div>
 			</div><br>
-			<div class="memberfield">
-			<input type="button" value="알림"><input type="button" value="마이페이지"><input type="button" value="회원정보관리">
+<!-- 			<div class="memberfield"> -->
+<!-- 			<input type="button" value="알림"><input type="button" value="마이페이지"><input type="button" value="회원정보관리"> -->
+<!-- 			</div> -->
+		</div>
+		<div class="searchdetail">
+			<p class="downarrow">상세검색<img src="/onl/resources/icon/paragraph_center.png" width="15px"></p>
+			<div class="details">
+				
 			</div>
 		</div>
-		
-		<div class="searchdetail">
-			
-		</div>
-		<div class="clear"></div>
 		
 		<div class="categoryfield">
 	
 		</div>
 
+		<div class="clear"></div>
 
 		
 	
