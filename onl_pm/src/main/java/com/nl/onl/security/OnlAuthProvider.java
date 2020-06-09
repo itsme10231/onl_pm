@@ -52,7 +52,7 @@ public class OnlAuthProvider extends DaoAuthenticationProvider {
 		}
 		
 		List<GrantedAuthority> roles = (List<GrantedAuthority>) dto.getAuthorities();
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto.getId(), password, roles);
+		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto, password, roles);
 		
 		return auth;
 	}

@@ -145,3 +145,4 @@ function confirmCode(){
 
 </body>
 </html>
+<%@include file="footer.jsp" %>
