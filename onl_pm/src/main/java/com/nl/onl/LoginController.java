@@ -27,7 +27,7 @@ public class LoginController {
 		return "regist";
 	}
 	
-	@RequestMapping(value = "/login.do", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = "/login.do", method = {RequestMethod.GET})
 	public String loginForm(Model model, String id, String pw) {
 		
 		
@@ -35,7 +35,7 @@ public class LoginController {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/member/profile.do", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = "/member/profile.do", method = {RequestMethod.GET})
 	public String userAuthProcessing(Model model, String id, String pw) {
 		
 		

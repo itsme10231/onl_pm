@@ -40,4 +40,10 @@ public class PageController {
 		
 		return "wantedlist";
 	}
+	
+	@RequestMapping(value="writewanted.do", method=RequestMethod.GET)
+	public String wantedWriteForm(Model model) {
+		
+		return "wantedform";
+	}
 }

@@ -26,7 +26,7 @@ public class LoginDto implements UserDetails {
 	
 	private String regflag;
 	private ReportDto reportDto;
-	
+	private String stored_name;
 	
 	
 	public LoginDto() {
@@ -157,10 +157,21 @@ public class LoginDto implements UserDetails {
 	public void setRegflag(String regflag) {
 		this.regflag = regflag;
 	}
-
+	
+	
 
 	
 	
+	public String getStored_name() {
+		return stored_name;
+	}
+
+
+	public void setStored_name(String stored_name) {
+		this.stored_name = stored_name;
+	}
+
+
 	@Override
 	public String toString() {
 		return "LoginDto [id=" + id + ", password=" + password + ", name=" + name + ", address_1=" + address_1

@@ -9,21 +9,35 @@
 <title>Insert title here</title>
 <style type="text/css">
 	
-	.copyright{
-		font-size: 12px;
-	}
-	
-	.footerlinkfield{
+	.footerWrapper{
+		position: relative;
+		min-width: 1000px;
+		max-width: 70%;
+		
+		margin: 0 auto;
+		margin-top: 100px;
 
 	}
 	
-	hr {
-		border: 1px solid whitesmoke;
+	.copyright{
+		font-size: 12px;
+		text-align: center;
 	}
+	
+	.footerlinkfield{
+		text-align: center;
+	}
+	
+	footer{
+		border-top: 1px solid lightgray;
+		background-color: white;
+		min-height: 200px;
+	}
+	
 </style>
 </head>
 <body>
-<hr>
+
 <footer>
 	<div calss="footerwrapper">
 		<div class="footerlinkfield">

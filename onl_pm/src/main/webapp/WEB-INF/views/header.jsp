@@ -11,9 +11,20 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <style type="text/css">
+	.headerWrapper{
+		min-width: 1000px;
+		max-width: 60%;
+		
+		margin: 0 auto;
+		position: relative;
+	}
+	
+	
 	.outUl{
 		overflow: visible;
 		display: inline-block;
+		height: 70px;
+		line-height: 45px;
 	}
 	
 	.bigC{
@@ -32,12 +43,13 @@
 		z-index: 10;
 		list-style: none;
 		text-align: left;
-		padding-left: 10px;
+		padding-left: 20px;
 		background-color: white;
+		border: 1px solid lightgray;
 
 		width: 150px;
-		margin-top: 10px;
-		top: 50px;
+		margin-top: 0px;
+		top: 70px;
 		left: 1px;
 	}
 	
@@ -47,15 +59,81 @@
 	
 	.categoryfield{
 		margin: 0;
-		border-bottom: 1px solid gray;
+		border: 1px solid lightgray;
+		
+	}
+	
+	.categoryfield a:link{
+		text-decoration: none;
+		color: black;
+		font-size: 18px;
+		font-weight: 500;
+	}
+	
+	.searchbox{
+		position: relative;
+		display: inline-block;
+		height: 100px;
+		top: 40px;
+	}
+	
+	.memberfield{
+		float: right;
+	}
+	
+	.loginbar{
+		text-align: right;
+		border: 1px solid lightgray;
+		height: 50px;
+	}
+	
+	.headerlogo{
+		display: inline-block;
+		font-weight: 800;
+		left: 100px;
 	}
 	
 	.clear{
 		clear: both;
 	}
 	
+	.remotediv{
+		position: fixed; 
+		right: 20%; 
+		bottom: 50px; 
+		width: 60px; 
+		height: 80px;
+		font-size: 12px;
+		text-align: center;
+	}
+	
+	.writebtodiv{
+		width: 60px; 
+		height: 60px;
+		border-radius: 30px;
+		background-color: white;
+		border: 1px solid whitesmoke;
+		-webkit-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.15);
+		-moz-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.15);
+		box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.15);
+	}
+	
+	.writebto{
+		position: relative;
+		top: 10px;
+
+	}
+	
 	header{
 		text-align: center;
+
+/* 		border-bottom: 1px solid gray; */
+		
+		-webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
+		-moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
+		box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
+		
+		background-color: white;
 	}
 	
 	body{
@@ -97,7 +175,7 @@ $(function(){
 
 function makeCategory(cjson){
 	
-	var categories = $("<ul class='outUl'></ul>");
+	var categories = $("<ul class='outUl nav justify-content-center'></ul>");
 	for(var i = 0; i < cjson.length; i++){
 
 		if(cjson[i].category_name1 != " "){
@@ -152,21 +230,52 @@ function makeCategory(cjson){
 </head>
 <body>
 <header>
-	<div class="loginbar">
-	고객센터 | <a href='registform.do'>회원가입</a> | <a href='login.do'>로그인</a>
-	</div>
-	<div class="searchbox">
-		<h2>ONL</h2><input type="text" placeholder="검색어를 입력하세요" name="searchval"><input type="button" name="searchbto" value="검색"><input type="button" value="알림"><input type="button" value="마이페이지"><input type="button" value="회원정보관리">
-	</div>
-	<div class="searchdetail">
-		
-	</div>
-	<div class="categoryfield">
 
-	</div>
-	<div class="clear"></div>
+		<div class="loginbar">
+			<div class="headerWrapper">
+				고객센터 | <sec:authorize access="isAnonymous()"><a href='registform.do'>회원가입</a> | </sec:authorize>
+				<sec:authorize access="isAnonymous()"><a href='login.do'>로그인</a></sec:authorize>
+				<sec:authorize access="isAuthenticated()"><a href='logout.do'>로그아웃</a></sec:authorize>
+			</div>
+		</div>
+		
+		<div class="headerWrapper">
+		
+			
+			<div class="searchbox">
+				
+				<div class="headerlogo">
+					<h2>ONL</h2> 			
+				</div>
+				<input type="text" placeholder="검색어를 입력하세요" name="searchval"><input type="button" name="searchbto" value="검색">
+				
+			</div><br>
+			<div class="memberfield">
+			<input type="button" value="알림"><input type="button" value="마이페이지"><input type="button" value="회원정보관리">
+			</div>
+		</div>
+		
+		<div class="searchdetail">
+			
+		</div>
+		<div class="clear"></div>
+		
+		<div class="categoryfield">
+	
+		</div>
+
+
+		
+	
 
 </header>
+
+<div class="remotediv">
+	<div class="writebtodiv">
+		<img class="writebto" alt="구인글 쓰기" src="/onl/resources/icon/write.png" width="40px">
+	</div>
+	▲TOP
+</div>
 이하 본문영역
 </body>
 </html>
