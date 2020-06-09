@@ -10,9 +10,24 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<!-- jQuery와 Postcodify를 로딩한다 -->
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> -->
+<!-- "검색" 단추를 누르면 팝업 레이어가 열리도록 설정한다 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 <script type="text/javascript">
 var code;
+
+
+$(function() {
+
+	$("#postcodify_search_button").postcodifyPopUp(); 
+
+
+
+});
+
+
 
 function pass(){
 	//입력된 아이디값 구하기
@@ -56,11 +71,11 @@ function confirmCode(){
 </head>
 <body>
 <h1>회원가입</h1>
-<form action="login.do" method="post">
-	<table style="margin: 0 auto; width: 700px; height: 1000px;">
+<form action="" method="post">
+	<table style="margin: 0 auto; width: 700px; height: 1000px;" border="1">
 		<tr>
 			<td>이메일</td>
-			<td><input type="email" name="email" required="required"></td>
+			<td><input type="text" name="email" required="required">@<input type="" name="emailAddress" required="required"></td>
 			<td><input type="button" value="인증번호 요청" onclick="requestCode()"></td>
 		</tr>
 		<tr>
@@ -90,23 +105,34 @@ function confirmCode(){
 		</tr>
 		<tr>
 			<td>휴대폰번호</td>
-			<td><input type="tel" name="phone" required="required"></td>
+			<td >
+				<input type="text" name="phone" required="required" size="4"> - 
+				<input type="text" name="phone" required="required" size="4"> - 
+				<input type="text" name="phone" required="required" size="4">
+			</td>
+			
 		</tr>
 		<tr>
 			<td>주소</td>
 			<td>
-				<input type="button" name="addressSearch" value="주소찾기" >
-				<input type="text" value="우편번호" readonly="readonly" style="width: 90px;">
+				<!-- 주소와 우편번호를 입력할 <input>들을 생성하고 적당한 name과 class를 부여한다 -->
+				<input type="text" name="postcode" class="postcodify_postcode5" value="" />
+				<button id="postcodify_search_button">검색</button><br />
+				<input type="text" name="address" class="postcodify_address" value="" /><br />
+				<input type="text" name="details" class="postcodify_details" value="" /><br />
+				<input type="text" name="extra_info" class="postcodify_extra_info" value="" /><br />
+<!-- 				<input type="button" name="addressSearch" value="주소찾기" > -->
+<!-- 				<input type="text" value="우편번호" readonly="readonly" style="width: 90px;"> -->
 			</td>
 		</tr>
-		<tr>
-			<td></td>	
-			<td><input type="text" name="address" required="required"></td>
-		</tr>
-		<tr>
-			<td>상세주소</td>	
-			<td><input type="text" name="detailAddress" required="required"></td>
-		</tr>
+<!-- 		<tr> -->
+<!-- 			<td></td>	 -->
+<!-- 			<td><input type="text" name="address" required="required"></td> -->
+<!-- 		</tr> -->
+<!-- 		<tr> -->
+<!-- 			<td>상세주소</td>	 -->
+<!-- 			<td><input type="text" name="detailAddress" required="required"></td> -->
+<!-- 		</tr> -->
 		<tr><td></td></tr><tr><td></td></tr>
 		<tr>
 			<td></td>
@@ -116,5 +142,6 @@ function confirmCode(){
 		</tr>
 	</table>
 </form>
+
 </body>
 </html>
