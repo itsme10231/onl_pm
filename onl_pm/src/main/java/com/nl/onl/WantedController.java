@@ -57,6 +57,10 @@ public class WantedController {
 	public String getWantedDetail(Model model, Authentication auth, String seq) {
 		System.out.println(auth == null? true: false);
 		
+		if(seq == null) {
+			seq = "0";
+		}
+		
 		if(auth != null && auth.isAuthenticated()) {
 			LoginDto ldto = (LoginDto)auth.getPrincipal();
 			String id = ldto.getId();
@@ -68,7 +72,7 @@ public class WantedController {
 			WantedDto wdto = wantedServiceImp.getWantedDetailLogin(map);
 			model.addAttribute(wdto);
 		
-		}else if(seq != null){
+		}else{
 			
 			WantedDto wdto = wantedServiceImp.getWantedDetail(seq);
 			model.addAttribute(wdto);

@@ -9,7 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
+import java.util.Base64;
+import java.util.Base64.Encoder;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -17,7 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -90,7 +91,11 @@ public class Util {
 			Mac mac = Mac.getInstance("HmacSHA256");
 		    mac.init(signingKey);
 		    byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-		    encodeBase64String = Base64.encodeBase64String(rawHmac);
+//		    encodeBase64String = Base64.encodeBase64String(rawHmac);
+		    
+		    Encoder encoder = Base64.getEncoder();
+		    
+		    encodeBase64String = new String(encoder.encode(rawHmac));
 		    
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
