@@ -142,6 +142,9 @@ $RECYCLE.BIN/
 # db정보설정파일
 db.properties
 
+# naver api key
+naverKey.properties
+
 pom.properties
 /test/
 # End of https://www.gitignore.io/api/maven,windows,eclipse,java-web
