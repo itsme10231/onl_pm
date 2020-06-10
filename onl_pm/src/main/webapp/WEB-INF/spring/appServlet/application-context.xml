@@ -9,7 +9,7 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- db.properties 파일의 위치 설정 -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
+		<property name="locations">
 			<list>
 				<value>classpath:properties/db.properties</value>
 				<value>classpath:properties/naverKey.properties</value>
