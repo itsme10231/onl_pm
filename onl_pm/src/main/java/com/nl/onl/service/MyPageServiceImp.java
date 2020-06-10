@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nl.onl.daos.IMyPageDao;
 import com.nl.onl.dtos.ReviewDto;
@@ -11,6 +12,7 @@ import com.nl.onl.dtos.UserlistDto;
 import com.nl.onl.dtos.WantedDto;
 import com.nl.onl.dtos.WishDto;
 
+@Service
 public class MyPageServiceImp implements IMyPageService{
 
 	@Autowired
