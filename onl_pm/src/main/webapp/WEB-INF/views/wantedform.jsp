@@ -194,6 +194,10 @@ $(function() {
 </div>
 </body>
 <script type="text/javascript">
+
+	var address = document.getElementsByName("address").val();
+	
+	
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	mapOption = {
 	    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -207,7 +211,7 @@ $(function() {
 	var geocoder = new kakao.maps.services.Geocoder();
 	
 	//주소로 좌표를 검색합니다
-	geocoder.addressSearch('제주특별자치도 제주시 첨단로 242', function(result, status) {
+	geocoder.addressSearch(address, function(result, status) {
 	
 	// 정상적으로 검색이 완료됐으면 
 	 if (status === kakao.maps.services.Status.OK) {

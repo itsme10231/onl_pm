@@ -5,12 +5,14 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.nl.onl.dtos.ReviewDto;
 import com.nl.onl.dtos.UserlistDto;
 import com.nl.onl.dtos.WantedDto;
 import com.nl.onl.dtos.WishDto;
 
+@Repository
 public class MyPageDaoImp implements IMyPageDao{
 
 	
