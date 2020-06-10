@@ -10,8 +10,12 @@
 	<!-- db.properties 파일의 위치 설정 -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
-			<value>classpath:properties/db.properties</value>
+			<list>
+				<value>classpath:properties/db.properties</value>
+				<value>classpath:properties/naverKey.properties</value>
+			</list>
 		</property>
+
 	</bean>
 	<!-- db.propertise에 설정된 정보를 통해서 dataSource 생성 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -54,5 +58,8 @@
 		</property>
 	</bean>
 	
-	<bean id="onlUtil" class="com.nl.onl.util.Util"/>
+	<bean id="onlUtil" class="com.nl.onl.util.Util">
+		<property name="accessKey" value="${accessKey}"/>
+		<property name="secretKey" value="${secretKey}"/>
+	</bean>
 </beans>

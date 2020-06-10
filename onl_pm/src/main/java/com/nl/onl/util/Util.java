@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -27,7 +28,30 @@ import org.json.simple.parser.ParseException;
 
 public class Util {
 	
+	private String accessKey;
+	private String secretKey;
 	
+	
+	
+	public String getAccessKey() {
+		return accessKey;
+	}
+
+	public void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
+
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+	
+	
+	
+
 	public Cookie getCookie(String cookieName, HttpServletRequest request) {
 		
 		Cookie[] cookies = request.getCookies();
@@ -61,7 +85,7 @@ public class Util {
 		return dom;
 	}
 	
-	public String makeSignature(String url, String accessKey, String timestamp, String userIp) {
+	public String makeSignature(String url, String accessKey, String secretKey, String timestamp, String userIp) {
 		
 		
 	    String space = " ";                    // one space
@@ -70,7 +94,7 @@ public class Util {
 //	    String url = "geolocation/v2/geoLocation?ip="+userIp;    // url (include query string)
 //	    String timestamp = getTodayMill();            // current timestamp (epoch)
 //	    String accessKey = ""   ;         // access key id (from portal or sub account)
-	    String secretKey = "zJL1YbqGV9dUxi2Tk3wCt31nstQ5Vj8iSrBnPYzk";
+//	    String secretKey = "";
 
 	    String message = new StringBuilder()
 	        .append(method)
@@ -126,11 +150,12 @@ public class Util {
 		String requestUrl2 = "/geoLocation";
 		
 		String accessKey = "vQXABY1T2mnBqEJXJhcZ";
+		String secretKey = "zJL1YbqGV9dUxi2Tk3wCt31nstQ5Vj8iSrBnPYzk";
 		String timestamp = getTodayMill();
-//		String userIp = "112.221.224.125";
+
 		
 		String queries = "ip="+ip+"&enc=utf8&ext=t&responseFormatType=json";
-		String signature = makeSignature(requestUrl1+requestUrl2+"?"+queries, accessKey, timestamp, ip);
+		String signature = makeSignature(requestUrl1+requestUrl2+"?"+queries, accessKey, secretKey, timestamp, ip);
 		
 		String urlS = "https://geolocation.apigw.ntruss.com/geolocation/v2/geoLocation?"
 				+queries
@@ -160,18 +185,17 @@ public class Util {
 				result.append(line);
 				result.append("\n");
 			}
-			System.out.println(result);
+//			System.out.println(result);
 			
 			//받아온 결과값을 제이슨 오브젝트로 가공
 			JSONParser parser = new JSONParser();
 			jObj = (JSONObject)parser.parse(result.toString());
 			
-			System.out.println(jObj.get("geoLocation"));
+//			System.out.println(jObj.get("geoLocation"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
@@ -180,7 +204,7 @@ public class Util {
 	}
 	
 	
-	public static String getRemoteAddr(HttpServletRequest request) {
+	public String getRemoteAddr(HttpServletRequest request) {
         String ip = null;
         ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
@@ -207,6 +231,30 @@ public class Util {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
             ip = request.getRemoteAddr(); 
         }
+        
+        System.out.println(ip);
+        
+        //로컬호스트에서 접속했을 경우
+        if(ip.equals("127.0.0.1")) {
+        	
+        	try {
+				URL ipURL = new URL("http://ipinfo.io/ip");
+				InputStream is = ipURL.openStream();
+				InputStreamReader isr = new InputStreamReader(is);
+				
+				BufferedReader br = new BufferedReader(isr);
+				
+				
+				ip = br.readLine();
+				System.out.println(ip);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+        }
+        
+        
         return ip;
     }
 }

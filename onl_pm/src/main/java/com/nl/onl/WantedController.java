@@ -48,7 +48,7 @@ public class WantedController {
 			wantedServiceImp.getWantedList(sdto);
 		}
 		
-		model.addAttribute(wlist);
+		model.addAttribute("wlist",wlist);
 		return "wantedlist";
 	}
 	
