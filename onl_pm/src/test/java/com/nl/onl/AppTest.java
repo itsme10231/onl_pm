@@ -23,6 +23,7 @@ import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.WantedDto;
 import com.nl.onl.security.OnlAuthProvider;
 import com.nl.onl.service.ILoginService;
+import com.nl.onl.util.Util;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/appServlet/**"})
@@ -32,8 +33,8 @@ public class AppTest {
 //	@Autowired
 //	UserDetailsService loginServiceImp;
 	
-	@Autowired
-	ILoginService loginServiceImp;
+//	@Autowired
+//	ILoginService loginServiceImp;
 	
 	@Test
 	public void test() {
@@ -41,6 +42,10 @@ public class AppTest {
 //		LoginDto ldto = new LoginDto(null, "admin", "관리자", "서울", "강서구", "어디", "admin", null, null, null, null, "ADMIN", "010-000-0000", "O");
 //		loginServiceImp.insertMember(ldto);
 		System.out.println("test");
+		
+		Util u = new Util();
+		u.getCurrLocation("112.221.224.125");
+//		u.getCurrLocation();
 	}
 	
 }

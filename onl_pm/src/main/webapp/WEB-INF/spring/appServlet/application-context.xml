@@ -53,4 +53,6 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="onlUtil" class="com.nl.onl.util.Util"/>
 </beans>

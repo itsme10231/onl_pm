@@ -55,8 +55,9 @@ public class WantedController {
 	//구인글 상세보기
 	@RequestMapping(value="wanted.do", method=RequestMethod.GET)
 	public String getWantedDetail(Model model, Authentication auth, String seq) {
+		System.out.println(auth == null? true: false);
 		
-		if(auth.isAuthenticated()) {
+		if(auth != null && auth.isAuthenticated()) {
 			LoginDto ldto = (LoginDto)auth.getPrincipal();
 			String id = ldto.getId();
 			
@@ -67,7 +68,7 @@ public class WantedController {
 			WantedDto wdto = wantedServiceImp.getWantedDetailLogin(map);
 			model.addAttribute(wdto);
 		
-		}else {
+		}else if(seq != null){
 			
 			WantedDto wdto = wantedServiceImp.getWantedDetail(seq);
 			model.addAttribute(wdto);
