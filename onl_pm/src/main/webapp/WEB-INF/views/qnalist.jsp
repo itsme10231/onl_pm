@@ -143,41 +143,39 @@
 		<th width="150px;">작성일</th>
 	</tr>
 
-
-	<tr>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-	</tr>
-	
-	<tr>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-	</tr>
-	
-	<tr>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-	</tr>
-	
-	<tr>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-		<td class="td2"></td>
-	</tr>
-	
-	<tr>
-		<td class="td3"></td>
-		<td class="td3"></td>
-		<td class="td3"></td>
-		<td class="td3"></td>
-	</tr>
+<c:choose>
+		<c:when test="${empty list}">
+			<tr>
+				<td colspan="10">---작성된 글이 없습니다.---</td>
+			</tr>
+		</c:when>
+		<c:otherwise>
+			<c:forEach items="${list}" var="dto">
+				<tr>
+					<td><input type="checkbox" name="seq" value="${dto.seq}"/></td>
+					<td>${dto.seq}</td>
+					<td>${dto.id}</td>
+					<c:choose>
+						<c:when test="${dto.delflag=='Y'}">
+							<td>---삭제된 글입니다.---</td>
+						</c:when>
+						<c:otherwise>
+							<td>
+							<jsp:setProperty property="arrowNbsp" name="util" value="${dto.depth}"/>
+							<jsp:getProperty property="arrowNbsp" name="util"/>
+							<a href="boarddetail.do?seqparam=${dto.seq}">${dto.title}</a></td>
+						</c:otherwise>
+					</c:choose>
+					<td><f:formatDate pattern="yyyy-MM-dd" value="${dto.regdate}"/>  </td>
+					<td>${qnalist.}</td>
+					<td>${dto.step}</td>
+					<td>${dto.depth}</td>
+					<td>${dto.readcount}</td>
+					<td>${dto.delflag}</td>
+				</tr>
+			</c:forEach>
+		</c:otherwise>
+	</c:choose>
 </table>
 <div id="div3">
 	<button id="button2">글쓰기</button>
