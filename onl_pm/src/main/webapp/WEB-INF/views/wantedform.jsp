@@ -141,14 +141,6 @@ $(function() {
 					</td>
 				</tr>
 				<tr>
-					<td>거리 설정</td>
-					<td>
-						<input type="radio" name="space">거리 무관 &nbsp;&nbsp;
-						<input type="radio" name="space">30km 이내  &nbsp;&nbsp;
-						<input type="checkbox">입력하신 거리설정으로 검색된 관련 거래를 알림 받습니다.
-					</td>
-				</tr>
-				<tr>
 					<td></td>
 					<td>		
 					</td>
