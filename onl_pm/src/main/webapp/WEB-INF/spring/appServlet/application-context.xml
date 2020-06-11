@@ -20,6 +20,7 @@
 				<value>classpath:properties/db.properties</value>
 				<value>classpath:properties/naverKey.properties</value>
 				<value>classpath:properties/mailSender.properties</value>
+				<value>classpath:properties/path.properties</value>
 			</list>
 		</property>
 
@@ -68,5 +69,6 @@
 	<bean id="onlUtil" class="com.nl.onl.util.Util">
 		<property name="accessKey" value="${nk.accessKey}"/>
 		<property name="secretKey" value="${nk.secretKey}"/>
+		<property name="filePath" value="${path.filePath}"/>
 	</bean>
 </beans>

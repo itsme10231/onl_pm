@@ -1,5 +1,7 @@
 package com.nl.onl.interceptor;
 
+import java.net.URLEncoder;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,16 +26,25 @@ public class GeoInterceptor extends HandlerInterceptorAdapter{
 		String currIp = onlUtil.getRemoteAddr(request);
 		
 		if(addressCookie == null || !addressCookie.getValue().equals(currIp) ) {
-			JSONObject gObj = onlUtil.getCurrLocation(currIp);
-			JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
 			
-			String addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
-			String code = gObj2.get("code").toString();
+			JSONObject gObj = onlUtil.getCurrLocation(currIp);
+			String addr = "NONE";
+			String code = "NONE";
+			
+			if(gObj != null){
+				JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
+				System.out.println(gObj2);
+				addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
+				addr = URLEncoder.encode(addr, "utf-8");
+				
+				code = gObj2.get("code").toString();
+			}
 			
 			
 			onlUtil.setCookie("addressCookie", currIp, response);
-			onlUtil.setCookie("locationCookie", addr, response);
 			onlUtil.setCookie("codeCookie", code, response);
+			onlUtil.setCookie("locationCookie", addr, response);
+			
 		}
 		
 		

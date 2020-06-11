@@ -1,6 +1,7 @@
 package com.nl.onl.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,8 +11,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Encoder;
+import java.util.List;
+import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -23,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.nl.onl.dtos.FileDto;
 
 
 
@@ -31,6 +38,7 @@ public class Util {
 	private String accessKey;
 	private String secretKey;
 	
+	private String filePath;
 	
 	
 	public String getAccessKey() {
@@ -49,6 +57,14 @@ public class Util {
 		this.secretKey = secretKey;
 	}
 	
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 	
 	
 
@@ -232,10 +248,10 @@ public class Util {
             ip = request.getRemoteAddr(); 
         }
         
-        System.out.println(ip);
+//        System.out.println(ip);
         
         //로컬호스트에서 접속했을 경우
-        if(ip.equals("127.0.0.1")) {
+        if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:1")) {
         	
         	try {
 				URL ipURL = new URL("http://ipinfo.io/ip");
@@ -257,4 +273,31 @@ public class Util {
         
         return ip;
     }
+	
+	public List<FileDto> letUpload(String boradType, MultipartFile[] files){
+		
+		List<FileDto> flist = new ArrayList<>();
+		for(MultipartFile file:files) {
+			
+			String originName = file.getOriginalFilename();
+			String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
+			String storedName = creatUUID +originName.substring(originName.indexOf("."));
+			
+			String path = filePath;
+			File f = new File(filePath+storedName);
+			boolean isS = false;
+			
+			try {
+				
+				file.transferTo(f);
+				
+				
+				
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		return flist;
+	}
 }

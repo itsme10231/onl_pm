@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
+import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.ReviewDto;
 import com.nl.onl.dtos.SearchDto;
 import com.nl.onl.dtos.WantedDto;
@@ -17,15 +18,12 @@ public interface IWantedService {
 	public List<WantedDto> getWantedListLogin(SearchDto sdto);
 	
 	//increaseView와 함께 트랜잭션 처리
-	public WantedDto getWantedDetail(String seq);
+	public WantedDto getWantedDetailT(String seq);
 	
-	public WantedDto getWantedDetailLogin(Map<String, String> map);
-	
-	
-	
-	//pay_agree 테이블 인서트와 함께 트랜잭션 처리
-	public boolean insertWanted(WantedDto wdto);
-	
+	public WantedDto getWantedDetailLoginT(Map<String, String> map);
+
+	//파일업로드와 함께 트랜잭션 처리
+	public boolean insertWantedT(WantedDto wdto, List<FileDto> flist);
 	
 	public List<CategoryDto> getCategory();
 	
@@ -37,10 +35,11 @@ public interface IWantedService {
 	public boolean insertApply(ApplyDto adto);
 	
 	//트랜잭션 처리
-	public boolean deleteApply(Map<String, String> map);
+	public boolean deleteApplyT(Map<String, String> map);
 	
+	//pay_agree 테이블 인서트와 함께 트랜잭션 처리
+	public boolean pickSelectorT(Map<String, String> map);
 	
-	public boolean pickSelector(Map<String, String> map);
 	
 	public boolean updateStatus(String seq);
 	

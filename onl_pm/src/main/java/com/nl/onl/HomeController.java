@@ -1,7 +1,5 @@
 package com.nl.onl;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -24,7 +22,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/home.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-
+		System.out.println("!!!");
 		return "home";
 	}
 	

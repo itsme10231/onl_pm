@@ -184,7 +184,7 @@
 	</select>
 	
 <!-- 	찜글보기 페이징 수정-->
-	<select id="getWishlist" resultType="WishDto" parameterType="map">
+	<select id="getWishlist" resultMap="WishDtoMap" parameterType="map">
 		SELECT ws.RN, ws.SEQ, ws.WANTED_SEQ, wp.TITLE, wp.ID, wp.DEADLINE, wp.SALARY, wp.STATE 
 		FROM WANTED_POST wp,
 			(SELECT ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN, SEQ, ID, WANTED_SEQ 
@@ -192,6 +192,9 @@
 			WHERE ID = #{id}) ws
 		WHERE CEIL(RN/10)=#{pnum} AND ws.WANTED_SEQ = wp.SEQ
 	</select>
+	
+
+
 	
 <!-- 	찜글삭제 -->
 	<delete id="delWishlist" parameterType="int">

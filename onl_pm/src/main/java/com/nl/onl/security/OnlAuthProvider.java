@@ -40,8 +40,6 @@ public class OnlAuthProvider extends DaoAuthenticationProvider {
 			throw new UsernameNotFoundException(email);
 		}
 		
-		System.out.println(passwordEncoder.matches(password, dto.getPassword()));
-		
 		
 		if (!passwordEncoder.matches(password, dto.getPassword())) {
 			throw new BadCredentialsException(email);

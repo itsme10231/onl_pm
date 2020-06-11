@@ -117,5 +117,11 @@
 		WHERE ID = #{id}
 	</update>
 	
+	<!-- 찜글 목록 가져오기(로그인) -->
+	<select id="getWishList" resultType="String" parameterType="String">
+		SELECT WANTED_SEQ 
+			FROM WISHLIST 
+			WHERE ID = #{id}
 	
+	</select>
 </mapper>

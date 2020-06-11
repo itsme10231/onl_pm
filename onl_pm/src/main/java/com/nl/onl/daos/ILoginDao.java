@@ -1,9 +1,11 @@
 package com.nl.onl.daos;
 
-import java.util.Map;
+import java.util.List;
+
 
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
+
 
 public interface ILoginDao {
 	//회원가입
@@ -32,4 +34,7 @@ public interface ILoginDao {
 	
 	//프로필 수정
 	public boolean updateProfile(ProfileDto pdto);
+	
+	//찜글목록 가져오기
+	public List<String> getWishList(String id);
 }

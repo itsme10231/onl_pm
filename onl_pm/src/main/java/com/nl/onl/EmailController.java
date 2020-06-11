@@ -27,30 +27,30 @@ import com.nl.onl.util.Util;
 public class EmailController {
 
 	
-	@Autowired 
-	private JavaMailSenderImpl mailSender;
+//	@Autowired 
+//	private JavaMailSenderImpl mailSender;
 
-	@RequestMapping(value = "/mailConfirm.do", method = RequestMethod.POST) 
-	public @ResponseBody String regist(Model model, String email) { 
-		System.out.println("서버접속성공");
-		Util uran=new Util();
-		String rannum = uran.random();
-		
-		final MimeMessagePreparator preparator = new MimeMessagePreparator() {
-			
-			@Override
-			public void prepare(MimeMessage mimeMessage) throws Exception {
-				
-				final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8"); 
-				helper.setFrom("김태환<01028257766k@gmail.com>"); 
-				helper.setTo(email); 
-				helper.setSubject("[오늘,내:일] 인증번호 를 입력해주세요."); 
-				helper.setText("[오늘,내:일] 인증번호 ["+rannum+"]를 입력해주세요.", true);
-			}
-		};  
-		mailSender.send(preparator); 
-		return rannum; 
-	}
+//	@RequestMapping(value = "/mailConfirm.do", method = RequestMethod.POST) 
+//	public @ResponseBody String regist(Model model, String email) { 
+//		System.out.println("서버접속성공");
+//		Util uran=new Util();
+//		String rannum = uran.random();
+//		
+//		final MimeMessagePreparator preparator = new MimeMessagePreparator() {
+//			
+//			@Override
+//			public void prepare(MimeMessage mimeMessage) throws Exception {
+//				
+//				final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8"); 
+//				helper.setFrom("김태환<01028257766k@gmail.com>"); 
+//				helper.setTo(email); 
+//				helper.setSubject("[오늘,내:일] 인증번호 를 입력해주세요."); 
+//				helper.setText("[오늘,내:일] 인증번호 ["+rannum+"]를 입력해주세요.", true);
+//			}
+//		};  
+//		mailSender.send(preparator); 
+//		return rannum; 
+//	}
 	
 
 }

@@ -7,7 +7,7 @@
 	<!-- 구인글 매칭시 지급동의 테이블 insert -->
 	<insert id="insertAgree" parameterType="map">
 		INSERT INTO PAY_AGREE VALUES(
-			#{seq}, 'N', 'N', SYSDATE, #{salary}
+			#{wanted_seq}, 'N', 'N', SYSDATE, #{salary}
 		)
 	</insert>
 	

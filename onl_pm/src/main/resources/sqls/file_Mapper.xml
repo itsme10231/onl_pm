@@ -11,10 +11,32 @@
 <!-- 	</insert> -->
 	
 	<!-- 첨부파일 여러장 한번에 업로드 -->
-	<insert id="insertMultiFile" parameterType="list">
+	<insert id="insertMultiFile" parameterType="java.util.List">
 		INSERT ALL
 		<foreach collection="list" open="INTO UPLOAD_FILE VALUES(" close=")" separator=") INTO UPLOAD_FILE VALUES(" item="fdto">
-			UPLOAD_FILE_SEQ.NEXTVAL, #{fdto.origin_name}, #{fdto.stored_name}, SYSDATE, 'N', #{fdto.board_type}, #{fdto.id}, #{fdto.post_seq}
+			UPLOAD_FILE_SEQ.NEXTVAL, #{fdto.origin_name}, #{fdto.stored_name}, SYSDATE, 'N', #{fdto.board_type}, #{fdto.id}, 
+			<choose>
+				<when test="fdto.post_seq==0">
+					<if test="fdto.board_type.equals('WANTED_POST')">
+						WANTED_POST_SEQ.CURRVAL
+					</if>
+					<if test="fdto.board_type.equals('REPORTLIST')">
+						REPORTLIST_SEQ.CURRVAL
+					</if>
+					<if test="fdto.board_type.equals('PROFILE')">
+						0
+					</if>
+					<if test="fdto.board_type.equals('NOTICE')">
+						NOTICE_SEQ.CURRVAL
+					</if>
+					<if test="fdto.board_type.equals('QNA')">
+						QNA_SEQ.CURRVAL
+					</if>
+				</when>
+				<otherwise>
+					#{fdto.post_seq}
+				</otherwise>
+			</choose>
 		</foreach>
 	</insert>
 	

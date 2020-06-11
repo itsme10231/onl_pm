@@ -7,10 +7,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nl.onl.daos.IFileDao;
 import com.nl.onl.daos.IPaymentDao;
 import com.nl.onl.daos.IWantedDao;
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
+import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.ReviewDto;
 import com.nl.onl.dtos.SearchDto;
 import com.nl.onl.dtos.WantedDto;
@@ -25,6 +27,9 @@ public class WantedServiceImp implements IWantedService{
 	@Autowired
 	IPaymentDao paymentDaoImp;
 	
+	@Autowired
+	IFileDao fileDaoImp;
+	
 	@Override
 	public List<WantedDto> getWantedList(SearchDto sdto) {
 		return wantedDaoImp.getWantedList(sdto);
@@ -36,22 +41,23 @@ public class WantedServiceImp implements IWantedService{
 	}
 
 	@Override
-	public WantedDto getWantedDetail(String seq) {
+	public WantedDto getWantedDetailT(String seq) {
 		WantedDto result = wantedDaoImp.getWantedDetail(seq);
 		boolean isS = wantedDaoImp.increaseView(seq);
 		return result;
 	}
 
 	@Override
-	public WantedDto getWantedDetailLogin(Map<String, String> map) {
+	public WantedDto getWantedDetailLoginT(Map<String, String> map) {
 		WantedDto result = wantedDaoImp.getWantedDetailLogin(map);
 		boolean isS = wantedDaoImp.increaseView(map.get("seq"));
 		return result;
 	}
 
 	@Override
-	public boolean insertWanted(WantedDto wdto) {
+	public boolean insertWantedT(WantedDto wdto, List<FileDto> flist) {
 		boolean isS = wantedDaoImp.insertWanted(wdto);
+		isS = fileDaoImp.insertMultiFile(flist);
 		return isS;
 	}
 
@@ -76,14 +82,16 @@ public class WantedServiceImp implements IWantedService{
 	}
 
 	@Override
-	public boolean deleteApply(Map<String, String> map) {
+	public boolean deleteApplyT(Map<String, String> map) {
 		boolean isS = wantedDaoImp.deleteApply(map.get("seq"));
 		wantedDaoImp.cancelSelector(map);
 		return isS;
 	}
 
 	@Override
-	public boolean pickSelector(Map<String, String> map) {
+	public boolean pickSelectorT(Map<String, String> map) {
+		//map의 key: seq, wanted_seq, salary
+		boolean isS = paymentDaoImp.insertAgree(map);
 		return wantedDaoImp.pickSelector(map);
 	}
 

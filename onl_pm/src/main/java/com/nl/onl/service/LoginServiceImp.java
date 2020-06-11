@@ -1,5 +1,7 @@
 package com.nl.onl.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -74,4 +76,8 @@ public class LoginServiceImp implements ILoginService{
 		return loginDaoImp.updateProfile(pdto);
 	}
 	
+	@Override
+	public List<String> getWishList(String id) {
+		return loginDaoImp.getWishList(id);
+	}
 }

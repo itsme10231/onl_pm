@@ -1,12 +1,15 @@
 package com.nl.onl.daos;
 
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
+
 
 @Repository
 public class LoginDaoImp implements ILoginDao {
@@ -61,5 +64,9 @@ public class LoginDaoImp implements ILoginDao {
 	public boolean updateProfile(ProfileDto pdto) {
 		return sqlSession.update(nameSpace+"updateProfile", pdto) > 0? true:false;
 	}
-
+	
+	@Override
+	public List<String> getWishList(String id) {
+		return sqlSession.selectList(nameSpace+"getWishList", id);
+	}
 }

@@ -1,6 +1,9 @@
 package com.nl.onl.dtos;
 
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class WantedDto {
 	private int seq;
@@ -33,6 +36,8 @@ public class WantedDto {
 	private String nickname;
 	private ApplyDto applyDto;
 	private FileDto fileDto;
+	
+	private List<MultipartFile> files;
 	
 	
 	public String getNickname() {
@@ -215,6 +220,16 @@ public class WantedDto {
 	}
 	public void setWishlist(String wishlist) {
 		this.wishlist = wishlist;
+	}
+	
+	
+	
+	
+	public List<MultipartFile> getFiles() {
+		return files;
+	}
+	public void setFiles(List<MultipartFile> files) {
+		this.files = files;
 	}
 	
 	

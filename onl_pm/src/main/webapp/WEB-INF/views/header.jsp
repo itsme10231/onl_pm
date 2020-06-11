@@ -106,12 +106,13 @@
 	
 	.remotediv{
 		position: fixed; 
-		right: 20%; 
+		right: 10%; 
 		bottom: 50px; 
 		width: 60px; 
 		height: 80px;
 		font-size: 12px;
 		text-align: center;
+		z-index: 1000;
 	}
 	
 	.writebtodiv{
@@ -174,7 +175,7 @@
 	
 	body{
 		font-family: source-han-sans-korean, sans-serif;
-		background-color: lightgray;
+		background-color: whitesmoke;
 	}
 </style>
 <script type="text/javascript" src="/onl/resources/js/jquery-3.5.1.min.js"></script>
@@ -312,10 +313,11 @@ function makeCategory(cjson){
 
 <div class="remotediv">
 	<div class="writebtodiv">
-		<img class="writebto" alt="구인글 쓰기" src="/onl/resources/icon/write.png" width="40px">
+		<a href='writewantedform.do'><img class="writebto" alt="구인글 쓰기" src="/onl/resources/icon/write.png" width="40px"></a>
 	</div>
 	▲TOP
 </div>
-이하 본문영역
+이하 본문영역 <br>
+
 </body>
 </html>

@@ -10,21 +10,25 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
-$(function() {
-	$("#postcodify_search_button").postcodifyPopUp(); 
+	$(function() {
+		$("#postcodify_search_button").postcodifyPopUp(); 
 	
+		setMap();
+		
 	});
-
+	
+	
 </script>
 <style type="text/css">
 	.wantedWrite{
-		border: solid gray 1px;
-		width: 800px;
+		border: solid lightgray 1px;
+/* 		width: 800px; */
 		margin: 0 auto;
 		padding: 20px;
 		border-radius: 5px;
+		background-color: white;
 	}
 	
 	.text1{
@@ -74,7 +78,7 @@ $(function() {
 <body>
 <div class="headerWrapper">
 	<h1>구인글 등록</h1>
-	<form action="">
+	<form action="writewanted.do" method="post" enctype="multipart/form-data">
 		<div class="wantedWrite">
 			<input type="radio" name="wanted" value="새 글 등록"/>새 글 등록
 			<input type="radio" name="wanted" value="목록에서 복사"/>목록에서 복사
@@ -85,7 +89,7 @@ $(function() {
 				<option value="구인글3">구인글3</option>
 			</select>
 		</div>
-			<p class="text1">필수 입력</p>
+			<p class="text1"></p>
 		<div class="wantedWrite">
 			<table>
 				<colgroup>
@@ -93,30 +97,29 @@ $(function() {
 					<col width="500px">
 				</colgroup>
 				<tr>
-					<td>제목</td>
-					<td><input type="text" style="width: 600px;" required="required"></td>
+					<th>제목</th>
+					<td><input type="text" style="width: 600px;" name="title" required="required"></td>
 				</tr>
 				<tr>
-					<td>내용</td>
-					<td><input type="text" style="width: 600px; height: 200px;" required="required"></td>
+					<th>내용</th>
+					<td><input type="text" style="width: 600px; height: 200px;" name="content" required="required"></td>
 				</tr>
 				<tr>
-					<td>제안금액</td>
-					<td><input type="number" style="width: 200px;" required="required">원</td>
+					<th>제안금액</th>
+					<td><input type="number" style="width: 200px;" name="salary" required="required">원</td>
 				</tr>
 				<tr>
-					<td>위치</td>
+					<th>위치</th>
 					<td>
-						우편번호
-						<input type="text" name="postcode" class="postcodify_postcode5" readonly="readonly" value="" />
-						<button type="button" id="postcodify_search_button">검색</button>
+						현재 나의 위치: ${location}
+						<button type="button" id="postcodify_search_button">새 주소 검색</button>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>		
 						도로명 &nbsp;&nbsp;
-						<input type="text" name="address" class="postcodify_address" readonly="readonly" value="" />
+						<input type="text" name="address" class="postcodify_address" readonly="readonly"/>
 					</td>
 				</tr>
 				<tr>
@@ -128,15 +131,8 @@ $(function() {
 				<tr>
 					<td></td>
 					<td>		
-						참고항목
-						<input type="text" name="extra_info" class="postcodify_extra_info" readonly="readonly" value="" />
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>		
-						<input type="checkbox" >현재 주소를 프로필에 저장
-						<input type="button" value="위치 보기" onclick="setMap()">
+
+						<input type="button" value="위치 새로고침" onclick="setMap()">
 						<div id="map" style="width: 500px; height: 400px;"></div>
 					</td>
 				</tr>
@@ -145,9 +141,36 @@ $(function() {
 					<td>		
 					</td>
 				</tr>
+				<tr>
+					<th>연락처</th>
+					<td>
+						<input type="radio" name="telpub" value="N">비공개 &nbsp;&nbsp; &nbsp;&nbsp;
+						<input type="radio" name="telpub" value="Y">매칭시 공개
+					</td>
+				</tr>
+				<tr>
+					<th>지원마감날짜</th>
+					<td>
+						<input type="date" style="width: 300px;">
+					</td>	
+				</tr>
+				<tr>
+					<th>일하는 날</th>
+					<td>
+						시작일 <input type="date" name="sdate" style="width: 300px;"><br/>
+						시작시간
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						종료일 <input type="date" name="edate" style="width: 300px;"><br/>
+						종료시간
+					</td>
+				</tr>
 			</table>
 		</div>
-		<p class="text2">선택 입력</p>
+		<p></p>
 		<div class="wantedWrite">
 			<table>
 				<colgroup>
@@ -155,22 +178,9 @@ $(function() {
 					<col width="500px">
 				</colgroup>
 				<tr>
-					<td>연락처</td>
-					<td>
-						<input type="radio" name="phone">비공개 &nbsp;&nbsp; &nbsp;&nbsp;
-						<input type="radio" name="phone">매칭시 공개
-					</td>
-				</tr>
-				<tr>
-					<td>지원마감날짜</td>
-					<td>
-						<input type="date" style="width: 300px;">
-					</td>	
-				</tr>
-				<tr>
 					<td>사진첨부</td>
 					<td>
-						<input type="file" name="fileUpload"><br>※ 첨부파일 용량은 개당 5MB 이하, 최대 5개 이하로 제한됩니다.
+						<input type="file" name="file" multiple="multiple"><br>※ 첨부파일 용량은 개당 5MB 이하, 최대 5개 이하로 제한됩니다.
 					</td>	
 				</tr>
 				<tr>
@@ -188,10 +198,14 @@ $(function() {
 
 <script type="text/javascript">
 
+// 	var inputLocationD = $("input[name='detail']")[0].val();
+
 	function setMap(){
 		
-		var inputLocations = $("input[name='address']").val();
-		var inputLocationsD = $("input[name='detail']").val();
+		var location = "${location}";
+		var inputLoc = $("input[name='address']").val();
+		console.log(inputLoc);
+		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		mapOption = {
 		    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -204,8 +218,14 @@ $(function() {
 		//주소-좌표 변환 객체를 생성합니다
 		var geocoder = new kakao.maps.services.Geocoder();
 		
+		if(inputLoc != null && inputLoc != ""){	
+			location = inputLoc;
+		}
+		
+		console.log(location);
+		
 		//주소로 좌표를 검색합니다
-		geocoder.addressSearch(inputLocations, function(result, status) {
+		geocoder.addressSearch(location, function(result, status) {
 	
 			// 정상적으로 검색이 완료됐으면 
 			if (status === kakao.maps.services.Status.OK) {
