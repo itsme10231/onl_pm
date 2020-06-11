@@ -48,7 +48,7 @@ public class WantedController {
 			wantedServiceImp.getWantedList(sdto);
 		}
 		
-		model.addAttribute(wlist);
+		model.addAttribute("wlist",wlist);
 		return "wantedlist";
 	}
 	
@@ -70,12 +70,12 @@ public class WantedController {
 			map.put("seq", seq);
 			
 			WantedDto wdto = wantedServiceImp.getWantedDetailLogin(map);
-			model.addAttribute(wdto);
+			model.addAttribute("wdto",wdto);
 		
 		}else{
 			
 			WantedDto wdto = wantedServiceImp.getWantedDetail(seq);
-			model.addAttribute(wdto);
+			model.addAttribute("wdto",wdto);
 			
 		}
 		

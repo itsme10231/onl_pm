@@ -139,8 +139,10 @@ $RECYCLE.BIN/
 *.lnk
 
 
-# db정보설정파일
+# 정보설정파일
 db.properties
+naverKey.properties
+mailSender.properties
 
 pom.properties
 /test/

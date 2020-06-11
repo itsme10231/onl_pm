@@ -15,16 +15,21 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- db.properties 파일의 위치 설정 -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
-			<value>classpath:properties/db.properties</value>
+		<property name="locations">
+			<list>
+				<value>classpath:properties/db.properties</value>
+				<value>classpath:properties/naverKey.properties</value>
+				<value>classpath:properties/mailSender.properties</value>
+			</list>
 		</property>
+
 	</bean>
 	<!-- db.propertise에 설정된 정보를 통해서 dataSource 생성 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="${driver}"/>
-		<property name="url" value="${url}"/>
-		<property name="username" value="${username}"/>
-		<property name="password" value="${password}"/>
+		<property name="driverClassName" value="${db.driver}"/>
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
 		<property name="defaultAutoCommit" value="true"/>
 	</bean>
 	<!-- dataSource 객체를 sqlSessionFactoryBean 객체에 주입한다 -->
@@ -48,10 +53,10 @@
 	
 	<!-- Mail 인증 관련 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="01028257766k@gmail.com" />
-		<property name="password" value="za45348600" />
+		<property name="host" value="${ms.host}" />
+		<property name="port" value="${ms.port}" />
+		<property name="username" value="${ms.username}" />
+		<property name="password" value="${ms.password}" />
 		<property name="javaMailProperties">
 			<props>
 					<prop key="mail.smtp.auth">true</prop>
@@ -60,5 +65,8 @@
 		</property>
 	</bean>
 	
-	<bean id="onlUtil" class="com.nl.onl.util.Util"/>
+	<bean id="onlUtil" class="com.nl.onl.util.Util">
+		<property name="accessKey" value="${nk.accessKey}"/>
+		<property name="secretKey" value="${nk.secretKey}"/>
+	</bean>
 </beans>

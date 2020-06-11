@@ -9,15 +9,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
-
 $(function() {
 	$("#postcodify_search_button").postcodifyPopUp(); 
-});
+	
+	});
 
-   
 </script>
 <style type="text/css">
 	.wantedWrite{
@@ -95,22 +94,22 @@ $(function() {
 				</colgroup>
 				<tr>
 					<td>제목</td>
-					<td><input type="text" style="width: 600px;"></td>
+					<td><input type="text" style="width: 600px;" required="required"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><input type="text" style="width: 600px; height: 200px;"></td>
+					<td><input type="text" style="width: 600px; height: 200px;" required="required"></td>
 				</tr>
 				<tr>
 					<td>제안금액</td>
-					<td><input type="text" style="width: 200px;"></td>
+					<td><input type="number" style="width: 200px;" required="required">원</td>
 				</tr>
 				<tr>
 					<td>위치</td>
 					<td>
 						우편번호
 						<input type="text" name="postcode" class="postcodify_postcode5" readonly="readonly" value="" />
-						<button id="postcodify_search_button">검색</button>
+						<button type="button" id="postcodify_search_button">검색</button>
 					</td>
 				</tr>
 				<tr>
@@ -137,6 +136,7 @@ $(function() {
 					<td></td>
 					<td>		
 						<input type="checkbox" >현재 주소를 프로필에 저장
+						<input type="button" value="위치 보기" onclick="setMap()">
 						<div id="map" style="width: 500px; height: 400px;"></div>
 					</td>
 				</tr>
@@ -165,7 +165,7 @@ $(function() {
 				<tr>
 					<td>연락처</td>
 					<td>
-						<input type="radio" name="phone">공개 &nbsp;&nbsp; &nbsp;&nbsp;
+						<input type="radio" name="phone">비공개 &nbsp;&nbsp; &nbsp;&nbsp;
 						<input type="radio" name="phone">매칭시 공개
 					</td>
 				</tr>
@@ -178,7 +178,7 @@ $(function() {
 				<tr>
 					<td>사진첨부</td>
 					<td>
-						<button>첨부파일</button><br>※ 첨부파일 용량은 개당 5MB 이하, 최대 5개 이하로 제한됩니다.
+						<input type="file" name="fileUpload"><br>※ 첨부파일 용량은 개당 5MB 이하, 최대 5개 이하로 제한됩니다.
 					</td>	
 				</tr>
 				<tr>
@@ -193,47 +193,53 @@ $(function() {
 	</form>
 </div>
 </body>
+
 <script type="text/javascript">
 
-	var address = document.getElementsByName("address").val();
+	function setMap(){
+		
+		var inputLocations = $("input[name='address']").val();
+		var inputLocationsD = $("input[name='detail']").val();
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		mapOption = {
+		    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+		    level: 3 // 지도의 확대 레벨
+		};  
 	
+		//지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		
+		//주소-좌표 변환 객체를 생성합니다
+		var geocoder = new kakao.maps.services.Geocoder();
+		
+		//주소로 좌표를 검색합니다
+		geocoder.addressSearch(inputLocations, function(result, status) {
 	
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	mapOption = {
-	    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-	    level: 3 // 지도의 확대 레벨
-	};  
-	
-	//지도를 생성합니다    
-	var map = new kakao.maps.Map(mapContainer, mapOption); 
-	
-	//주소-좌표 변환 객체를 생성합니다
-	var geocoder = new kakao.maps.services.Geocoder();
-	
-	//주소로 좌표를 검색합니다
-	geocoder.addressSearch(address, function(result, status) {
-	
-	// 정상적으로 검색이 완료됐으면 
-	 if (status === kakao.maps.services.Status.OK) {
-	
-	    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-	
-	    // 결과값으로 받은 위치를 마커로 표시합니다
-	    var marker = new kakao.maps.Marker({
-	        map: map,
-	        position: coords
-	    });
-	
-	    // 인포윈도우로 장소에 대한 설명을 표시합니다
-	    var infowindow = new kakao.maps.InfoWindow({
-	        content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-	    });
-	    infowindow.open(map, marker);
-	
-	    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-	    map.setCenter(coords);
-	} 
-	}); 
+			// 정상적으로 검색이 완료됐으면 
+			if (status === kakao.maps.services.Status.OK) {
+			
+				var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+				
+				// 결과값으로 받은 위치를 마커로 표시합니다
+				var marker = new kakao.maps.Marker({
+				    map: map,
+				    position: coords
+				});
+		
+				// 인포윈도우로 장소에 대한 설명을 표시합니다
+				var infowindow = new kakao.maps.InfoWindow({
+				    content: '<div style="width:150px;text-align:center;padding:6px 0;">'+result[0].address_name+'</div>'
+				});
+				infowindow.open(map, marker);
+				
+				// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+				map.setCenter(coords);
+		
+			}
+			
+		});
+	}
 </script>
+
 </html>
 <%@include file="footer.jsp" %>

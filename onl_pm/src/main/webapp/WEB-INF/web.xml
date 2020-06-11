@@ -75,13 +75,5 @@
 	   <url-pattern>/*</url-pattern> 
 	</filter-mapping>
 	
-	<!-- ip주소를 바탕으로 현재 위치정보를 가져오는 필터 -->
-	<filter>
-	<filter-name>getGeoLocationFilter</filter-name>
-	<filter-class>com.nl.onl.filter.GetGeoLocationFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>getGeoLocationFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+
 </web-app>
