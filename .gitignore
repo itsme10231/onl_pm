@@ -143,6 +143,7 @@ $RECYCLE.BIN/
 db.properties
 naverKey.properties
 mailSender.properties
+path.properties
 
 pom.properties
 /test/
