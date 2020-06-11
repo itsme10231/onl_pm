@@ -18,7 +18,7 @@
 		</property>
 
 	</bean>
-	<!-- db.propertise에 설정된 정보를 통해서 dataSource 생성 -->
+	<!-- db.properties에 설정된 정보를 통해서 dataSource 생성 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${db.driver}"/>
 		<property name="url" value="${db.url}"/>

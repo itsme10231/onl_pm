@@ -1,7 +1,9 @@
 package com.nl.onl.security;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +28,12 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 			Authentication authentication) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();
-//		List<WishDto>
+		
+		Map<String, String> map = new HashMap<>();
+		
+		
+		
+		List<WishDto> wlist = myPageServiceImp.getWishlist(map);
 		
 		super.onAuthenticationSuccess(request, response, authentication);
 	}

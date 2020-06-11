@@ -28,10 +28,12 @@ public class GeoInterceptor extends HandlerInterceptorAdapter{
 			JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
 			
 			String addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
+			String code = gObj2.get("code").toString();
 			
 			
 			onlUtil.setCookie("addressCookie", currIp, response);
 			onlUtil.setCookie("locationCookie", addr, response);
+			onlUtil.setCookie("codeCookie", code, response);
 		}
 		
 		
