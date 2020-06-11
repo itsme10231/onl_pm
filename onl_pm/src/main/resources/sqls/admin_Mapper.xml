@@ -40,7 +40,7 @@
 	</insert>
 
 <!-- 	신고목록보기 -->
-	<select id="getAllListReport" resultMap="ReportDtoMap"
+	<select id="getAllLi stReport" resultMap="ReportDtoMap"
 	 parameterType="String">
 	SELECT SEQ ,REGDATE ,CONTENT AS C_CONTENT ,ID ,REPORTED_ID , PROCESS
 	FROM (
