@@ -262,7 +262,7 @@ public class Util {
 				
 				
 				ip = br.readLine();
-				System.out.println(ip);
+//				System.out.println(ip);
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -274,8 +274,9 @@ public class Util {
         return ip;
     }
 	
-	public List<FileDto> letUpload(String boradType, MultipartFile[] files){
+	public List<FileDto> letUpload(String boardType, MultipartFile[] files, String id){
 		
+		boolean isS = false;
 		List<FileDto> flist = new ArrayList<>();
 		for(MultipartFile file:files) {
 			
@@ -283,21 +284,20 @@ public class Util {
 			String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
 			String storedName = creatUUID +originName.substring(originName.indexOf("."));
 			
-			String path = filePath;
 			File f = new File(filePath+storedName);
-			boolean isS = false;
 			
 			try {
 				
 				file.transferTo(f);
-				
-				
+				flist.add(new FileDto(0, originName, storedName, null, "N", boardType, id, 0));
+				isS = true;
 				
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
+				isS = false;
 			}
 			
 		}
-		return flist;
+		return isS ? flist : null;
 	}
 }

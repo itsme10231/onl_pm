@@ -3,6 +3,7 @@
 <%request.setCharacterEncoding("UTF-8"); %>
 <%response.setContentType("text/html; charset=UTF-8"); %>
 <%@include file="header.jsp" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE>
 <html>
 <head>
@@ -126,7 +127,7 @@
 					<td></td>
 					<td>		
 						상세주소
-						<input type="text" name="details" class="postcodify_details" value="" />
+						<input type="text" name="LOC_DETAIL" class="postcodify_details" value="" />
 					</td>
 				<tr>
 					<td></td>
@@ -158,14 +159,14 @@
 					<th>일하는 날</th>
 					<td>
 						시작일 <input type="date" name="sdate" style="width: 300px;"><br/>
-						시작시간
+						시작시간 <select name="shour"></select> <select name='smin'></select>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
 						종료일 <input type="date" name="edate" style="width: 300px;"><br/>
-						종료시간
+						종료시간 <select name="ehour"></select> <select name='emin'></select>
 					</td>
 				</tr>
 			</table>

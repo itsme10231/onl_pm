@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.location">
+	
+	<!-- 시도 얻어오기 -->
+	<select id="getCity">
+		SELECT LOC_CODE , LOC_NAME FROM LOCATION_CODE WHERE LOC_CODE LIKE %||'00000000' ORDER BY LOC_CODE ASC
+	</select>
+	
+	<!-- 군구 얻어오기 -->
+	<select id="getDistrict" parameterType="String">
+		SELECT LOC_CODE , LOC_NAME FROM LOCATION_CODE WHERE LOC_CODE LIKE #{loc}||%||'00000' AND LOC_CODE NOT LIKE #{loc}||'00000000'
+	</select>
+
+	<!-- 동 얻어오기 -->
+	<select id="getDong" parameterType="String">
+		SELECT LOC_CODE , LOC_NAME FROM LOCATION_CODE WHERE LOC_CODE LIKE #{loc}||%||'00' AND LOC_CODE NOT LIKE #{loc}||'00000'
+	</select>
+
+
+</mapper>

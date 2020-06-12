@@ -132,9 +132,12 @@ public class WantedController {
 	@RequestMapping(value="writewantedform.do", method=RequestMethod.GET)
 	public String writeWantedForm(Model model, Authentication auth, HttpServletRequest request) throws UnsupportedEncodingException {
 		
+		List<CategoryDto> clist = wantedServiceImp.getCategory();
+		
 		String location = onlUtil.getCookie("locationCookie", request).getValue();
 		location = URLDecoder.decode(location, "utf-8");
 		model.addAttribute("location", location);
+		model.addAttribute("clist", clist);
 		
 		return "wantedform";
 	}
@@ -143,25 +146,31 @@ public class WantedController {
 	//구인글 작성 메소드
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewanted.do", method=RequestMethod.POST)
-	public String writeWanted(Model model, Authentication auth, String telpub, MultipartFile[] file) {
+	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub, MultipartFile[] file) {
+		
+		boolean isS = false;
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
-//		wdto.setNickname(ldto.getNickname());
-//		wdto.setId(ldto.getId());
-//		wdto.setPhone(telpub+ldto.getPhone());
-//		
-//		wantedServiceImp.insertWanted(wdto);
+
+		wdto.setId(ldto.getId());
+		wdto.setPhone(telpub+ldto.getPhone());
+		
 		
 		System.out.println("files: " +file);
 		
-		List<FileDto> flist = new ArrayList<>();
-		for(MultipartFile f:file) {
+		List<FileDto> flist = onlUtil.letUpload("WANTED_POST", file, ldto.getId());
+		
+		if(flist != null) {
+			//실제 수행
+			isS = wantedServiceImp.insertWantedT(wdto, flist);
+			if(!isS) {
+				model.addAttribute("msg", "글 등록에 실패하였습니다.\n 관리자에게 문의해 주세요[DB 오류]");
+			}
 			
-			String originName = f.getOriginalFilename();
-			String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
-			String storedName = creatUUID +originName.substring(originName.indexOf("."));
+		}else {
 			
-			String path = "";
+			model.addAttribute("msg", "글 등록에 실패하였습니다.\n 관리자에게 문의해 주세요[파일 업로드 오류]");
+			
 		}
 		
 		return "redirect:/";
