@@ -11,9 +11,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Encoder;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -151,7 +153,7 @@ public class Util {
 	
 	public String getTodayMill() {
 		long mills = System.currentTimeMillis();
-		System.out.println(mills);
+//		System.out.println(mills);
 		String millS = String.valueOf(mills);
 		
 		return millS;
@@ -299,5 +301,13 @@ public class Util {
 			
 		}
 		return isS ? flist : null;
+	}
+	
+	public Date toDate(String dateS) throws java.text.ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date thisdate = format.parse(dateS);
+		
+		return thisdate;
 	}
 }

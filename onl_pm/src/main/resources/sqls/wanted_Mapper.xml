@@ -247,12 +247,12 @@
 	<!-- ........................................................................... -->
 	<!-- 구인글 작성 -->
 	<insert id="insertWanted" parameterType="WantedDto">
-		INSERT INTO WANTED_POST (SEQ, ID, CATEGORY, TITLE, REGDATE, DEADLINE, SDATE, EDATE, LOCATION, STIME, ETIME, SALARY, CONTENT, VIEWS, STATE, DELFLAG, SOSFLAG, SELECTOR, LOC_DETAIL, PHONE)
+		INSERT INTO WANTED_POST 
 		VALUES (
 				WANTED_POST_SEQ.NEXTVAL, #{id}, #{category}, 
 				#{title}, SYSDATE, #{deadline}, #{sdate}, 
-				#{edate}, #{location}, #{stime}, #{etime}, #{salary}, 
-				#{content}, #{views}, 'WANTED', #{delflag}, #{sosflag}, NULL, #{loc_detail}, #{phone}
+				#{edate}, #{stime}, #{etime}, #{salary}, 
+				#{content}, 0, 'WANTED', 'N', #{sosflag},#{location}, NULL, #{loc_detail}, #{phone}
 				)
 	</insert>
 	

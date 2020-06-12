@@ -18,5 +18,5 @@
 		SELECT LOC_CODE , LOC_NAME FROM LOCATION_CODE WHERE LOC_CODE LIKE #{loc}||%||'00' AND LOC_CODE NOT LIKE #{loc}||'00000'
 	</select>
 
-
+	
 </mapper>

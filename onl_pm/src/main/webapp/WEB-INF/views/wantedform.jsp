@@ -9,14 +9,79 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
-	$(function() {
-		$("#postcodify_search_button").postcodifyPopUp(); 
+	var inputLoc = $("input[name='loc_name']").val();
 	
+	$(function() {
+		
 		setMap();
+		
+		var width = "500";
+		var height = "600";
+		
+		$("#getJuso").click(function(){
+			new daum.Postcode({
+				q: inputLoc,
+				popupName: "주소찾기",
+				width: width,
+				height: height,
+				oncomplete: function(data){
+					
+					var roadAddr = data.roadAddress; // 도로명 주소 변수
+	                var extraRoadAddr = ''; // 참고 항목 변수	
+	                
+// 	             	// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+// 	                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+// 	                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+// 	                    extraRoadAddr += data.bname;
+// 	                }
+// 	                // 건물명이 있고, 공동주택일 경우 추가한다.
+// 	                if(data.buildingName !== '' && data.apartment === 'Y'){
+// 	                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+// 	                }
+// 	                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+// 	                if(extraRoadAddr !== ''){
+// 	                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+// 	                }
+
+	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+// 	                document.getElementById('sample4_postcode').value = data.zonecode;
+// 	                document.getElementById("sample4_roadAddress").value = roadAddr;
+	                document.getElementById("jibun").value = data.jibunAddress;
+					
+// 	                if(roadAddr !== ''){
+// 	                    document.getElementById("jibun_detail").value = extraRoadAddr;
+// 	                } else {
+// 	                    document.getElementById("jibun_detail").value = '';
+// 	                }
+				}
+				
+			}).open({
+				left: (window.screen.width / 2) - (width / 2),
+			    top: (window.screen.height / 2) - (height / 2)
+			});
+		});
+		
+		$("form").submit(function(){
+			
+			if(confirm("글을 등록하시겠습니까?")){
+				$("input[name='stime']").val(
+					$("select[name='shour']").val() +$("select[name='smin']").val()
+				);
+				
+				$("input[name='etime']").val(
+					$("select[name='ehour']").val() +$("select[name='emin']").val()
+				);
+				
+				return true;
+			}else{
+				return false;
+			}
+			
+		});
 		
 	});
 	
@@ -112,22 +177,23 @@
 				<tr>
 					<th>위치</th>
 					<td>
-						현재 나의 위치: ${location}
-						<button type="button" id="postcodify_search_button">새 주소 검색</button>
+						현재 접속위치: ${location}<br>
+						<input type="button" id="getJuso" value="새 주소 찾기">
+						<input type="button" id="getMyJuso" value="회원정보 주소 불러오기">
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>		
-						도로명 &nbsp;&nbsp;
-						<input type="text" name="address" class="postcodify_address" readonly="readonly"/>
+						주소 &nbsp;&nbsp;
+						<input type="text" name="loc_name" class="postcodify_address" id="jibun" readonly="readonly" value="${location}"/>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>		
 						상세주소
-						<input type="text" name="LOC_DETAIL" class="postcodify_details" value="" />
+						<input type="text" name="loc_detail" class="postcodify_details" id="jibun_detail" value="" />
 					</td>
 				<tr>
 					<td></td>
@@ -159,14 +225,35 @@
 					<th>일하는 날</th>
 					<td>
 						시작일 <input type="date" name="sdate" style="width: 300px;"><br/>
-						시작시간 <select name="shour"></select> <select name='smin'></select>
+						시작시간 <select name="shour">
+							<c:forEach begin="0" end="23" varStatus="i">
+								<option value="${i.index}">${i.index}</option>
+							</c:forEach>
+						</select> 시
+						<select name='smin'>
+							<c:forEach begin="0" end="50" varStatus="i" step="10">
+								<option value="${i.index}">${i.index}</option>
+							</c:forEach>
+						</select> 분
+						<input type="hidden" name="stime">
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
 						종료일 <input type="date" name="edate" style="width: 300px;"><br/>
-						종료시간 <select name="ehour"></select> <select name='emin'></select>
+						종료시간 
+						<select name="ehour">
+							<c:forEach begin="0" end="23" varStatus="i">
+								<option value="${i.index}">${i.index}</option>
+							</c:forEach>
+						</select> 
+						<select name='emin'>
+							<c:forEach begin="0" end="50" varStatus="i" step="10">
+								<option value="${i.index}">${i.index}</option>
+							</c:forEach>
+						</select>
+						<input type="hidden" name="etime">
 					</td>
 				</tr>
 			</table>
@@ -204,7 +291,7 @@
 	function setMap(){
 		
 		var location = "${location}";
-		var inputLoc = $("input[name='address']").val();
+		
 		console.log(inputLoc);
 		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

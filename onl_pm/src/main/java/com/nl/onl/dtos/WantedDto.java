@@ -40,6 +40,37 @@ public class WantedDto {
 	private List<MultipartFile> files;
 	
 	
+	
+	public WantedDto() {
+
+	}
+	
+	
+	
+	
+	public WantedDto(String id, int category, String title, Date deadline, String sdate, String edate,
+			int location, String stime, String etime, int salary, String content, String phone, 
+			String sosflag, String loc_detail) {
+		super();
+		this.id = id;
+		this.category = category;
+		this.title = title;
+		this.deadline = deadline;
+		this.sdate = sdate;
+		this.edate = edate;
+		this.location = location;
+		this.stime = stime;
+		this.etime = etime;
+		this.salary = salary;
+		this.content = content;
+		this.phone = phone;
+		this.sosflag = sosflag;
+		this.loc_detail = loc_detail;
+	}
+
+
+
+
 	public String getNickname() {
 		return nickname;
 	}
@@ -233,17 +264,6 @@ public class WantedDto {
 	}
 	
 	
-	@Override
-	public String toString() {
-		return "WantedDto [seq=" + seq + ", id=" + id + ", category=" + category + ", title=" + title + ", regdate="
-				+ regdate + ", deadline=" + deadline + ", sdate=" + sdate + ", edate=" + edate + ", location="
-				+ location + ", stime=" + stime + ", etime=" + etime + ", salary=" + salary + ", content=" + content
-				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
-				+ sosflag + ", selector=" + selector + ", loc_detail=" + loc_detail + ", loc_name=" + loc_name
-				+ ", whitelist=" + whitelist + ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1="
-				+ category_name1 + ", category_name2=" + category_name2 + ", nickname=" + nickname + ", applyDto="
-				+ applyDto + "]";
-	}
 	
 	
 }
