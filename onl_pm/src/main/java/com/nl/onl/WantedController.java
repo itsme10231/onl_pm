@@ -97,6 +97,7 @@ public class WantedController {
 			
 			WantedDto wdto = wantedServiceImp.getWantedDetailT(seq);
 			model.addAttribute("wdto",wdto);
+			System.out.println(wdto);
 			
 		}
 		

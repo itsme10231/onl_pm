@@ -262,6 +262,21 @@ public class WantedDto {
 	public void setFiles(List<MultipartFile> files) {
 		this.files = files;
 	}
+
+
+
+
+	@Override
+	public String toString() {
+		return "WantedDto [seq=" + seq + ", id=" + id + ", category=" + category + ", title=" + title + ", regdate="
+				+ regdate + ", deadline=" + deadline + ", sdate=" + sdate + ", edate=" + edate + ", location="
+				+ location + ", stime=" + stime + ", etime=" + etime + ", salary=" + salary + ", content=" + content
+				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
+				+ sosflag + ", selector=" + selector + ", loc_detail=" + loc_detail + ", loc_name=" + loc_name
+				+ ", whitelist=" + whitelist + ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1="
+				+ category_name1 + ", category_name2=" + category_name2 + ", nickname=" + nickname + ", fileDto="
+				+ fileDto + "]";
+	}
 	
 	
 	

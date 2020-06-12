@@ -21,7 +21,7 @@
 						WANTED_POST_SEQ.CURRVAL
 					</if>
 					<if test="fdto.board_type.equals('REPORTLIST')">
-						REPORTLIST_SEQ.CURRVAL
+						REPRTLIST_SEQ.CURRVAL
 					</if>
 					<if test="fdto.board_type.equals('PROFILE')">
 						0
@@ -38,6 +38,7 @@
 				</otherwise>
 			</choose>
 		</foreach>
+		SELECT * FROM dual
 	</insert>
 	
 	<!-- 첨부파일 삭제 -->
