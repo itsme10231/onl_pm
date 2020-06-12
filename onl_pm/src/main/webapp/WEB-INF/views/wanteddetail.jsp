@@ -1,4 +1,4 @@
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("UTF-8"); %>
@@ -11,28 +11,32 @@
 <title>Insert title here</title>
 <style type="text/css">
 	.wantedDetail{
-		border: solid gray 1px;
+/* 		border: solid gray 1px; */
+/* 		margin: 0 auto; */
+/* 		padding: 20px; */
+/* 		border-radius: 5px; */
+		
+		border: solid lightgray 1px;
 /* 		width: 800px; */
 		margin: 0 auto;
 		padding: 20px;
 		border-radius: 5px;
+		background-color: white;
 	}
 	
 	h1{
+/*  		border: solid 1px;  */
 		width: 800px;
  		margin: 0 auto;
- 		border: solid 1px; 
 		margin-bottom: 10px;
 	}
 	
-	
 	.wish{
+/*  		border: solid 1px;  */
 		width: 25px;
 		height: 25px;
-/* 		float: left; */
-		border: solid 1px;
 		position: absolute;
-		right: 172px;
+		right: 223px;
 		top: 115px;
 	}
 	
@@ -40,42 +44,50 @@
 		width: 25px;
 		height: 25px;
 		position: absolute;
-		right: 400px;
+		right: 716px;
 		top: 115px;
 	}
 	
+	.sosText{
+/*  		border: solid 1px;  */
+  		position: absolute; 
+ 		top: 115px; 
+ 		left: 425px; 
+	}
+	
 	.views{
+/*  		border: solid 1px;  */
 		width: 50px;
 		height: 25px;
 		position: absolute;
 		top: 115px;
-		border: solid 1px;
-		right: 300px;
+		right: 410px;
 	}
 	
 	.views div{
+/*  		border: solid 1px;  */
 		position: absolute;
  		top: -1px;
-		border: solid 1px;
 		left: 50px;
 		height: 25px;
 		width: 50px;
 	}
 	.profile{
+/*  		border: solid 1px;  */
  		width: 150px;
  		height: 200px; 
- 		border: solid 1px; 
 		border-radius: 50%;
-	
+		margin-left: 5px;
 	}
 	
 	.profileName{
+/*  		border: solid 1px;  */
  		width: 150px;  
  		height: 20px;
 		text-align: center;
- 		border: solid 1px; 
  		position: relative; 
-		top: -20px;
+		top: -30px;
+		
 	}
 	
 	.profileImg{
@@ -87,28 +99,29 @@
 	}
 	
 	.detail{
- 		border: solid 1px; 
+/*   		border: solid 1px;    */
 		width: 800px;
-		height: 300px;
+		height: 280px;
 		margin: 0 auto;
+		
 	}
 	
 	.content{
-		border: solid 1px;
+/* 		border: solid 1px; */
 		width: 800px;
 		margin: 0 auto;
 		padding: 10px;
 	}
 	
 	.phone{
-		border: solid 1px;
+/* 		border: solid 1px; */
 		width: 800px;
 		margin: 0 auto;
 		padding: 10px;
 	}
 	
 	.map{
-		border: solid 1px;
+/* 		border: solid 1px; */
 		width: 800px;
 		margin: 0 auto;
 		padding: 10px;
@@ -118,7 +131,7 @@
 		border: solid 1px;
 	}
 	.process1 div{
- 		border: solid 1px;
+/*  		border: solid 1px; */
 		margin-left: 10px;
 		float: left; 
 		text-align: center;	
@@ -130,32 +143,34 @@
 	}
 	
 	.regdate{
- 		border: solid 1px; 
+/*   		border: solid 1px;   */
 		margin-left: 50px;
-		margin-top: 20px;
+		margin-top: 10px;
 	}
 	
 	.deadline{
-		border: solid 1px; 
-		margin-top: 20px;
+/*  		border: solid 1px;   */
+		margin-top: 10px;
+		margin-left: 50px;
 	}
 	
 	.sdate{
-		border: solid 1px; 
+/*  		border: solid 1px;  */
 		margin-left: 50px;
 		margin-top: 10px;
 	}
 	
 	.edate{
-		border: solid 1px; 
+/*  		border: solid 1px;   */
 		margin-top: 10px;
+		margin-left: 50px;
 	}
 	.date{
-  		border: solid 1px;  
+/*    		border: solid 1px;    */
 		margin-left: 20px;
-/* 		width: 500xp; */
 		overflow: auto;
-		height: 250px;
+		height: 230px;
+		
 	}
 	
 	.date div{
@@ -183,90 +198,100 @@
 	}
 	
 	.apply{
+/*   		border: solid 1px;  */
 		float: left;
- 		border: solid 1px;
-		margin-left: 100px;
+		margin-left: 123px;
 		margin-top: 10px;
 	}
 	
 	.salary{
-		border: solid 1px;
+/*  		border: solid 1px;  */
 		margin-left: 50px;
 		margin-top: 10px;
 	}
 	
 	.button{
-		margin-left: 50px;
+		margin-left: 70px;
 		margin-top: 10px;
 	}
 	
 	.button input{
 		width: 100px;
 		height: 30px;
-		
+		margin-right: 10px;
 	}
 </style>
 </head>
 
 <body>
 <div class="headerWrapper">
+	<div class="depth">
+		<div class="depth1">홈</div><div>></div><div>${wdto.category_name1}</div><div>></div><div class="depth5">${wdto.category_name2}</div>
+	</div>	
 	<div class="wantedDetail">
-		<div class="depth">
-			<div class="depth1">홈</div><div>></div><div>대분류</div><div>></div><div class="depth5">소분류</div>
-		</div>	
-		<h1>제목</h1>
+		<h1>${wdto.title}</h1>
 		<div class="detail">
 			<div class="process1">
 				<div class="wanted">지원  ></div><div class="process">진행  ></div><div class="complete">완료</div>
 			</div>
-			
-			<img alt="찜하기아이콘" src="resources/img/service_1.jpg" class="wish">
-			<img alt="긴급" src="resources/img/service_1.jpg" class="sos">
+			<img alt="찜하기아이콘" src="resources/icon/WhiteHeart.jpg" class="wish">
+			<img alt="긴급" src="resources/icon/emergency.png" class="sos"><b class="sosText">긴급</b>
 			<div class=views>조회수
-				<div>10</div>
+				<div>${wdto.views}</div>
 			</div>
-			
-			
 			<div class="profileImg">
-				<img alt="프로필사진" src="resources/img/service_1.jpg" class="profileImg">
+				<img alt="프로필사진" src="resources/icon/Peaple2.jpg" class="profileImg">
 			</div>
 			<div class="date">
 				<div class="regdate">
 					<div>
-						<img alt="등록일" src="resources/img/service_1.jpg" class="dateIcon">
+						<img alt="등록일" src="resources/icon/write.png" class="dateIcon">
 					</div>
 					<div>등록일</div>
-					<div>2020-20-20 20:20</div>
+					<div>${wdto.regdate}</div>
 				</div>
 				<div class="deadline">
 					<div>
-						<img alt="마감일" src="resources/img/service_1.jpg" class="dateIcon">
+						<img alt="마감일" src="resources/icon/write.png" class="dateIcon">
 					</div>
 					<div>마감일</div>
-					<div>2020-20-20 20:20</div>
+					<div>${fn:substring(wdto.deadline,0,4)}년 
+						${fn:substring(wdto.deadline,4,6)}월
+						${fn:substring(wdto.deadline,6,8)}일 
+						${fn:substring(wdto.deadline,0,2)}시
+						${fn:substring(wdto.deadline,2,4)}분</div>
 				</div>
 				<div class="sdate">
 					<div>
-						<img alt="시작일" src="resources/img/service_1.jpg" class="dateIcon">
+						<img alt="시작일" src="resources/icon/Watch.png" class="dateIcon">
 					</div>
 					<div>시작일</div>
-					<div>2020-20-20 20:20</div>
+					<div>${fn:substring(wdto.sdate,0,4)}년 
+						${fn:substring(wdto.sdate,4,6)}월
+						${fn:substring(wdto.sdate,6,8)}일 
+						${fn:substring(wdto.stime,0,2)}시
+						${fn:substring(wdto.stime,2,4)}분</div>
 				</div>
 				<div class="edate">
 					<div>
-						<img alt="종료일" src="resources/img/service_1.jpg" class="dateIcon">
+						<img alt="종료일" src="resources/icon/Watch.png" class="dateIcon">
 					</div>
 					<div>종료일</div>
-					<div>2020-20-20 20:20</div>
+					<div>${fn:substring(wdto.edate,0,4)}년 
+						${fn:substring(wdto.edate,4,6)}월
+						${fn:substring(wdto.edate,6,8)}일 
+						${fn:substring(wdto.etime,0,2)}시
+						${fn:substring(wdto.etime,2,4)}분
+					</div>
 				</div>
 				<div class="salary">
-					<div>금액</div>
-					<div>10,000</div>
+					<div>제안금액</div>
+					<div>${wdto.salary}</div>
 					<div>원</div>
 				</div>	
 				<div class="apply">
 					<div>지원자</div>
-					<div>0명</div>
+					<div>${wdto.apply_c}명</div>
 				</div>
 				<div class="button">
 					<input type="button" value="신고하기">
@@ -275,23 +300,60 @@
 					<input type="button" value="지원하기">
 				</div>
 			</div>
-			<div class="profileName">이름</div>
+			<div class="profileName">${wdto.nickname}</div>
 		</div>
+	</div>	
+	<div class="wantedDetail">	
 		<div class="content">
-			<div><b>내용</b></div>
-			<div>내용이 들어갈 곳</div>
+			<div><b>내용</b></div><br>
+			<div><p>${wdto.content}</p></div>
 		</div>
+	</div>
+	<div class="wantedDetail">	
 		<div class="phone">
-			<div><b>연락처</b></div>
-			<div>연락처가 들어갈곳(비공개/매칭시 공개)</div>
+			<div><b>연락처</b></div><br>
+			<div id="phone">
+				<c:if test="${fn:substring(wdto.phone,0,1) == 'Y'}">
+					매칭시 공개
+				</c:if>
+				
+			</div>
 		</div>
+	</div>	
+	<div class="wantedDetail">	
 		<div class="map">
-			<div><b>위치</b></div>
-			<div>위치 설명 및 주소기입</div>
+			<div><b>위치</b></div><br>
+			<div>${wdto.loc_name}${wdto.loc_detail}</div>
+			<div><P>위치 설명(생략가능)</P></div>
 			<div id="map" style="width: 300px; height: 300px;"></div>
 		</div>
 	</div>
 </div>
 </body>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+// $(function(){
+// 	var phone = $("div[id='phone']").text();
+// 	if(phone.substr(0,1)=="Y"){
+// 		$("div[id='phone']").text(phone = phone.substr(1));
+// 	}
+		
+// 	var sdate = $("div[id='sdate']").text();
+// 	var stime = $("div[id='stime']").text();
+	
+// 	var YYYY = sdate.substr(0,4);
+// 	var MM = sdate.substr(4,2);
+// 	var DD = sdate.substr(6);
+	
+// 	var H = stime.substr(0,2);
+// 	var M = stime.substr(2);
+	
+// 	$("div[id='sdate']").text(sdate = YYYY+"년"+" "+MM+"월"+" "+DD+"일"+" "+H+"시"+" "+M+"분");
+	
+// 	console.log(sdate);
+// 	console.log(stime);
+	
+// });
+</script>
 </html>
 <%@include file="footer.jsp" %>
