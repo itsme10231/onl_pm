@@ -44,7 +44,7 @@
 	
 	<!-- 이메일 중복검사 -->
 	<select id="checkEmail" parameterType="String" resultType="String">
-		SELECT ID FROM MEMBER WHERE EMAIL = #{email}
+		SELECT EMAIL FROM MEMBER WHERE EMAIL = #{email}
 	</select>
 	
 	<!-- 로그인 -->

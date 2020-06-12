@@ -32,7 +32,10 @@
 		<result column="CATEGORY_NAME1" property="category_name1"/>
 		<result column="CATEGORY_NAME2" property="category_name2"/>
 		<result column="NICKNAME" property="nickname"/>
+		<result column="APPLY" property="apply"/>
+		<result column="SELECTED" property="selected"/>
 		<collection property="fileDto" resultMap="FileDtoMap"/>
+		<collection property="categoryDto" resultMap="CategoryDtoMap"/>
 	</resultMap>
 	
 	<resultMap type="FileDto" id="FileDtoMap">
@@ -44,6 +47,13 @@
 		<result column="BOARD_TYPE" property="board_type"/>
 		<result column="F_ID" property="id"/>
 		<result column="POST_SEQ" property="post_seq"/>
+	</resultMap>
+	
+	<resultMap type="CategoryDto" id="CategoryDtoMap">
+		<result column="CODE1" property="code1"/>
+		<result column="CODE2" property="code2"/>
+		<result column="CATEGORY_NAME1" property="category_name1"/>
+		<result column="CATEGORY_NAME2" property="category_name2"/>
 	</resultMap>
 	<!-- 검색기능 쿼리 -->
 	
@@ -215,8 +225,8 @@
 	</select>
 	
 	<!-- 로그인 구인글 상세보기 -->
-	<select id="getWantedDetailLogin" parameterType="map" resultType="WantedDto">
-		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG, APPLY_C, 
+	<select id="getWantedDetailLogin" parameterType="map" resultMap="WantedDtoMap">
+		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wc1.CODE as CODE1, wc2.CODE as CODE2, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG, APPLY_C, 
 				CASE 
 					WHEN EXISTS (SELECT 1 FROM APPLYLIST a WHERE a.ID = #{id} AND a.WANTED_SEQ = wp.SEQ) THEN 'Y'
 					ELSE 'N'

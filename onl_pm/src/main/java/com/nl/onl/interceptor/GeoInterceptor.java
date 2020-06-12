@@ -33,7 +33,7 @@ public class GeoInterceptor extends HandlerInterceptorAdapter{
 			
 			if(gObj != null){
 				JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
-				System.out.println(gObj2);
+//				System.out.println(gObj2);
 				addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
 				addr = URLEncoder.encode(addr, "utf-8");
 				

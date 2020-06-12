@@ -27,7 +27,7 @@
 	</security:authentication-manager> 
 	
 	<bean id="loginSuccessHandler" class="com.nl.onl.security.AuthenticationSuccessHandler"> 
-		<property name="defaultTargetUrl" value="/home.do" /> 
+		<property name="defaultTargetUrl" value="/" /> 
 		<property name="alwaysUseDefaultTargetUrl" value="true" /> 
 	</bean> 
 	

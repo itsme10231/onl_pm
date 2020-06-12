@@ -11,8 +11,8 @@
 	
 	.footerWrapper{
 		position: relative;
-		min-width: 1000px;
-		max-width: 70%;
+		min-width: 1200px;
+		max-width: 80%;
 		
 		margin: 0 auto;
 		margin-top: 100px;
@@ -30,8 +30,7 @@
 	}
 	
 	footer{
-		border-top: 1px solid lightgray;
-		background-color: white;
+
 		min-height: 200px;
 	}
 	
@@ -40,7 +39,8 @@
 <body>
 
 <footer>
-	<div calss="footerwrapper">
+	<div class="footerwrapper">
+		<hr style="boder:2px;"/>
 		<div class="footerlinkfield">
 		회사소개 | 공지사항 | QnA | 사이트맵 | 찾아오시는 길
 		</div>

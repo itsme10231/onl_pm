@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
@@ -129,16 +133,27 @@ public class WantedController {
 //	}
 	
 	//구인글 작성 폼
-//	@Secured({"ROLE_USER"})
+	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewantedform.do", method=RequestMethod.GET)
-	public String writeWantedForm(Model model, Authentication auth, HttpServletRequest request) throws UnsupportedEncodingException {
+	public String writeWantedForm(Model model, Authentication auth, HttpServletRequest request) throws UnsupportedEncodingException, JsonProcessingException, ParseException {
+		ObjectMapper mapper = new ObjectMapper();
+		
 		
 		List<CategoryDto> clist = wantedServiceImp.getCategory();
+		
+		JSONArray cArray = new JSONArray();
+		JSONParser parser = new JSONParser();
+		
+		for(CategoryDto cdto:clist) {
+			cArray.add(parser.parse(mapper.writeValueAsString(cdto)));
+		}
+		
+		System.out.println(cArray);
 		
 		String location = onlUtil.getCookie("locationCookie", request).getValue();
 		location = URLDecoder.decode(location, "utf-8");
 		model.addAttribute("location", location);
-		model.addAttribute("clist", clist);
+		model.addAttribute("cArray", cArray);
 		
 		return "wantedform";
 	}

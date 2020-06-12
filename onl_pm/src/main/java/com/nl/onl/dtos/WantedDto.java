@@ -31,11 +31,13 @@ public class WantedDto {
 	private String whitelist;
 	private String wishlist;
 	private int apply_c;
-	private String category_name1;
-	private String category_name2;
+	private String apply;
+	private String selected;
+
 	private String nickname;
 	private ApplyDto applyDto;
 	private FileDto fileDto;
+	private CategoryDto categoryDto;
 	
 	private List<MultipartFile> files;
 	
@@ -77,18 +79,7 @@ public class WantedDto {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	public String getCategory_name1() {
-		return category_name1;
-	}
-	public void setCategory_name1(String category_name1) {
-		this.category_name1 = category_name1;
-	}
-	public String getCategory_name2() {
-		return category_name2;
-	}
-	public void setCategory_name2(String category_name2) {
-		this.category_name2 = category_name2;
-	}
+
 	public int getApply_c() {
 		return apply_c;
 	}
@@ -256,11 +247,53 @@ public class WantedDto {
 	
 	
 	
+	public String getApply() {
+		return apply;
+	}
+
+
+
+
+	public void setApply(String apply) {
+		this.apply = apply;
+	}
+
+
+
+
+	public String getSelected() {
+		return selected;
+	}
+
+
+
+
+	public void setSelected(String selected) {
+		this.selected = selected;
+	}
+
+
+
+
 	public List<MultipartFile> getFiles() {
 		return files;
 	}
 	public void setFiles(List<MultipartFile> files) {
 		this.files = files;
+	}
+
+
+
+
+	public CategoryDto getCategoryDto() {
+		return categoryDto;
+	}
+
+
+
+
+	public void setCategoryDto(CategoryDto categoryDto) {
+		this.categoryDto = categoryDto;
 	}
 
 
@@ -273,10 +306,19 @@ public class WantedDto {
 				+ location + ", stime=" + stime + ", etime=" + etime + ", salary=" + salary + ", content=" + content
 				+ ", phone=" + phone + ", views=" + views + ", state=" + state + ", delflag=" + delflag + ", sosflag="
 				+ sosflag + ", selector=" + selector + ", loc_detail=" + loc_detail + ", loc_name=" + loc_name
-				+ ", whitelist=" + whitelist + ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", category_name1="
-				+ category_name1 + ", category_name2=" + category_name2 + ", nickname=" + nickname + ", fileDto="
-				+ fileDto + "]";
+				+ ", whitelist=" + whitelist + ", wishlist=" + wishlist + ", apply_c=" + apply_c + ", apply=" + apply
+				+ ", selected=" + selected + ", nickname=" + nickname + ", applyDto=" + applyDto + ", fileDto="
+				+ fileDto + ", categoryDto=" + categoryDto + ", files=" + files + "]";
 	}
+
+
+
+
+
+
+
+
+	
 	
 	
 	

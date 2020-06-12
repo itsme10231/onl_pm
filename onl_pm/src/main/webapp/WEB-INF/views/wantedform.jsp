@@ -4,6 +4,7 @@
 <%response.setContentType("text/html; charset=UTF-8"); %>
 <%@include file="header.jsp" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE>
 <html>
 <head>
@@ -21,6 +22,19 @@
 		
 		var width = "500";
 		var height = "600";
+		
+		var categories = ${cArray};
+		//카테고리 셋팅
+		
+
+		console.log(categories);
+		
+		
+		
+		
+		
+		
+		
 		
 		$("#getJuso").click(function(){
 			new daum.Postcode({
@@ -65,20 +79,24 @@
 			});
 		});
 		
+		
 		$("form").submit(function(){
 			
 			if(confirm("글을 등록하시겠습니까?")){
 				$("input[name='stime']").val(
-					$("select[name='shour']").val() +$("select[name='smin']").val()
+					"" +$("select[name='shour']").val() +$("select[name='smin']").val()
 				);
 				
 				$("input[name='etime']").val(
-					$("select[name='ehour']").val() +$("select[name='emin']").val()
+					"" +$("select[name='ehour']").val() +$("select[name='emin']").val()
 				);
 				
 				return true;
+				
 			}else{
+				
 				return false;
+				
 			}
 			
 		});
@@ -146,8 +164,8 @@
 	<h1>구인글 등록</h1>
 	<form action="writewanted.do" method="post" enctype="multipart/form-data">
 		<div class="wantedWrite">
-			<input type="radio" name="wanted" value="새 글 등록"/>새 글 등록
-			<input type="radio" name="wanted" value="목록에서 복사"/>목록에서 복사
+			<input type="radio" name="wanted" value="새 글 등록" checked/>새 글 등록&nbsp;&nbsp;
+			<input type="radio" name="wanted" value="목록에서 복사" onclick="getMyWantedList()"/>목록에서 복사
 			<select>
 				<option value="선택" selected="selected">선택하세요</option>
 				<option value="구인글1">구인글1</option>
@@ -162,6 +180,17 @@
 					<col width="200px">
 					<col width="500px">
 				</colgroup>
+				<tr>
+					<th>카테고리</th>
+					<td>
+						<select name="bCategory">
+							<option value="">--대분류--</option>
+						</select>
+						<select name="category">
+							<option value="">--소분류--</option>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<th>제목</th>
 					<td><input type="text" style="width: 600px;" name="title" required="required"></td>
@@ -247,12 +276,12 @@
 							<c:forEach begin="0" end="23" varStatus="i">
 								<option value="${i.index}">${i.index}</option>
 							</c:forEach>
-						</select> 
+						</select> 시
 						<select name='emin'>
 							<c:forEach begin="0" end="50" varStatus="i" step="10">
 								<option value="${i.index}">${i.index}</option>
 							</c:forEach>
-						</select>
+						</select> 분
 						<input type="hidden" name="etime">
 					</td>
 				</tr>
@@ -268,7 +297,8 @@
 				<tr>
 					<td>사진첨부</td>
 					<td>
-						<input type="file" name="file" multiple="multiple"><br>※ 첨부파일 용량은 개당 5MB 이하, 최대 5개 이하로 제한됩니다.
+						<input type="file" name="file" multiple="multiple" accept=".gif, .jpg, .png"><br>
+						※ 첨부파일 용량은 개당 5MB 이하, 최대 5개 이하로 제한됩니다.
 					</td>	
 				</tr>
 				<tr>

@@ -1,4 +1,4 @@
-package com.nl.onl;
+package com.nl.onl.util;
 
 import java.util.HashMap;
 

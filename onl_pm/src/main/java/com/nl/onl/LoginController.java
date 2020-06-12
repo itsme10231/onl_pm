@@ -44,14 +44,29 @@ public class LoginController {
 		return "regist";
 	}
 	
+	@RequestMapping(value = "/regist.do", method = {RequestMethod.POST})
+	public String regist(Model model, LoginDto ldto) {
+		
+		boolean isS = loginServiceImp.insertMember(ldto);
+		
+		if(isS) {
+			model.addAttribute("msg", "회원가입을 축하드립니다.");
+		}else {
+			model.addAttribute("msg", "회원가입에 실패하였습니다. 관리자에게 문의해 주세요.");
+		}
+		
+		return "redirect:/";
+	}
+	
 	
 	@RequestMapping(value = "/emailchk.do", method = {RequestMethod.POST})
 	@ResponseBody
 	public String mailCheck(Model model, String email) {
-		
+//		System.out.println(email);
 		String s = loginServiceImp.checkEmail(email);
-		
+//		System.out.println("s: "+s);
 		if(s == null || s.equals("")) {
+			System.out.println("able");
 			return "ABLE";
 		}else {
 			return "DISABLE";
@@ -60,7 +75,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "/mailConfirm.do", method = RequestMethod.POST) 
 	public @ResponseBody String mailConfirm(Model model, String email) { 
-		System.out.println("서버접속성공");
+//		System.out.println("서버접속성공");
 		
 		String rannum = onlUtil.random();
 		
@@ -95,11 +110,26 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/outlogin.do", method = {RequestMethod.POST})
-	public String outLogin() {
+	public String outLogin(Model model, String id, String email) {
+		
+		String s = "";
+		
+		s = loginServiceImp.checkEmail( (email==null||email.equals(""))? id:email );
 		
 		
+		if(s==null || s.equals("")) {
+			
+			model.addAttribute("id",id);
+			model.addAttribute("email",email);
+			
+			return "regist";
+			
+		}else {			
+			
+			return "login";			
+			
+		}
 		
-		return "login";
 	}
 	
 	

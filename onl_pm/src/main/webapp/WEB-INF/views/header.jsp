@@ -19,6 +19,13 @@
 		position: relative;
 	}
 	
+	.contentBox1{
+		border: solid lightgray 1px;
+		margin: 0 auto;
+		padding: 20px;
+		border-radius: 5px;
+		background-color: white;
+	}
 	
 	.outUl{
 		overflow: visible;
@@ -98,7 +105,9 @@
 		
 	}
 	
-	.headerlogo>
+	.headerlogo{
+	
+	}
 	
 	.clear{
 		clear: both;
