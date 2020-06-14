@@ -1,8 +1,6 @@
 package com.nl.onl;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
+
 
 import javax.mail.internet.MimeMessage;
 
@@ -10,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.security.access.annotation.Secured;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +35,7 @@ public class LoginController {
 	
 	
 	@RequestMapping(value = "/registform.do", method = {RequestMethod.GET})
-	public String registForm(Model model, String id, String pw) {
+	public String registForm() {
 		
 		
 		
@@ -133,17 +131,37 @@ public class LoginController {
 	}
 	
 	
-	//나의 프로필 보기
+	//나의 프로필 보기, 다른 유저의 프로필 보기
 	@RequestMapping(value = "/member/profile.do", method = {RequestMethod.GET})
-	public String getProfile(Model model, Authentication auth) {
+	public String getProfile(Model model, Authentication auth, String id) {
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
-		ProfileDto pdto = loginServiceImp.getProfile(ldto.getId());
+		ProfileDto pdto = null;
+		
+		if(id == null || id.equals("")) {
+			
+			pdto = loginServiceImp.getProfile(ldto.getId());
+			
+		}else {
+			
+			pdto = loginServiceImp.getProfile(id);
+			
+		}
+		
 		
 		model.addAttribute("pdto", pdto);
 		
 		return "profile";
 	}
 	
-	//다른 유저의 프로필 보기
+	
+	//프로필 작성
+	@RequestMapping(value="/member/writeprofile.do", method= {RequestMethod.GET})
+	public String writeProfileform(Model model) {
+		
+		
+		
+		return "writeprofile";
+	}
+
 }

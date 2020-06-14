@@ -208,7 +208,7 @@
 			</tr>
 			<tr>
 				<td>비밀번호 확인*</td>
-				<td><input type="password" name="passowrd2" required="required"></td>
+				<td><input type="password" name="password2" required="required"></td>
 			</tr>
 			<tr>
 				<td>이름*</td>
@@ -216,7 +216,7 @@
 			</tr>
 			<tr>
 				<td>닉네임</td>
-				<td><input type="text" name="nickName" placeholder="입력하지 않을시 자동으로 실명이 입력됩니다."></td>
+				<td><input type="text" name="nickname" placeholder="입력하지 않을시 자동으로 실명이 입력됩니다."></td>
 			</tr>
 			<tr>
 				<td>생년월일</td>
@@ -225,9 +225,10 @@
 			<tr>
 				<td>휴대폰번호*</td>
 				<td>
-					<input type="text" name="phone" required="required" size="4"> - 
-					<input type="text" name="phone" required="required" size="4"> - 
-					<input type="text" name="phone" required="required" size="4">
+					<input type="text" name="phone1" required="required" size="4"> - 
+					<input type="text" name="phone2" required="required" size="4"> - 
+					<input type="text" name="phone3" required="required" size="4">
+					<input type="hidden" name="phone">
 				</td>
 				
 			</tr>
