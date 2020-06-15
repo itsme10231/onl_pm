@@ -53,9 +53,9 @@ public class AppTest {
 //		LoginDto ldto = new LoginDto(null, "admin", "관리자", "서울", "강서구", "어디", "admin", null, null, null, null, "ADMIN", "010-000-0000", "O");
 //		loginServiceImp.insertMember(ldto);
 		System.out.println("test");
-		
-		List<FileDto> flist = new ArrayList<>();
-		flist.add(new FileDto(0,"service_1.jpg","service_1.jpg",null,"N","WANTED_POST","O0",0));
+//		
+//		List<FileDto> flist = new ArrayList<>();
+//		flist.add(new FileDto(0,"service_1.jpg","service_1.jpg",null,"N","WANTED_POST","O0",0));
 		
 //		wantedServiceImp.insertWantedT(new WantedDto("O0",105,"애견 호텔링 구함",onlUtil.toDate("2020-07-12"),"20200812","20200813",1141011400,"0330","0430",1800,"테스트용","Y010-000-0000","Y","우리집"), flist);
 //		wantedServiceImp.getWantedDetailT("46");

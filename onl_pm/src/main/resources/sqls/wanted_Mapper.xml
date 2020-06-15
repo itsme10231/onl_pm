@@ -29,8 +29,7 @@
 		<result column="LOC_NAME" property="loc_name"/>
 		<result column="WHITELIST" property="whitelist"/>
 		<result column="WISHLIST" property="wishlist"/>
-		<result column="CATEGORY_NAME1" property="category_name1"/>
-		<result column="CATEGORY_NAME2" property="category_name2"/>
+
 		<result column="NICKNAME" property="nickname"/>
 		<result column="APPLY" property="apply"/>
 		<result column="SELECTED" property="selected"/>

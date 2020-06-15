@@ -170,6 +170,11 @@
 		padding: 0;
 	}
 	
+	h1{
+		margin-left: 80px;
+		margin-top: 30px;
+	}
+	
 	header{
 		text-align: center;
 
@@ -326,7 +331,7 @@ function makeCategory(cjson){
 	</div>
 	▲TOP
 </div>
-이하 본문영역 <br>
+
 
 </body>
 </html>

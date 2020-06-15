@@ -73,11 +73,27 @@
 		});
 		
 		
+		$("input[name=password2]").blur(function(){
+			if($("input[name=password1]").val() != $(this).val()){
+				$("isS2").text("비밀번호를 확인해주세요.");
+			}
+		});
+		
 		
 		
 		$("form").submit(function(){
 			//가입완료 버튼을 눌렀을 경우
-
+			if($("#isS1").attr("class")=="N"){
+				
+				$("#isS1").text("이메일 인증을 진행해주세요.");
+				return false;
+				
+			}else if($("#isS2").attr("class")=="N"){
+				
+				$("#isS2").text("비밀번호를 확인해주세요.");
+				return false;
+				
+			}
 			
 			
 		});
@@ -90,20 +106,26 @@
 		//입력된 아이디값 구하기
 		var confirm=document.getElementsByName("confirm").text();
 		
-		
 	}
+	
 	function requestCode(){
 		
-		if($("select[name='emailCheck']").val() != ""){
+		if($("select[name='emailCheck']").val() != "" && $("select[name='emailCheck']").val() != "--"){
+			
 			email = $("input[name='email01']").val() +"@" +$("select[name='emailCheck']").val();
-		}else{
+			
+		}else if($("select[name='emailCheck']").val() == ""){
+			
 			email = $("input[name='email01']").val();
+			
+		}else{
+			$("#isS1").text("이메일 도메인을 선택해주세요.");
 		}
 		
 		console.log(email);
 		
 		if(!mailRegex.test(email)){
-			$("#isS").text("유효하지 않은 이메일 주소입니다.");
+			$("#isS1").text("유효하지 않은 이메일 주소입니다.");
 		}else{
 			$.ajax({
 				url: "emailchk.do",
@@ -113,10 +135,10 @@
 				success: function(data){
 					
 					if(data == "DISABLE"){
-						$("#isS").text("이미 사용중인 이메일 주소입니다.");
+						$("#isS1").text("이미 사용중인 이메일 주소입니다.");
 					}else {
 						
-						$("#isS").text("인증번호를 발송중입니다.");
+						$("#isS1").text("인증번호를 발송중입니다.");
 						$("#codeBtn").attr("disabled",true);
 						$.ajax({
 							url:"mailConfirm.do",
@@ -126,11 +148,11 @@
 							success:function(result){
 								code=result;
 								console.log(result);
-								$("#isS").text("인증번호가 발송되었습니다.");
+								$("#isS1").text("인증번호가 발송되었습니다.");
 					// 			console.log(uran);
 							},
 							fail:function(){
-								$("#isS").text("인증번호 발송에 실패했습니다.");
+								$("#isS1").text("인증번호 발송에 실패했습니다.");
 							}
 						});
 						
@@ -168,6 +190,29 @@
 	.Y{
 		color: green;
 	}
+	
+	.registT th{
+		padding-right: 50px;
+	}
+	
+	.registT td{
+		padding-left: 100px;
+	}
+	
+	th{
+		border-right: 1px solid lightgray;
+	}
+	
+	.phoneInput {
+		width: 100px;
+		display: inline-block;
+	}
+	
+	.attention{
+		text-align: right;
+		color: darkgray;
+		font-weight: 100;
+	}
 </style>
 </head>
 <body>
@@ -177,81 +222,97 @@
 <h1>회원가입</h1>
 	<div class="contentBox1">
 	<form action="regist.do" method="post">
-		<table style="margin: 0 auto; width: 700px; height: 1000px;">
+		<table class="registT" style="margin: 0 auto;  height: 1000px;">
 			<tr>
-				<td>이메일*</td>
+				<td colspan="2" class="attention">
+					* 표시는 필수입력항목입니다.
+				</td>
+			</tr>
+			<tr>
+				<th>이메일*</th>
 				<td id="email">
-					<input type="text" name="email01" required="required">@
-					<select name="emailCheck" >
-						<option value="" selected="selected">---선택하세요---</option>
+					<input type="text" name="email01" required="required" class="form-control" style="width: 300px; display: inline-block;">@
+					<select name="emailCheck" class="custom-select" style="width:150px;">
+						<option value="--" selected="selected">---선택하세요---</option>
 						<option value="naver.com">naver.com</option>
 						<option value="gmail.com">gmail.com</option>
 						<option value="daum.com">daum.com</option>
 						<option value="nate.com">nate.com</option>
 						<option value="">---직접입력---</option>
 					</select>
-					<input type="button" id="codeBtn" value="인증번호 요청" onclick="requestCode()">
+
+					
+					<input type="button" id="codeBtn" class="btn btn-outline-secondary" value="인증번호 요청" onclick="requestCode()">
 					<input type="hidden" name="email">
-					<p class='N' id='isS'></p>
+					<p class='N' id='isS1'></p>
 				</td>
 				
 			</tr>	
 			<tr>
-				<td>인증번호 확인*</td>
-				<td><input type="text" name="confirm">
-					<input type="button" value="인증번호 확인" id="confirmBtn" onclick="confirmCode()">
+				<th>인증번호 확인*</th>
+				<td>
+					<div class="input-group mb-3">
+						<input type="text" name="confirm" class="form-control">
+						<div class="input-group-append">
+							<input type="button" value="인증번호 확인" class="btn btn-outline-secondary" id="confirmBtn" onclick="confirmCode()">
+						</div>
+					</div>
 				</td>
 			</tr>
 			<tr>
-				<td>비밀번호*</td>
-				<td><input type="password" name="password1" required="required"></td>
+				<th>비밀번호*</th>
+				<td><input type="password" class="form-control" name="password1" required="required"></td>
 			</tr>
 			<tr>
-				<td>비밀번호 확인*</td>
-				<td><input type="password" name="password2" required="required"></td>
-			</tr>
-			<tr>
-				<td>이름*</td>
-				<td><input type="text" name="name" required="required"></td>
-			</tr>
-			<tr>
-				<td>닉네임</td>
-				<td><input type="text" name="nickname" placeholder="입력하지 않을시 자동으로 실명이 입력됩니다."></td>
-			</tr>
-			<tr>
-				<td>생년월일</td>
-				<td><input type="date" name="birth" required="required"></td>
-			</tr>
-			<tr>
-				<td>휴대폰번호*</td>
+				<th>비밀번호 확인*</th>
 				<td>
-					<input type="text" name="phone1" required="required" size="4"> - 
-					<input type="text" name="phone2" required="required" size="4"> - 
-					<input type="text" name="phone3" required="required" size="4">
+					<input type="password" class="form-control" name="password2" required="required">
+					<p class='N' id='isS2'></p>
+				</td>
+			</tr>
+			<tr>
+				<th>이름*</th>
+				<td><input type="text"  class="form-control" name="name" required="required"></td>
+			</tr>
+			<tr>
+				<th>닉네임</th>
+				<td><input type="text" class="form-control" name="nickname" placeholder="입력하지 않을시 자동으로 실명이 입력됩니다."></td>
+			</tr>
+			<tr>
+				<th>생년월일</th>
+				<td><input type="date" class="form-control" name="birth"></td>
+			</tr>
+			<tr>
+				<th>휴대폰번호*</th>
+				<td>
+					<input type="text" class="form-control phoneInput" name="phone1" required="required" > - 
+					<input type="text" class="form-control phoneInput" name="phone2" required="required" > - 
+					<input type="text" class="form-control phoneInput" name="phone3" required="required" >
 					<input type="hidden" name="phone">
 				</td>
 				
 			</tr>
 			<tr>
-				<td>주소*</td>
+				<th>주소*</th>
 				<td>우편번호
-					<input type="text" name="address_1" id="postcode" readonly="readonly" style="width:100px;">
-					<input type="button" id="getJuso" value="주소 찾기">
+					<div class="input-group mb-3" style="width:300px;">
+						<input type="text" class="form-control" name="address_1" id="postcode" readonly="readonly" >
+						<div class="input-group-append">
+							<input type="button" class="btn btn-outline-secondary" id="getJuso" value="주소 찾기">
+						</div>
+					</div>
+					<input type="text" name="address_2" class="form-control" id="jibun" readonly="readonly" value=""/>
 				</td>
 			</tr>
+
 			<tr>
-				<td></td>	
-				<td><input type="text" name="address_2" class="postcodify_address" id="jibun" readonly="readonly" value=""/></td>
-			</tr>
-			<tr>
-				<td>상세주소</td>	
-				<td><input type="text" name="address_3" class="postcodify_details" id="jibun_detail" value="" /></td>
+				<th>상세주소</th>	
+				<td><input type="text" name="address_3" class="form-control" id="jibun_detail" value="" /></td>
 			</tr>
 	
 			<tr>
-				<td></td>
-				<td>
-					<input type="submit" value="가입완료" style="width: 175px;">
+				<td colspan='2' style="text-align: center; padding: 0px;">
+					<input type="submit" class="btn btn-primary btn-lg" value="가입완료" style="width: 175px;">
 				</td>
 			</tr>
 		</table>
