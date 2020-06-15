@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("UTF-8"); %>
@@ -32,7 +33,7 @@
 	}
 	
 	.wish{
-/*  		border: solid 1px;  */
+/*  		border: solid 1px;   */
 		width: 25px;
 		height: 25px;
 		position: absolute;
@@ -49,14 +50,14 @@
 	}
 	
 	.sosText{
-/*  		border: solid 1px;  */
+/*   		border: solid 1px;   */
   		position: absolute; 
  		top: 115px; 
  		left: 425px; 
 	}
 	
 	.views{
-/*  		border: solid 1px;  */
+/* 		border: solid 1px;  */
 		width: 50px;
 		height: 25px;
 		position: absolute;
@@ -65,7 +66,7 @@
 	}
 	
 	.views div{
-/*  		border: solid 1px;  */
+/* 		border: solid 1px; */
 		position: absolute;
  		top: -1px;
 		left: 50px;
@@ -107,14 +108,14 @@
 	}
 	
 	.content{
-/* 		border: solid 1px; */
+/*  		border: solid 1px;  */
 		width: 800px;
 		margin: 0 auto;
 		padding: 10px;
 	}
 	
 	.phone{
-/* 		border: solid 1px; */
+/* 		border: solid 1px;  */
 		width: 800px;
 		margin: 0 auto;
 		padding: 10px;
@@ -143,30 +144,34 @@
 	}
 	
 	.regdate{
-/*   		border: solid 1px;   */
-		margin-left: 50px;
+/*   		border: solid 1px;  */
+		margin-left: 40px;
 		margin-top: 10px;
+		font-size: 9pt;
 	}
 	
 	.deadline{
-/*  		border: solid 1px;   */
+/*   		border: solid 1px;    */
 		margin-top: 10px;
 		margin-left: 50px;
+		font-size: 9pt;
 	}
 	
 	.sdate{
-/*  		border: solid 1px;  */
-		margin-left: 50px;
+/*  		border: solid 1px;   */
+		margin-left: 40px;
 		margin-top: 10px;
+		font-size: 9pt;
 	}
 	
 	.edate{
-/*  		border: solid 1px;   */
+/*    		border: solid 1px;     */
 		margin-top: 10px;
 		margin-left: 50px;
+		font-size: 9pt;
 	}
 	.date{
-/*    		border: solid 1px;    */
+/*    		border: solid 1px;   */
 		margin-left: 20px;
 		overflow: auto;
 		height: 230px;
@@ -176,7 +181,7 @@
 	.date div{
 		float: left;
  		padding: 5px; 
-		
+	
 	}
 	
 	.dateIcon{
@@ -198,15 +203,15 @@
 	}
 	
 	.apply{
-/*   		border: solid 1px;  */
+/*   		border: solid 1px;   */
 		float: left;
-		margin-left: 123px;
+		margin-left: 147px;
 		margin-top: 10px;
 	}
 	
 	.salary{
 /*  		border: solid 1px;  */
-		margin-left: 50px;
+		margin-left: 40px;
 		margin-top: 10px;
 	}
 	
@@ -222,11 +227,10 @@
 	}
 </style>
 </head>
-
 <body>
 <div class="headerWrapper">
 	<div class="depth">
-		<div class="depth1">홈</div><div>></div><div>${wdto.category_name1}</div><div>></div><div class="depth5">${wdto.category_name2}</div>
+		<div class="depth1">홈</div><div>></div><div>${wdto.categoryDto.category_name1}</div><div>></div><div class="depth5">${wdto.categoryDto.category_name2}</div>
 	</div>	
 	<div class="wantedDetail">
 		<h1>${wdto.title}</h1>
@@ -248,18 +252,18 @@
 						<img alt="등록일" src="resources/icon/write.png" class="dateIcon">
 					</div>
 					<div>등록일</div>
-					<div>${wdto.regdate}</div>
+					<div id=regdate>
+						<fmt:formatDate value="${wdto.regdate}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>
+					</div>
 				</div>
 				<div class="deadline">
 					<div>
 						<img alt="마감일" src="resources/icon/write.png" class="dateIcon">
 					</div>
 					<div>마감일</div>
-					<div>${fn:substring(wdto.deadline,0,4)}년 
-						${fn:substring(wdto.deadline,4,6)}월
-						${fn:substring(wdto.deadline,6,8)}일 
-						${fn:substring(wdto.deadline,0,2)}시
-						${fn:substring(wdto.deadline,2,4)}분</div>
+					<div id=deadline>
+						<fmt:formatDate value="${wdto.deadline}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>
+					</div>
 				</div>
 				<div class="sdate">
 					<div>
@@ -270,7 +274,8 @@
 						${fn:substring(wdto.sdate,4,6)}월
 						${fn:substring(wdto.sdate,6,8)}일 
 						${fn:substring(wdto.stime,0,2)}시
-						${fn:substring(wdto.stime,2,4)}분</div>
+						${fn:substring(wdto.stime,2,4)}분
+					</div>
 				</div>
 				<div class="edate">
 					<div>
@@ -313,17 +318,21 @@
 		<div class="phone">
 			<div><b>연락처</b></div><br>
 			<div id="phone">
-				<c:if test="${fn:substring(wdto.phone,0,1) == 'Y'}">
-					매칭시 공개
-				</c:if>
-				
+				<c:choose>
+					<c:when test="${fn:substring(wdto.phone,0,1)=='Y'}">
+						매칭시 공개
+					</c:when>
+					<c:otherwise>
+						비공개
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</div>	
 	<div class="wantedDetail">	
 		<div class="map">
 			<div><b>위치</b></div><br>
-			<div>${wdto.loc_name}${wdto.loc_detail}</div>
+			<div>${wdto.loc_name}&nbsp;${wdto.loc_detail}</div>
 			<div><P>위치 설명(생략가능)</P></div>
 			<div id="map" style="width: 300px; height: 300px;"></div>
 		</div>
@@ -332,28 +341,9 @@
 </body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
-// $(function(){
-// 	var phone = $("div[id='phone']").text();
-// 	if(phone.substr(0,1)=="Y"){
-// 		$("div[id='phone']").text(phone = phone.substr(1));
-// 	}
-		
-// 	var sdate = $("div[id='sdate']").text();
-// 	var stime = $("div[id='stime']").text();
+$(function(){
 	
-// 	var YYYY = sdate.substr(0,4);
-// 	var MM = sdate.substr(4,2);
-// 	var DD = sdate.substr(6);
-	
-// 	var H = stime.substr(0,2);
-// 	var M = stime.substr(2);
-	
-// 	$("div[id='sdate']").text(sdate = YYYY+"년"+" "+MM+"월"+" "+DD+"일"+" "+H+"시"+" "+M+"분");
-	
-// 	console.log(sdate);
-// 	console.log(stime);
-	
-// });
+});
 </script>
 </html>
 <%@include file="footer.jsp" %>
