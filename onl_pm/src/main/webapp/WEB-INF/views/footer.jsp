@@ -42,7 +42,7 @@
 	<div class="footerwrapper">
 		<hr style="boder:2px;"/>
 		<div class="footerlinkfield">
-		회사소개 | 공지사항 | QnA | 사이트맵 | 찾아오시는 길
+		회사소개 | 공지사항 | <a href="qnalist.do?pnum=1">QnA</a> | 사이트맵 | 찾아오시는 길
 		</div>
 		<p class="copyright">
 		Copyright © 2020 ONL Inc. All rights reserved.

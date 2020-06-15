@@ -20,6 +20,11 @@ public class CustomServiceImp implements ICustomService{
 	}
 
 	@Override
+	public int pcountQna() {
+		return customDaoImp.pcountQna();
+	}
+	
+	@Override
 	public QnaDto detailQna(String seq) {
 		return customDaoImp.detailQna(seq);
 	}

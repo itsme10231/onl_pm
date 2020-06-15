@@ -9,6 +9,9 @@ public interface ICustomDao{
 //	QNA목록보기
 	public List<QnaDto> getAllListQna(String pnum);
 	
+//	QNA페이징
+	public int pcountQna();
+	
 //	QNA상세보기
 	public QnaDto detailQna(String seq);
 	

@@ -22,6 +22,11 @@ public class CustomDaoImp implements ICustomDao{
 	public List<QnaDto> getAllListQna(String pnum) {
 		return sqlSession.selectList(nameSpace+"getAllListQna", pnum);
 	}
+	
+	@Override
+	public int pcountQna() {
+		return sqlSession.selectOne(nameSpace+"pcountQna");
+	}
 
 	@Override
 	public QnaDto detailQna(String seq) {
