@@ -28,12 +28,29 @@
 		
 
 		console.log(categories);
+		for(var i = 0; i < categories.length; i++){
+			if(categories[i].category_name1 != " "){
+				var bigC = $("<option value='"+categories[i].code1+"'>"+categories[i].category_name1+"</option>");
+				$("select[name='bCategory']").append(bigC);
+			}
+		}
 		
 		
+		$("select[name='bCategory']").change(function(){
+			var selected = $("select[name='bCategory']").val();
+			var selCate = $("<select name='category'></select>");
+			
+			for(var i = 0; i < categories.length; i++){
+				if(categories[i].code1 == selected){
+					var smallC = $("<option value='"+ categories[i].code2+"'>"+categories[i].category_name2+"</option>");
+					selCate.append(smallC);
+				}
+			}
+			
+			$("select[name='category']").replaceWith(selCate);
+		});
 		
-		
-		
-		
+		//카테고리 셋팅 끝
 		
 		
 		$("#getJuso").click(function(){
@@ -103,6 +120,14 @@
 		
 	});
 	
+	
+	function getMyWantedList(){
+		$.ajax({
+			url:
+			
+			
+		});
+	}
 	
 </script>
 <style type="text/css">

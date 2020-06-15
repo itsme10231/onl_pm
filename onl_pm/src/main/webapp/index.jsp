@@ -13,9 +13,20 @@
 /* 		background-color: snow; */
 /* 	} */
 </style>
+<script type="text/javascript">
+	$(function(){
+		var msg = "${msg}";
+		if(msg!=null && msg!=""){
+			alert(msg);
+		}
+	});
+
+
+</script>
 </head>
 <body>
 <h1>INDEX</h1>
+
 </body>
 </html>
 <%@include file="WEB-INF/views/footer.jsp"%>

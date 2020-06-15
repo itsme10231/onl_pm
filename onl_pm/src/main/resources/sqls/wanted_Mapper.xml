@@ -279,6 +279,22 @@
 	</select>
 	
 	
+	<!-- 내가 쓴 구인글 서식 가져오기 -->
+	<select id="getMyDoc" parameterType="String" resultType="WantedDto">
+		SELECT	wp.SEQ, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.LOCATION, lc.LOC_NAME, wp.LOC_DETAIL 
+		FROM 	WANTED_POST wp, LOCATION_CODE lc
+		WHERE 	wp.ID = #{id} AND wp.LOCATION = lc.LOC_CODE
+	</select>
+	
+	
+	<!-- 지역코드 매칭(구인글 작성, 수정과 함께 트랜잭션 처리) -->
+	<select id="getLocCode" parameterType="String" resultType="int">
+		SELECT	LOC_CODE
+		FROM	LOCATION_CODE
+		WHERE 	LOC_NAME = #{loc_name}
+	</select>
+	
+	
 	<!-- 구인글 수정 -->
 	<update id="updateWanted" parameterType="WantedDto">
 		UPDATE 	WANTED_POST 

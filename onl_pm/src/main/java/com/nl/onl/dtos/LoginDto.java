@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,10 @@ public class LoginDto implements UserDetails {
 	private String address_3;
 	private String email;
 	private String nickname;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birth;
+	
 	private String delflag;
 	private Date regdate;
 	private String role;

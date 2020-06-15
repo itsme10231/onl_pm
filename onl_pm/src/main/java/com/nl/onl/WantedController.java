@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +160,18 @@ public class WantedController {
 	}
 	
 	
+	//내가 쓴 구인글 가져오기
+	@RequestMapping(value="getmydoclist.do", method=RequestMethod.GET)
+	public JSONObject getMyWantedDocList(Authentication auth) {
+		JSONObject jObj = null;
+		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		
+		
+		return jObj;
+	}
+	
+	
 	//구인글 작성 메소드
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewanted.do", method=RequestMethod.POST)
@@ -193,7 +206,7 @@ public class WantedController {
 	}
 	
 	
-	@RequestMapping(value="modifywantedform.do", method=RequestMethod.POST)
+	@RequestMapping(value="modifywantedform.do", method=RequestMethod.GET)
 	public String modifyWantedForm(Model model, Authentication auth) {
 		
 		//차후 로그인 검증 및 아이디 검사 추가

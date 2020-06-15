@@ -35,6 +35,10 @@ public interface IWantedDao {
 	public boolean deleteWanted(String seq);
 	
 	
+	public int getLocCode(String loc_name);
+	
+	public List<WantedDto> getMyDoc(String id);
+	
 	public boolean insertApply(ApplyDto adto);
 	
 	//트랜잭션 처리

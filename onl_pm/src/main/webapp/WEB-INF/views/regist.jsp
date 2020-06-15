@@ -1,4 +1,5 @@
-<%@page import="com.nl.onl.util.Util"%>
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("UTF-8"); %>
@@ -14,6 +15,7 @@
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> -->
 <!-- "검색" 단추를 누르면 팝업 레이어가 열리도록 설정한다 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
 	var code;
 	var inputLoc = $("input[name='loc_name']").val();
@@ -28,6 +30,36 @@
 		
 		var width = "500";
 		var height = "600";
+		
+		//페이지가 로드되었을때 토큰이 있다면
+		Kakao.init("4256f43891c9d18b2a718ee8751b2b5a");
+			Kakao.API.request({
+		        url: '/v2/user/me',
+		        success: function(res) {
+		          	//정보 받아오기 성공
+
+		        	$(".toggleDisplay").css("display","none");
+		        	
+		        	$("input[name='email']").val(jQuery.trim("${param.regflag}") +res.id);
+		        	$("input[name='email01']").val(" ");
+		        	
+		        	$("input[name='password']").val(res.id);
+		        	$("input[name='password2']").val(" ");
+		        	
+		        	$("#isS1").attr("class","Y");
+		        	$("#isS2").attr("class","Y");
+		        },
+		        fail: function(error) {
+		          alert(
+		            'login success, but failed to request user information: ' +
+		              JSON.stringify(error)
+		          )
+		        },
+		});
+		
+		
+		
+		
 		
 		$("#getJuso").click(function(){
 			new daum.Postcode({
@@ -73,9 +105,13 @@
 		});
 		
 		
-		$("input[name=password2]").blur(function(){
-			if($("input[name=password1]").val() != $(this).val()){
-				$("isS2").text("비밀번호를 확인해주세요.");
+		$(".pass").keyup(function(){
+			if($("input[name=password]").val() != $("input[name=password2]").val()){
+				$("#isS2").attr("class","N");
+				$("#isS2").text("비밀번호를 확인해주세요.");
+			}else{
+				$("#isS2").attr("class","Y");
+				$("#isS2").text("비밀번호가 일치합니다.");
 			}
 		});
 		
@@ -93,6 +129,28 @@
 				$("#isS2").text("비밀번호를 확인해주세요.");
 				return false;
 				
+			}else{
+				var nickname = $("input[name='nickname']").val();
+				var address_2 = $("input[name='address_2']").val();
+				var address_3 = $("input[name='address_3']").val();
+				
+				$("input[name='address_3']").val(address_2.substring(address_2.indexOf("동")+2) +" " +address_3);
+				$("input[name='address_2']").val(address_2.substring(0,address_2.indexOf("동")+1));
+				
+				console.log(address_2);
+				console.log(address_3);
+				
+				$("input[name='phone']").val(
+						$("input[name='phone1']").val()+"-"+
+						$("input[name='phone2']").val()+"-"+
+						$("input[name='phone3']").val()
+				);
+				
+				if(nickname == null || nickname == ""){
+					$("input[name='nickname']").val($("input[name='name']").val());
+				}
+				
+				return confirm("입력하신 정보로 회원가입을 진행하시겠습니까?");
 			}
 			
 			
@@ -169,11 +227,13 @@
 		
 		if(code==confirm){
 			
-			$("#isS").attr("class","Y").text("인증코드가 일치합니다.");
+			$("#isS1").attr("class","Y").text("인증코드가 일치합니다.");
+			$("input[name='email01']").attr("disabled",true);
 			$("#confirmBtn").attr("disabled",true);
+			$("input[name='email']").val(email);
 			
 		}else{
-			$("#isS").text("인증코드를 확인해주세요.");
+			$("#isS1").text("인증코드를 확인해주세요.");
 		}
 		
 	}
@@ -191,12 +251,19 @@
 		color: green;
 	}
 	
+	.registT{
+		margin: 0 auto;  
+		min-height: 800px;
+	}
+	
 	.registT th{
 		padding-right: 50px;
 	}
 	
 	.registT td{
 		padding-left: 100px;
+		min-width: 600px;
+		max-width: 800px;
 	}
 	
 	th{
@@ -222,15 +289,25 @@
 <h1>회원가입</h1>
 	<div class="contentBox1">
 	<form action="regist.do" method="post">
-		<table class="registT" style="margin: 0 auto;  height: 1000px;">
+		<input type="hidden" name="regflag" value="
+			<c:choose>
+				<c:when test="${!empty param.regflag}">
+					${param.regflag}
+				</c:when>
+				<c:otherwise>
+					O
+				</c:otherwise>
+			</c:choose>
+		">
+		<table class="registT">
 			<tr>
 				<td colspan="2" class="attention">
 					* 표시는 필수입력항목입니다.
 				</td>
 			</tr>
-			<tr>
+			<tr class="toggleDisplay">
 				<th>이메일*</th>
-				<td id="email">
+				<td>
 					<input type="text" name="email01" required="required" class="form-control" style="width: 300px; display: inline-block;">@
 					<select name="emailCheck" class="custom-select" style="width:150px;">
 						<option value="--" selected="selected">---선택하세요---</option>
@@ -248,7 +325,7 @@
 				</td>
 				
 			</tr>	
-			<tr>
+			<tr class="toggleDisplay">
 				<th>인증번호 확인*</th>
 				<td>
 					<div class="input-group mb-3">
@@ -259,20 +336,22 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr class="toggleDisplay">
 				<th>비밀번호*</th>
-				<td><input type="password" class="form-control" name="password1" required="required"></td>
+				<td>
+					<input type="password" class="form-control pass" name="password" required="required">
+				</td>
 			</tr>
-			<tr>
+			<tr class="toggleDisplay">
 				<th>비밀번호 확인*</th>
 				<td>
-					<input type="password" class="form-control" name="password2" required="required">
+					<input type="password" class="form-control pass" name="password2" required="required">
 					<p class='N' id='isS2'></p>
 				</td>
 			</tr>
 			<tr>
 				<th>이름*</th>
-				<td><input type="text"  class="form-control" name="name" required="required"></td>
+				<td><input type="text"  class="form-control" name="name" required="required" ></td>
 			</tr>
 			<tr>
 				<th>닉네임</th>
@@ -280,7 +359,7 @@
 			</tr>
 			<tr>
 				<th>생년월일</th>
-				<td><input type="date" class="form-control" name="birth"></td>
+				<td><input type="date" class="form-control" name="birth" value="1900-01-01" min="1900-01-01"></td>
 			</tr>
 			<tr>
 				<th>휴대폰번호*</th>
@@ -307,7 +386,10 @@
 
 			<tr>
 				<th>상세주소</th>	
-				<td><input type="text" name="address_3" class="form-control" id="jibun_detail" value="" /></td>
+				<td>
+					<input type="text" name="address_3" class="form-control" id="jibun_detail" value="" />
+					
+				</td>
 			</tr>
 	
 			<tr>

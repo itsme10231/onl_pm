@@ -2,6 +2,9 @@ package com.nl.onl;
 
 
 
+import java.text.ParseException;
+import java.util.Date;
+
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,7 @@ public class LoginController {
 	Util onlUtil;
 	
 	
-	@RequestMapping(value = "/registform.do", method = {RequestMethod.GET})
+	@RequestMapping(value = "/registform.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String registForm() {
 		
 		
@@ -45,10 +48,22 @@ public class LoginController {
 	@RequestMapping(value = "/regist.do", method = {RequestMethod.POST})
 	public String regist(Model model, LoginDto ldto) {
 		
-		boolean isS = loginServiceImp.insertMember(ldto);
+		Date defaultDate = onlUtil.toDate("1900-01-01");
+		boolean isS = false;
+		
+		if(ldto.getBirth().compareTo(defaultDate) == 0) {
+			ldto.setBirth(null);	
+		}	
+		
+		ldto.setRole("USER");
+		ldto.setRegflag(ldto.getRegflag().trim());
+		isS = loginServiceImp.insertMember(ldto);
+			
+		
 		
 		if(isS) {
 			model.addAttribute("msg", "회원가입을 축하드립니다.");
+			System.out.println("success");
 		}else {
 			model.addAttribute("msg", "회원가입에 실패하였습니다. 관리자에게 문의해 주세요.");
 		}
@@ -64,7 +79,7 @@ public class LoginController {
 		String s = loginServiceImp.checkEmail(email);
 //		System.out.println("s: "+s);
 		if(s == null || s.equals("")) {
-			System.out.println("able");
+//			System.out.println("able");
 			return "ABLE";
 		}else {
 			return "DISABLE";
@@ -107,27 +122,23 @@ public class LoginController {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/outlogin.do", method = {RequestMethod.POST})
-	public String outLogin(Model model, String id, String email) {
+	//회원탈퇴(신청)
+	@RequestMapping(value="/member/withdraw.do", method = {RequestMethod.GET})
+	public String withdrawMember(Authentication auth) {
 		
-		String s = "";
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		loginServiceImp.updateDelflag(ldto.getId());
 		
-		s = loginServiceImp.checkEmail( (email==null||email.equals(""))? id:email );
-		
-		
-		if(s==null || s.equals("")) {
-			
-			model.addAttribute("id",id);
-			model.addAttribute("email",email);
-			
-			return "regist";
-			
-		}else {			
-			
-			return "login";			
-			
+		return "redirect:/logout.do";
+	}
+	
+	//회원정보삭제(quartz 이용예정)
+	@RequestMapping(value="deletemember.do", method = {RequestMethod.GET})
+	public void deleteMember() {
+		boolean isS = loginServiceImp.deleteMember();
+		if(isS) {
+			System.out.println("error: 탈퇴회원 삭제 실패");
 		}
-		
 	}
 	
 	

@@ -21,13 +21,15 @@ public interface IWantedService {
 	public WantedDto getWantedDetailT(String seq);
 	
 	public WantedDto getWantedDetailLoginT(Map<String, String> map);
-
+	
+	public List<WantedDto> getMyDoc(String id);
+	
 	//파일업로드와 함께 트랜잭션 처리
 	public boolean insertWantedT(WantedDto wdto, List<FileDto> flist);
 	
 	public List<CategoryDto> getCategory();
 	
-	public boolean updateWanted(WantedDto wdto);
+	public boolean updateWantedT(WantedDto wdto);
 	
 	public boolean deleteWanted(String seq);
 	

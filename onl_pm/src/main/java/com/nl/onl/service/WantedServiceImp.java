@@ -67,7 +67,7 @@ public class WantedServiceImp implements IWantedService{
 	}
 
 	@Override
-	public boolean updateWanted(WantedDto wdto) {
+	public boolean updateWantedT(WantedDto wdto) {
 		return wantedDaoImp.updateWanted(wdto);
 	}
 
@@ -114,5 +114,11 @@ public class WantedServiceImp implements IWantedService{
 	@Override
 	public boolean insertWish(WishDto wdto) {
 		return wantedDaoImp.insertWish(wdto);
+	}
+	
+	@Override
+	public List<WantedDto> getMyDoc(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

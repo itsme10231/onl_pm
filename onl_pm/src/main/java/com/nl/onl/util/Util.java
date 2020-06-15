@@ -303,10 +303,15 @@ public class Util {
 		return isS ? flist : null;
 	}
 	
-	public Date toDate(String dateS) throws java.text.ParseException {
+	public Date toDate(String dateS) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
-		Date thisdate = format.parse(dateS);
+		Date thisdate = null;
+		try {
+			thisdate = format.parse(dateS);
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
 		
 		return thisdate;
 	}

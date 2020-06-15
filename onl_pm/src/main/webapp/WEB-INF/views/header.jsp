@@ -328,6 +328,7 @@ function makeCategory(cjson){
 <div class="remotediv">
 	<div class="writebtodiv">
 		<a href='writewantedform.do'><img class="writebto" alt="구인글 쓰기" src="/onl/resources/icon/write.png" width="40px"></a>
+		
 	</div>
 	▲TOP
 </div>
