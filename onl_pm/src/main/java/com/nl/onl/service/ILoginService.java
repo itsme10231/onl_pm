@@ -39,4 +39,7 @@ public interface ILoginService {
 		
 		//찜글목록 가져오기
 		public List<String> getWishList(String id);
+		
+		//지원목록 가져오기
+		public List<String> getApplySeq(String id);
 }

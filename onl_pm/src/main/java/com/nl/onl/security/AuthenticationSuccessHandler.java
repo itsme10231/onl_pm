@@ -33,7 +33,10 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 		
 		//wlist에는 wanted_seq만 담겨서 반환
 		List<String> wlist = loginServiceImp.getWishList(ldto.getId());
+//		List<String> alist = loginServiceImp.getApplySeq(ldto.getId());
+		
 		session.setAttribute("wishlist", wlist);
+//		session.setAttribute("applylist", alist);
 		
 		super.onAuthenticationSuccess(request, response, authentication);
 	}

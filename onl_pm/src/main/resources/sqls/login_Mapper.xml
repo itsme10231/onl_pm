@@ -122,6 +122,10 @@
 		SELECT WANTED_SEQ 
 			FROM WISHLIST 
 			WHERE ID = #{id}
+	</select>
 	
+	<!-- 내가 지원한 구인글 시퀀스 목록(로그인) -->
+	<select id="getApplySeq" parameterType="String" resultType="String">
+		SELECT WANTED_SEQ FROM APPLYLIST WHERE ID = #{id}
 	</select>
 </mapper>

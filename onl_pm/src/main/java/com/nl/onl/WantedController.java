@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
@@ -96,14 +97,14 @@ public class WantedController {
 			map.put("id", id);
 			map.put("seq", seq);
 			
-			WantedDto wdto = wantedServiceImp.getWantedDetailLoginT(map);
-			model.addAttribute("wdto",wdto);
-		
+
+			List<WantedDto> wlist = wantedServiceImp.getWantedDetailLoginT(map);
+			model.addAttribute("wlist",wlist);
+			System.out.println(wlist);
 		}else{
 			
-			WantedDto wdto = wantedServiceImp.getWantedDetailT(seq);
-			model.addAttribute("wdto",wdto);
-			System.out.println(wdto);
+			List<WantedDto> wlist = wantedServiceImp.getWantedDetailT(seq);
+			model.addAttribute("wlist",wlist);
 			
 		}
 		
@@ -227,6 +228,55 @@ public class WantedController {
 		
 		return "redirect:/wanted.do?seq="+wdto.getSeq();
 	}
+	
+	@Secured({"ROLE_USER"})
+	@RequestMapping(value="apply.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String insertApply(Model model, Authentication auth, String wanted_seq) {
+		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		boolean isS = wantedServiceImp.insertApply(new ApplyDto(0, ldto.getId(), Integer.parseInt(wanted_seq), null, 0, null));
+		String msg = "";
+		
+		if(isS) {
+			msg = "지원에 성공하였습니다.";
+		}else {
+			msg = "지원에 실패하였습니다.";
+		}
+		
+		return msg;
+	}
+	
+	@Secured({"ROLE_USER"})
+	@RequestMapping(value="cancelapply.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String deleteApply(Model model, Authentication auth, String wanted_seq) {
+		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		Map<String, String> map = new HashMap<>();
+		map.put("id", ldto.getId());
+		map.put("wanted_seq", wanted_seq);
+		
+		boolean isS = wantedServiceImp.deleteApplyT(map);
+		String msg = "";
+		
+		if(isS) {
+			msg = "성공적으로 지원 취소되었습니다.";
+		}else {
+			msg = "지원 취소에 실패하였습니다.";
+		}
+		
+		return msg;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value="addwish.do", method=RequestMethod.POST)
 	@ResponseBody

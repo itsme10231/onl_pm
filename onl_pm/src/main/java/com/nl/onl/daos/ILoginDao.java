@@ -37,4 +37,7 @@ public interface ILoginDao {
 	
 	//찜글목록 가져오기
 	public List<String> getWishList(String id);
+	
+	//지원글 시퀀스 목록 가져오기
+	public List<String> getApplySeq(String id);
 }

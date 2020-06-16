@@ -17,9 +17,9 @@ public interface IWantedDao {
 	public List<WantedDto> getWantedListLogin(SearchDto sdto);
 	
 	//increaseView와 함께 트랜잭션 처리
-	public WantedDto getWantedDetail(String seq);
+	public List<WantedDto> getWantedDetail(String seq);
 	
-	public WantedDto getWantedDetailLogin(Map<String, String> map);
+	public List<WantedDto> getWantedDetailLogin(Map<String, String> map);
 	
 	public boolean increaseView (String seq);
 	
@@ -42,7 +42,7 @@ public interface IWantedDao {
 	public boolean insertApply(ApplyDto adto);
 	
 	//트랜잭션 처리
-	public boolean deleteApply(String seq);
+	public boolean deleteApply(Map<String, String> map);
 	public boolean cancelSelector(Map<String, String> map);
 	
 	

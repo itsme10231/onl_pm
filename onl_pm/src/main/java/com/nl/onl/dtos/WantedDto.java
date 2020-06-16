@@ -28,7 +28,7 @@ public class WantedDto {
 	private String state;
 	private String delflag;
 	private String sosflag;
-	private int selector;
+	private String selector;
 	private String loc_detail;
 	
 	private String loc_name;
@@ -90,10 +90,10 @@ public class WantedDto {
 	public void setApply_c(int apply_c) {
 		this.apply_c = apply_c;
 	}
-	public int getSelector() {
+	public String getSelector() {
 		return selector;
 	}
-	public void setSelector(int selector) {
+	public void setSelector(String selector) {
 		this.selector = selector;
 	}
 

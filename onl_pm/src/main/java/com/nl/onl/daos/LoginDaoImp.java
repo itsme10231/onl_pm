@@ -69,4 +69,9 @@ public class LoginDaoImp implements ILoginDao {
 	public List<String> getWishList(String id) {
 		return sqlSession.selectList(nameSpace+"getWishList", id);
 	}
+	
+	@Override
+	public List<String> getApplySeq(String id) {
+		return sqlSession.selectList(nameSpace+"getApplySeq", id);
+	}
 }

@@ -3,6 +3,7 @@ package com.nl.onl.service;
 import java.util.List;
 import java.util.Map;
 
+
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.FileDto;
@@ -18,9 +19,9 @@ public interface IWantedService {
 	public List<WantedDto> getWantedListLogin(SearchDto sdto);
 	
 	//increaseView와 함께 트랜잭션 처리
-	public WantedDto getWantedDetailT(String seq);
+	public List<WantedDto> getWantedDetailT(String seq);
 	
-	public WantedDto getWantedDetailLoginT(Map<String, String> map);
+	public List<WantedDto> getWantedDetailLoginT(Map<String, String> map);
 	
 	public List<WantedDto> getMyDoc(String id);
 	

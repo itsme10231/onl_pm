@@ -64,8 +64,7 @@ public class AppTest {
 		map.put("id", "O1");
 		map.put("seq", "46");
 		
-		WantedDto wdto = wantedServiceImp.getWantedDetailLoginT(map);
-		System.out.println(wdto);
+
 //		u.getCurrLocation();
 	}
 	

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.nl.onl.daos.IFileDao;
 import com.nl.onl.daos.IPaymentDao;
 import com.nl.onl.daos.IWantedDao;
+
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
 import com.nl.onl.dtos.FileDto;
@@ -41,15 +42,15 @@ public class WantedServiceImp implements IWantedService{
 	}
 
 	@Override
-	public WantedDto getWantedDetailT(String seq) {
-		WantedDto result = wantedDaoImp.getWantedDetail(seq);
+	public List<WantedDto> getWantedDetailT(String seq) {
+		List<WantedDto> result = wantedDaoImp.getWantedDetail(seq);
 		boolean isS = wantedDaoImp.increaseView(seq);
 		return result;
 	}
 
 	@Override
-	public WantedDto getWantedDetailLoginT(Map<String, String> map) {
-		WantedDto result = wantedDaoImp.getWantedDetailLogin(map);
+	public List<WantedDto> getWantedDetailLoginT(Map<String, String> map) {
+		List<WantedDto> result = wantedDaoImp.getWantedDetailLogin(map);
 		boolean isS = wantedDaoImp.increaseView(map.get("seq"));
 		return result;
 	}
@@ -89,7 +90,8 @@ public class WantedServiceImp implements IWantedService{
 
 	@Override
 	public boolean deleteApplyT(Map<String, String> map) {
-		boolean isS = wantedDaoImp.deleteApply(map.get("seq"));
+		//map의 key: id, wanted_seq
+		boolean isS = wantedDaoImp.deleteApply(map);
 		wantedDaoImp.cancelSelector(map);
 		return isS;
 	}

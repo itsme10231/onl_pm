@@ -13,6 +13,23 @@ public class ApplyDto {
 	private String nickname;
 	
 	
+	
+	public ApplyDto() {
+
+	}
+
+	
+	public ApplyDto(int seq, String id, int wanted_seq, Date regdate, int acount, String nickname) {
+		super();
+		this.seq = seq;
+		this.id = id;
+		this.wanted_seq = wanted_seq;
+		this.regdate = regdate;
+		this.acount = acount;
+		this.nickname = nickname;
+	}
+	
+	
 	public String getNickname() {
 		return nickname;
 	}

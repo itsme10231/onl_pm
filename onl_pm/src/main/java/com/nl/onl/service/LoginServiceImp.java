@@ -80,4 +80,9 @@ public class LoginServiceImp implements ILoginService{
 	public List<String> getWishList(String id) {
 		return loginDaoImp.getWishList(id);
 	}
+	
+	@Override
+	public List<String> getApplySeq(String id) {
+		return loginDaoImp.getApplySeq(id);
+	}
 }

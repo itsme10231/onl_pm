@@ -32,8 +32,9 @@
 
 		<result column="NICKNAME" property="nickname"/>
 		<result column="APPLY" property="apply"/>
+		<result column="APPLY_C" property="apply_c"/>
 		<result column="SELECTED" property="selected"/>
-		<collection property="fileDto" resultMap="FileDtoMap"/>
+		<collection property="fileDto" resultMap="FileDtoMap" />
 		<collection property="categoryDto" resultMap="CategoryDtoMap"/>
 	</resultMap>
 	
@@ -215,12 +216,13 @@
 		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, 
 				wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, 
 				wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, 
-				wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.SOSFLAG, f.STORED_NAME , f.REGDATE AS F_REGDATE, m.NICKNAME
-		FROM 	WANTED_POST wp WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m,
-				(SELECT STORED_NAME, POST_SEQ , REGDATE
+				wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.SOSFLAG, f.STORED_NAME , f.REGDATE AS F_REGDATE, f.SEQ AS F_SEQ, m.NICKNAME
+		FROM 	WANTED_POST wp, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m,
+				(SELECT STORED_NAME, POST_SEQ , REGDATE , SEQ
 				 FROM UPLOAD_FILE 
 				 WHERE BOARD_TYPE = 'WANTED_POST' AND DELFLAG = 'N') f
 		WHERE 	wp.SEQ = #{seq} AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
+		ORDER BY f.REGDATE ASC
 	</select>
 	
 	<!-- 로그인 구인글 상세보기 -->
@@ -235,12 +237,13 @@
 					ELSE 'N'
 				END AS SELECTED,
 				f.STORED_NAME , f.REGDATE AS F_REGDATE, f.SEQ AS F_SEQ, m.NICKNAME
-		FROM 	WANTED_POST wp, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
+		FROM 	WANTED_POST wp, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m,
 				(SELECT COUNT(a2.ID) AS apply_c, a2.WANTED_SEQ FROM APPLYLIST a2 where a2.WANTED_SEQ = #{seq} GROUP BY a2.WANTED_SEQ ) a3,
-				(SELECT STORED_NAME, POST_SEQ , REGDATE, SEQ
-				 FROM UPLOAD_FILE 
-				 WHERE BOARD_TYPE = 'WANTED' AND DELFLAG = 'N') f
-		WHERE 	wp.SEQ = #{seq} AND wp.SEQ = a3.WANTED_SEQ AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
+				(SELECT uf.STORED_NAME, uf.POST_SEQ , uf.REGDATE, uf.SEQ
+				 FROM UPLOAD_FILE uf
+				 WHERE uf.BOARD_TYPE = 'WANTED_POST' AND uf.DELFLAG = 'N') f
+		WHERE 	wp.SEQ = #{seq} AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = a3.WANTED_SEQ(+) AND wp.SEQ = f.POST_SEQ(+)
+
 	</select>
 	
 	<!-- 구인글 상세보기 공통(조회수 증가) -->
@@ -321,6 +324,11 @@
 		WHERE 	SEQ = #{seq}
 	</update>
 	
+	
+	
+	
+
+	
 	<!-- 구인글 지원 -->
 	<insert id="insertApply" parameterType="ApplyDto">
 		INSERT INTO APPLYLIST 
@@ -330,15 +338,15 @@
 	</insert>
 	
 	<!-- 지원 취소 -->
-	<delete id="deleteApply" parameterType="String">
-		DELETE FROM APPLYLIST WHERE SEQ = #{seq}
+	<delete id="deleteApply" parameterType="map">
+		DELETE FROM APPLYLIST WHERE WANTED_SEQ = #{wanted_seq} AND ID = #{id}
 	</delete>
 	
 	<!-- 취소하려는 지원이 이미 선정된 구직자의 지원이었다면 -->
 	<update id="cancelSelector" parameterType="map">
 		UPDATE 	WANTED_POST 
-		SET 	SELECTOR = NULL, STATUS = 'WANTED'
-		WHERE 	SEQ = #{seq} AND SELECTOR = #{selector}
+		SET 	SELECTOR = NULL, STATE = 'WANTED'
+		WHERE 	SEQ = #{wanted_seq} AND SELECTOR = #{id}
 	</update>
 	
 	<!-- 지원자 선정 -->
@@ -380,8 +388,8 @@
 	</insert>
 	
 	<!-- 찜글 삭제 -->
-<!-- 	<delete id="delWishlist" parameterType="int"> -->
-<!-- 		DELETE FROM WISHLIST  -->
-<!-- 		WHERE ID = #{id} AND  -->
-<!-- 	</delete> -->
+	<delete id="delWishlist" parameterType="map">
+		DELETE FROM WISHLIST 
+		WHERE ID = #{id} AND WANTED_SEQ = #{wanted_seq}
+	</delete>
 </mapper>

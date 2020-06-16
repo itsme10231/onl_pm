@@ -33,13 +33,13 @@ public class WantedDaoImp implements IWantedDao{
 	}
 
 	@Override
-	public WantedDto getWantedDetail(String seq) {
-		return sqlSession.selectOne(nameSpace +"getWantedDetail", seq);
+	public List<WantedDto> getWantedDetail(String seq) {
+		return sqlSession.selectList(nameSpace +"getWantedDetail", seq);
 	}
 
 	@Override
-	public WantedDto getWantedDetailLogin(Map<String, String> map) {
-		return sqlSession.selectOne(nameSpace +"getWantedDetail", map);
+	public List<WantedDto> getWantedDetailLogin(Map<String, String> map) {
+		return sqlSession.selectList(nameSpace +"getWantedDetailLogin", map);
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class WantedDaoImp implements IWantedDao{
 	}
 
 	@Override
-	public boolean deleteApply(String seq) {
-		int isS = sqlSession.delete(nameSpace +"deleteApply", seq);
+	public boolean deleteApply(Map<String, String> map) {
+		int isS = sqlSession.delete(nameSpace +"deleteApply", map);
 		return isS > 0 ? true:false;
 	}
 

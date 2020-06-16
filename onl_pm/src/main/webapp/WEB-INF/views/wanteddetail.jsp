@@ -1,3 +1,4 @@
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -225,15 +226,65 @@
 		height: 30px;
 		margin-right: 10px;
 	}
+	
+	.disable{
+		display: none;
+	}
 </style>
+<script type="text/javascript">
+	
+	var wanted_seq = "";
+	
+	function addApply(){
+		wanted_seq = $("input[name='seq']").val();
+		
+		$.ajax({
+			url: "apply.do",
+			method: "post",
+			data: {"wanted_seq":wanted_seq},
+			dataType: "text",
+			success: function(msg){
+				$("#apply").toggleClass("disable");
+				$("#cancelApply").toggleClass("disable");
+				alert(msg);
+			},
+			fail: function(msg){
+				alert(msg);
+			}
+			
+		});
+	}
+	
+	function cancelApply(){
+		wanted_seq = $("input[name='seq']").val();
+		
+		$.ajax({
+			url: "cancelapply.do",
+			method: "post",
+			data: {"wanted_seq":wanted_seq},
+			dataType: "text",
+			success: function(msg){
+				$("#apply").toggleClass("disable");
+				$("#cancelApply").toggleClass("disable");
+				alert(msg);
+			},
+			fail: function(msg){
+				alert(msg);
+			}
+			
+		});
+	}
+
+</script>
 </head>
 <body>
 <div class="headerWrapper">
 	<div class="depth">
-		<div class="depth1">홈</div><div>></div><div>${wdto.categoryDto.category_name1}</div><div>></div><div class="depth5">${wdto.categoryDto.category_name2}</div>
+		<div class="depth1">홈</div><div>></div><div>${wlist[0].categoryDto.category_name1}</div><div>></div><div class="depth5">${wdto.categoryDto.category_name2}</div>
 	</div>	
 	<div class="wantedDetail">
-		<h1>${wdto.title}</h1>
+		<input type="hidden" name="seq" value="${wlist[0].seq}">
+		<h1>${wlist[0].title}</h1>
 		<div class="detail">
 			<div class="process1">
 				<div class="wanted">지원  ></div><div class="process">진행  ></div><div class="complete">완료</div>
@@ -241,7 +292,7 @@
 			<img alt="찜하기아이콘" src="resources/icon/WhiteHeart.jpg" class="wish">
 			<img alt="긴급" src="resources/icon/emergency.png" class="sos"><b class="sosText">긴급</b>
 			<div class=views>조회수
-				<div>${wdto.views}</div>
+				<div>${wlist[0].views}</div>
 			</div>
 			<div class="profileImg">
 				<img alt="프로필사진" src="resources/icon/Peaple2.jpg" class="profileImg">
@@ -253,7 +304,7 @@
 					</div>
 					<div>등록일</div>
 					<div id=regdate>
-						<fmt:formatDate value="${wdto.regdate}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>
+						<fmt:formatDate value="${wlist[0].regdate}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>
 					</div>
 				</div>
 				<div class="deadline">
@@ -262,7 +313,7 @@
 					</div>
 					<div>마감일</div>
 					<div id=deadline>
-						<fmt:formatDate value="${wdto.deadline}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>
+						<fmt:formatDate value="${wlist[0].deadline}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>
 					</div>
 				</div>
 				<div class="sdate">
@@ -270,11 +321,11 @@
 						<img alt="시작일" src="resources/icon/Watch.png" class="dateIcon">
 					</div>
 					<div>시작일</div>
-					<div>${fn:substring(wdto.sdate,0,4)}년 
-						${fn:substring(wdto.sdate,4,6)}월
-						${fn:substring(wdto.sdate,6,8)}일 
-						${fn:substring(wdto.stime,0,2)}시
-						${fn:substring(wdto.stime,2,4)}분
+					<div>${fn:substring(wlist[0].sdate,0,4)}년 
+						${fn:substring(wlist[0].sdate,4,6)}월
+						${fn:substring(wlist[0].sdate,6,8)}일 
+						${fn:substring(wlist[0].stime,0,2)}시
+						${fn:substring(wlist[0].stime,2,4)}분
 					</div>
 				</div>
 				<div class="edate">
@@ -282,36 +333,51 @@
 						<img alt="종료일" src="resources/icon/Watch.png" class="dateIcon">
 					</div>
 					<div>종료일</div>
-					<div>${fn:substring(wdto.edate,0,4)}년 
-						${fn:substring(wdto.edate,4,6)}월
-						${fn:substring(wdto.edate,6,8)}일 
-						${fn:substring(wdto.etime,0,2)}시
-						${fn:substring(wdto.etime,2,4)}분
+					<div>${fn:substring(wlist[0].edate,0,4)}년 
+						${fn:substring(wlist[0].edate,4,6)}월
+						${fn:substring(wlist[0].edate,6,8)}일 
+						${fn:substring(wlist[0].etime,0,2)}시
+						${fn:substring(wlist[0].etime,2,4)}분
 					</div>
 				</div>
 				<div class="salary">
 					<div>제안금액</div>
-					<div>${wdto.salary}</div>
+					<div>${wlist[0].salary}</div>
 					<div>원</div>
 				</div>	
 				<div class="apply">
 					<div>지원자</div>
-					<div>${wdto.apply_c}명</div>
+					<div>${wlist[0].apply_c}명</div>
 				</div>
 				<div class="button">
-					<input type="button" value="신고하기">
-					<input type="button" value="문의하기">
-					<input type="button" value="프로필">
-					<input type="button" value="지원하기">
+					<sec:authorize access="hasRole('ROLE_USER')">
+						<input type="button" value="신고하기">
+						<input type="button" value="문의하기">
+						<input type="button" value="프로필">
+
+						<input type="button" id="apply" class="${wlist[0].apply eq 'Y'? '':'disable'}" value="지원취소" onclick="cancelApply()">
+
+						<input type="button" id="cancelApply" class="${wlist[0].apply eq 'N'? '':'disable'}" value="지원하기" onclick="addApply()">
+
+					</sec:authorize>
+					<sec:authorize access="isAnonymous()">
+						<input type="button" value="로그인이 필요한 기능입니다.">
+					</sec:authorize>
 				</div>
 			</div>
-			<div class="profileName">${wdto.nickname}</div>
+			<div class="profileName">${wlist[0].nickname}</div>
 		</div>
 	</div>	
 	<div class="wantedDetail">	
 		<div class="content">
 			<div><b>내용</b></div><br>
-			<div><p>${wdto.content}</p></div>
+			<div>
+				<c:forEach items="${wlist}" var="wdto">
+					
+					${wdto.fileDto.stored_name}
+				</c:forEach>
+				<p>${wlist[0].content}</p>
+			</div>
 		</div>
 	</div>
 	<div class="wantedDetail">	
@@ -319,7 +385,7 @@
 			<div><b>연락처</b></div><br>
 			<div id="phone">
 				<c:choose>
-					<c:when test="${fn:substring(wdto.phone,0,1)=='Y'}">
+					<c:when test="${fn:substring(wlist[0].phone,0,1)=='Y'}">
 						매칭시 공개
 					</c:when>
 					<c:otherwise>
@@ -332,7 +398,7 @@
 	<div class="wantedDetail">	
 		<div class="map">
 			<div><b>위치</b></div><br>
-			<div>${wdto.location}&nbsp;${wdto.loc_detail}</div>
+			<div>${wlist[0].location}&nbsp;${wlist[0].loc_detail}</div>
 			<div><P>위치 설명(생략가능)</P></div>
 			<div id="map" style="width: 300px; height: 300px;"></div>
 		</div>
