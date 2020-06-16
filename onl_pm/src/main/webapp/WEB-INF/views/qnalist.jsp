@@ -1,3 +1,6 @@
+<%@page import="java.util.Map"%>
+<%@page import="com.nl.onl.dtos.QnaDto"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
 <%response.setContentType("text/html; charset=utf-8"); %>
@@ -130,6 +133,11 @@ th {
 </style>
 </head>
 <body>
+<%
+	List<QnaDto> list=(List<QnaDto>)request.getAttribute("list");
+	int count=(Integer) request.getAttribute("count");
+	Map<String,Integer> map=(Map<String,Integer>)request.getAttribute("map");
+%>
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
 		<h2>사용자 QnA</h2>
@@ -164,17 +172,38 @@ th {
 
 			<c:forEach items="${list}" var="dto">
 				<tr>
-					<td>${dto.qna_code}</td>
+					<td>${dto.category_name}</td>
 					<td><a href="qnadetail.do?seqparam=${dto.seq}">${dto.title}</a></td>
 					<td>${dto.process}</td>
 					<td><f:formatDate pattern="yyyy-MM-dd" value="${dto.regdate}"/></td>
 				</tr>
 			</c:forEach>
+<!-- 			<tr> -->
+<%-- 				<td colspan="5" style="text-align: center;"><a href="">◀</a> <% --%>
+<!-- //  	for (int i = 1; i <= count; i++) { -->
+<%--  %> <a href="qnalist.do?pnum=<%=i%>"><%=i%></a> --%>
+<%-- 					<% --%>
+<!-- // 						} -->
+<%-- 					%> <a href="">▶</a></td> --%>
+<!-- 			</tr> -->
 
-
+		<tr>
+			<td colspan="5" style="text-align: center;">
+				<a href="qnalist.do?pnum=<%=map.get("prePageNum")%>">◀</a>
+				<%
+				for(int i=map.get("startPage"); i<=map.get("endPage"); i++){
+						%>
+						<a href="qnalist.do?pnum=<%=i%>"><%=i%></a>
+						<%
+					}
+				%>
+				<a href="qnalist.do?pnum=<%=map.get("nextPageNum")%>">▶</a>
+			</td>
+		</tr>
 		</table>
+		
 		<div id="div3">
-			<button id="button2" onclick="location.href='CustomerController.do?command=addForm'">글쓰기</button>
+			<button id="button2" onclick="location.href='addForm.do'">글쓰기</button>
 		</div>
 	</div>
 </body>

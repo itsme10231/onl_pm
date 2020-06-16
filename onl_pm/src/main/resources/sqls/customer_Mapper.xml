@@ -23,12 +23,12 @@
 			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
 				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME 
 					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE ) a
-			    WHERE CEIL(RN/10)=#{pnum}
+			    WHERE CEIL(RN/5)=#{pnum}
 	</select>
 	
 <!-- 	QNA페이징 -->
 	<select id="pcountQna" resultType="int">
-		SELECT CEIL(COUNT(*)/10) FROM QNA
+		SELECT CEIL(COUNT(*)/5) FROM QNA
 	</select>
 	
 <!-- 	QNA상세보기 -->
@@ -43,8 +43,7 @@
 	<insert id="insertQna" parameterType="QnaDto">
 		INSERT INTO QNA
 		VALUES (QNA_SEQ.NEXTVAL
-				,#{qna_code},#{title},#{content},#{id},SYSDATE  
-		 		,#{ref},#{process})
+				,#{qna_code},#{title},#{content},#{id}, SYSDATE ,QNA_seq.CURRVAL,'WAIT')
 	</insert>
 	
 <!-- 	QNA수정 -->

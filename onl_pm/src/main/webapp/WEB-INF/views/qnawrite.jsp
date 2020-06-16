@@ -75,6 +75,10 @@ th {
 	border: 1px solid #1b5ac2;
 	text-align: center;
 }
+#input1{
+	height: 20px;
+}
+
 #input2{
 	width: 500px; height: 20px;
 }
@@ -83,23 +87,25 @@ th {
 <body>
 <div style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
 		<h2>QNA 작성</h2>
-		<form action="qnaWrite.do" method="post">
+		<form action="qnawrite.do" method="post">
 		<table>
 			<tr>
 				<th height="40px">문의유형</th>
-				<td height="40px"><select name="Category">
-				<option value="" selected="selected">유형선택</option>
-				<option value="구인 회원가입">구인 회원가입</option>
-				<option value="회원정보 수정">회원정보 수정</option>
-				<option value="채용공고등록/관리">채용공고등록/관리</option>
-				<option value="결제">결제</option>
-				<option value="기타">기타</option>
+				<td height="40px"><select name="qna_code">
+				<option value=1 selected="selected">구인 회원가입</option>
+				<option value=2>회원정보 수정</option>
+				<option value=3>채용공고등록/관리</option>
+				<option value=4>결제</option>
 				</select>
 				</td>
 			</tr>
 			<tr>
+			<th height="40px">아이디</th>
+			<td><input type="text" name="id" id="input1" required="required"/></td>
+		</tr>
+			<tr>
 				<th height="40px">제목</th>
-				<td height="40px"><input type="text" name="title" id="input2" required="required"></td>
+				<td><input type="text" name="title" id="input2" required="required"></td>
 			</tr>
 			<tr>
 				<th height="230px">문의내용</th>
@@ -111,7 +117,7 @@ th {
 			</tr>
 		</table>
 		<div id="div2">
-			<button class="button2">글쓰기</button>
+			<button class="button2" type="submit">글쓰기</button>
 			</div>
 			</form>
 	</div>
