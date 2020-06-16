@@ -56,8 +56,7 @@ public class WantedServiceImp implements IWantedService{
 
 	@Override
 	public boolean insertWantedT(WantedDto wdto, List<FileDto> flist) {
-		int code = wantedDaoImp.getLocCode(wdto.getLoc_name().trim());
-		wdto.setLocation(code);
+
 		boolean isS = wantedDaoImp.insertWanted(wdto);
 		isS = fileDaoImp.insertMultiFile(flist);
 		return isS;
@@ -70,10 +69,7 @@ public class WantedServiceImp implements IWantedService{
 
 	@Override
 	public boolean updateWantedT(WantedDto wdto, List<FileDto> flist, String preLocation) {
-		if(!preLocation.equals(wdto.getLoc_name().trim())) {
-			int code = wantedDaoImp.getLocCode(wdto.getLoc_name());
-			wdto.setLocation(code);
-		}
+
 		return wantedDaoImp.updateWanted(wdto);
 	}
 

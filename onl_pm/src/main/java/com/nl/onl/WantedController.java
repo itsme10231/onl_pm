@@ -172,7 +172,9 @@ public class WantedController {
 	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub, MultipartFile[] file) {
 		
 		boolean isS = false;
-		System.out.println(wdto.getLoc_name());
+		System.out.println(wdto.getLocation());
+		wdto.setLocation(wdto.getLocation().trim());
+		wdto.setLoc_detail(wdto.getLoc_detail().trim());
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
 
 		wdto.setId(ldto.getId());

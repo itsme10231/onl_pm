@@ -332,7 +332,7 @@
 	<div class="wantedDetail">	
 		<div class="map">
 			<div><b>위치</b></div><br>
-			<div>${wdto.loc_name}&nbsp;${wdto.loc_detail}</div>
+			<div>${wdto.location}&nbsp;${wdto.loc_detail}</div>
 			<div><P>위치 설명(생략가능)</P></div>
 			<div id="map" style="width: 300px; height: 300px;"></div>
 		</div>

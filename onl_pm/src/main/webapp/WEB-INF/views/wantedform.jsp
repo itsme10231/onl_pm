@@ -236,7 +236,7 @@
 					<td></td>
 					<td>		
 						주소 &nbsp;&nbsp;
-						<input type="text" name="loc_name" class="postcodify_address" id="jibun" readonly="readonly" value="${location}"/>
+						<input type="text" name="location" class="postcodify_address" id="jibun" readonly="readonly" value="${location}"/>
 					</td>
 				</tr>
 				<tr>

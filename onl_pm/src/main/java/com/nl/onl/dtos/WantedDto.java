@@ -14,7 +14,7 @@ public class WantedDto {
 	private Date deadline;
 	private String sdate;
 	private String edate;
-	private int location;
+	private String location;
 	private String stime;
 	private String etime;
 	private int salary;
@@ -51,7 +51,7 @@ public class WantedDto {
 	
 	
 	public WantedDto(String id, int category, String title, Date deadline, String sdate, String edate,
-			int location, String stime, String etime, int salary, String content, String phone, 
+			String location, String stime, String etime, int salary, String content, String phone, 
 			String sosflag, String loc_detail) {
 		super();
 		this.id = id;
@@ -155,10 +155,10 @@ public class WantedDto {
 	public void setEdate(String edate) {
 		this.edate = edate;
 	}
-	public int getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public void setLocation(int location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
 	public String getStime() {

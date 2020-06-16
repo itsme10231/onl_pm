@@ -58,7 +58,7 @@
 	
 	<!-- 비로그인 구인글 목록보기&검색(timezone은 8자리의 숫자형태, String 타입) -->
 	<select id="getWantedList" resultMap="WantedDtoMap" parameterType="SearchDto">
-		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOC_NAME , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
+		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOCATION , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
 		FROM	(SELECT ROW_NUMBER() OVER(
 							PARTITION BY w.SOSFLAG
 							ORDER BY w.SOSFLAG DESC 
@@ -89,8 +89,8 @@
 								, w.REGDATE DESC
 								</otherwise>
 							</choose>	
-						) AS RN, w.SEQ , w.ID, m.NICKNAME, w.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, w.TITLE , w.REGDATE , w.DEADLINE , l.LOC_NAME , w.LOC_DETAIL, w.SALARY , w.VIEWS , w.SOSFLAG , f.STORED_NAME,
-				FROM 	WANTED_POST w, LOCATION_CODE l, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
+						) AS RN, w.SEQ , w.ID, m.NICKNAME, w.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, w.TITLE , w.REGDATE , w.DEADLINE , w.LOCATION , w.LOC_DETAIL, w.SALARY , w.VIEWS , w.SOSFLAG , f.STORED_NAME,
+				FROM 	WANTED_POST w, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
 						, (SELECT STORED_NAME, POST_SEQ
 							FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN, STORED_NAME, POST_SEQ 
 									FROM UPLOAD_FILE 
@@ -99,7 +99,7 @@
 						<if test="score!=null">
 						, (SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
-				WHERE 	w.DELFLAG = 'N' AND w.STATE = 'WANTED' AND w.DEADLINE &gt;= SYSDATE AND w.LOCATION = l.LOC_CODE AND SUBSTR(w.CATEGORY, 1, 1) = wc1.CODE AND w.CATEGORY = wc2.CODE AND w.ID = m.ID AND w.SEQ = f.POST_SEQ(+)
+				WHERE 	w.DELFLAG = 'N' AND w.STATE = 'WANTED' AND w.DEADLINE &gt;= SYSDATE AND SUBSTR(w.CATEGORY, 1, 1) = wc1.CODE AND w.CATEGORY = wc2.CODE AND w.ID = m.ID AND w.SEQ = f.POST_SEQ(+)
 						<if test="score!=null">
 							AND w.ID = r.TARGET_ID(+) AND NVL(r.SCORE, 0) &gt;= #{score}
 						</if>
@@ -120,7 +120,7 @@
 							AND (TO_DATE(w.ETIME,'HH24MI')-TO_DATE(w.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
 						<if test="location!=null">
-							AND l.LOC_NAME = '%'||#{location}||'%'
+							AND w.LOCATION||' '||w.LOC_DETAIL = '%'||#{location}||'%'
 						</if>
 						)
 		WHERE CEIL(RN/20) = #{pnum}
@@ -128,7 +128,7 @@
 	
 	<!-- 로그인 구인글 목록보기&검색 -->
 	<select id="getWantedListLogin" parameterType="map" resultMap="WantedDtoMap">
-		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOC_NAME , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
+		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOCATION , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
 		FROM	(SELECT ROW_NUMBER() OVER(
 						PARTITION BY wp.SOSFLAG
 						ORDER BY wp.SOSFLAG DESC,  
@@ -159,7 +159,7 @@
 								, wp.REGDATE DESC
 								</otherwise>
 							</choose>	
-						) as RN, wp.SEQ , wp.ID, wp.NICKNAME, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.REGDATE , wp.DEADLINE , lc.LOC_NAME , wc.LOC_DETAIL, wp.SALARY , wp.VIEWS, wp.ID , wp.SOSFLAG , f.STORED_NAME
+						) as RN, wp.SEQ , wp.ID, wp.NICKNAME, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.REGDATE , wp.DEADLINE , wp.LOCATION , wc.LOC_DETAIL, wp.SALARY , wp.VIEWS, wp.ID , wp.SOSFLAG , f.STORED_NAME
 						CASE
 							WHEN EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'W' AND ul.LIST_ID = wp.ID) THEN 'Y'
 							ELSE 'N'
@@ -168,7 +168,7 @@
 							WHEN EXISTS (SELECT 1 FROM WISHLIST w WHERE w.ID = #{id} AND w.WANTED_SEQ = wp.SEQ) THEN 'Y'
 							ELSE 'N'
 						END AS WISHLIST
-				FROM 	WANTED_POST wp, LOCATION_CODE lc, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
+				FROM 	WANTED_POST wp, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
 						, (SELECT STORED_NAME, POST_SEQ
 							FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN, STORED_NAME, POST_SEQ 
 									FROM UPLOAD_FILE 
@@ -177,7 +177,7 @@
 						<if test="score!=null">
 						,(SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
-				WHERE 	wp.DELFLAG = 'N' AND wp.STATE = 'WANTED' AND wp.DEADLINE >= SYSDATE AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID
+				WHERE 	wp.DELFLAG = 'N' AND wp.STATE = 'WANTED' AND wp.DEADLINE >= SYSDATE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID
 						AND NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'B' AND ul.LIST_ID = wp.ID) 
 						AND NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.LIST_ID = #{id} AND ul."TYPE" = 'B' AND ul.ID = wp.ID)
 						<if test="score!=null">
@@ -202,7 +202,7 @@
 							AND (TO_DATE(wp.ETIME,'HH24MI')-TO_DATE(wp.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
 						<if test="location!=null">
-							AND lc.LOC_NAME = '%'||#{location}||'%'
+							AND wp.LOCATION||' '||wp.LOC_DETAIL = '%'||#{location}||'%'
 						</if>
 						 AND wp.SEQ = f.POST_SEQ(+)
 						)
@@ -214,18 +214,18 @@
 	<select id="getWantedDetail" parameterType="String" resultMap="WantedDtoMap">
 		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE, 
 				wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, 
-				lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, 
+				wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, 
 				wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.SOSFLAG, f.STORED_NAME , f.REGDATE AS F_REGDATE, m.NICKNAME
-		FROM 	WANTED_POST wp, LOCATION_CODE lc, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m,
+		FROM 	WANTED_POST wp WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m,
 				(SELECT STORED_NAME, POST_SEQ , REGDATE
 				 FROM UPLOAD_FILE 
 				 WHERE BOARD_TYPE = 'WANTED_POST' AND DELFLAG = 'N') f
-		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION = lc.LOC_CODE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
+		WHERE 	wp.SEQ = #{seq} AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
 	</select>
 	
 	<!-- 로그인 구인글 상세보기 -->
 	<select id="getWantedDetailLogin" parameterType="map" resultMap="WantedDtoMap">
-		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wc1.CODE as CODE1, wc2.CODE as CODE2, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, lc.LOC_NAME, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG, APPLY_C, 
+		SELECT 	wp.SEQ, wp.ID, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wc1.CODE as CODE1, wc2.CODE as CODE2, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, wp.DELFLAG, wp.SOSFLAG, APPLY_C, 
 				CASE 
 					WHEN EXISTS (SELECT 1 FROM APPLYLIST a WHERE a.ID = #{id} AND a.WANTED_SEQ = wp.SEQ) THEN 'Y'
 					ELSE 'N'
@@ -235,12 +235,12 @@
 					ELSE 'N'
 				END AS SELECTED,
 				f.STORED_NAME , f.REGDATE AS F_REGDATE, f.SEQ AS F_SEQ, m.NICKNAME
-		FROM 	WANTED_POST wp, LOCATION_CODE lc, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
+		FROM 	WANTED_POST wp, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
 				(SELECT COUNT(a2.ID) AS apply_c, a2.WANTED_SEQ FROM APPLYLIST a2 where a2.WANTED_SEQ = #{seq} GROUP BY a2.WANTED_SEQ ) a3,
 				(SELECT STORED_NAME, POST_SEQ , REGDATE, SEQ
 				 FROM UPLOAD_FILE 
 				 WHERE BOARD_TYPE = 'WANTED' AND DELFLAG = 'N') f
-		WHERE 	wp.SEQ = #{seq} AND wp.LOCATION  = lc.LOC_CODE AND wp.SEQ = a3.WANTED_SEQ AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
+		WHERE 	wp.SEQ = #{seq} AND wp.SEQ = a3.WANTED_SEQ AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID AND wp.SEQ = f.POST_SEQ(+)
 	</select>
 	
 	<!-- 구인글 상세보기 공통(조회수 증가) -->
@@ -261,7 +261,7 @@
 				WANTED_POST_SEQ.NEXTVAL, #{id}, #{category}, 
 				#{title}, SYSDATE, #{deadline}, #{sdate}, 
 				#{edate}, #{stime}, #{etime}, #{salary}, 
-				#{content}, 0, 'WANTED', 'N', #{sosflag},#{location}, NULL, #{loc_detail}, #{phone}
+				#{content}, 0, 'WANTED', 'N', #{sosflag}, NULL, #{loc_detail}, #{phone}, #{location}
 				)
 	</insert>
 	
@@ -281,18 +281,18 @@
 	
 	<!-- 내가 쓴 구인글 서식 가져오기 -->
 	<select id="getMyDoc" parameterType="String" resultType="WantedDto">
-		SELECT	wp.SEQ, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.LOCATION, lc.LOC_NAME, wp.LOC_DETAIL 
-		FROM 	WANTED_POST wp, LOCATION_CODE lc
-		WHERE 	wp.ID = #{id} AND wp.LOCATION = lc.LOC_CODE
+		SELECT	wp.SEQ, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.STIME, wp.ETIME, wp.SALARY, wp.CONTENT, wp.LOCATION, wp.LOC_DETAIL 
+		FROM 	WANTED_POST wp
+		WHERE 	wp.ID = #{id}
 	</select>
 	
 	
 	<!-- 지역코드 매칭(구인글 작성, 수정과 함께 트랜잭션 처리) -->
-	<select id="getLocCode" parameterType="String" resultType="int">
-		SELECT	LOC_CODE
-		FROM	LOCATION_CODE
-		WHERE 	LOC_NAME LIKE #{loc_name}
-	</select>
+<!-- 	<select id="getLocCode" parameterType="String" resultType="int"> -->
+<!-- 		SELECT	LOC_CODE -->
+<!-- 		FROM	LOCATION_CODE -->
+<!-- 		WHERE 	LOC_NAME LIKE #{loc_name} -->
+<!-- 	</select> -->
 	
 	
 	<!-- 구인글 수정 -->
@@ -304,13 +304,13 @@
 				DEADLINE = #{deadline},
 				SDATE = #{sdate},
 				EDATE = #{edate},
-				LOCATION = #{location},
 				STIME = #{stime},
 				ETIME = #{etime},
 				SALARY = #{salary},
 				CONTENT = #{content},
 				SOSFLAG = #{sosflag},
-				LOC_DETAIL = #{loc_detail}
+				LOC_DETAIL = #{loc_detail},
+				LOCATION = #{location}
 		WHERE 	SEQ = #{seq}
 	</update>
 	

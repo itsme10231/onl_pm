@@ -35,7 +35,7 @@ public interface IWantedDao {
 	public boolean deleteWanted(String seq);
 	
 	
-	public int getLocCode(String loc_name);
+
 	
 	public List<WantedDto> getMyDoc(String id);
 	

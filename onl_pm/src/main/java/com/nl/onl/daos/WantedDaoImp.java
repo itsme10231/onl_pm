@@ -119,10 +119,7 @@ public class WantedDaoImp implements IWantedDao{
 		return isS > 0 ? true:false;
 	}
 	
-	@Override
-	public int getLocCode(String loc_name) {
-		return sqlSession.selectOne(nameSpace+"getLocCode", loc_name);
-	}
+
 	
 	@Override
 	public List<WantedDto> getMyDoc(String id) {
