@@ -288,6 +288,7 @@ public class Util {
 			String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
 			String storedName = creatUUID +originName.substring(originName.indexOf("."));
 			
+			
 			File f = new File(filePath+storedName);
 			
 			try {
@@ -316,6 +317,15 @@ public class Util {
 		}
 		
 		return thisdate;
+	}
+	
+	public String toDateString(Date date) {
+		String s = "";
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		
+		s = format.format(date);
+		
+		return s;
 	}
 	
 	public JSONArray toJArr(List<? extends Object> list) {

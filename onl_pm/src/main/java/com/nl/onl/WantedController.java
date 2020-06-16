@@ -3,6 +3,7 @@ package com.nl.onl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.json.simple.JSONArray;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -169,7 +171,7 @@ public class WantedController {
 	//구인글 작성 메소드
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewanted.do", method=RequestMethod.POST)
-	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub, MultipartFile[] file) {
+	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub, @DateTimeFormat(pattern = "yyyy-MM-dd") Date sdate, @DateTimeFormat(pattern = "yyyy-MM-dd") Date edate, MultipartFile[] file) {
 		
 		boolean isS = false;
 		System.out.println(wdto.getLocation());
@@ -179,6 +181,8 @@ public class WantedController {
 
 		wdto.setId(ldto.getId());
 		wdto.setPhone(telpub+ldto.getPhone());
+		wdto.setSdate(onlUtil.toDateString(sdate));
+		wdto.setEdate(onlUtil.toDateString(edate));
 		
 		
 //		System.out.println("files: " +file);

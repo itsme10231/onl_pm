@@ -3,43 +3,65 @@
 
 <mapper namespace="com.nl.onl.file">
 	
-	<!-- 첨부파일 업로드(미사용-멀티업로드 기능으로 병합) -->
-<!-- 	<insert id="insertFile" parameterType="FileDto"> -->
-<!-- 		INSERT INTO UPLOAD_FILE VALUES( -->
-<!-- 				UPLOAD_FILE_SEQ.NEXTVAL, #{origin_name}, #{stored_name}, SYSDATE, 'N', #{board_type}, #{id}, #{post_seq} -->
-<!-- 		) -->
-<!-- 	</insert> -->
-	
-	<!-- 첨부파일 여러장 한번에 업로드 -->
-	<insert id="insertMultiFile" parameterType="java.util.List">
-		INSERT ALL
-		<foreach collection="list" open="INTO UPLOAD_FILE VALUES(" close=")" separator=") INTO UPLOAD_FILE VALUES(" item="fdto">
-			UPLOAD_FILE_SEQ.NEXTVAL, #{fdto.origin_name}, #{fdto.stored_name}, SYSDATE, 'N', #{fdto.board_type}, #{fdto.id}, 
-			<choose>
-				<when test="fdto.post_seq==0">
-					<if test="fdto.board_type.equals('WANTED_POST')">
-						WANTED_POST_SEQ.CURRVAL
-					</if>
-					<if test="fdto.board_type.equals('REPORTLIST')">
-						REPRTLIST_SEQ.CURRVAL
-					</if>
-					<if test="fdto.board_type.equals('PROFILE')">
-						0
-					</if>
-					<if test="fdto.board_type.equals('NOTICE')">
-						NOTICE_SEQ.CURRVAL
-					</if>
-					<if test="fdto.board_type.equals('QNA')">
-						QNA_SEQ.CURRVAL
-					</if>
-				</when>
-				<otherwise>
-					#{fdto.post_seq}
-				</otherwise>
-			</choose>
-		</foreach>
-		SELECT * FROM dual
+	<!-- 첨부파일 업로드 -->
+	<insert id="insertFile" parameterType="FileDto">
+		INSERT INTO UPLOAD_FILE VALUES(
+				UPLOAD_FILE_SEQ.NEXTVAL, #{origin_name}, #{stored_name}, SYSDATE, 'N', #{board_type}, #{id}, 
+				<choose>
+					<when test="post_seq==0">
+						<if test="board_type.equals('WANTED_POST')">
+							WANTED_POST_SEQ.CURRVAL
+						</if>
+						<if test="board_type.equals('REPORTLIST')">
+							REPRTLIST_SEQ.CURRVAL
+						</if>
+						<if test="board_type.equals('PROFILE')">
+							0
+						</if>
+						<if test="board_type.equals('NOTICE')">
+							NOTICE_SEQ.CURRVAL
+						</if>
+						<if test="board_type.equals('QNA')">
+							QNA_SEQ.CURRVAL
+						</if>
+					</when>
+					<otherwise>
+						#{post_seq}
+					</otherwise>
+				</choose>	
+		)
 	</insert>
+	
+	<!-- 첨부파일 여러장 한번에 업로드(미사용) -->
+<!-- 	<insert id="insertMultiFile" parameterType="java.util.List"> -->
+<!-- 		INSERT ALL -->
+<!-- 		<foreach collection="list" open="INTO UPLOAD_FILE VALUES(" close=")" separator=") INTO UPLOAD_FILE VALUES(" item="fdto"> -->
+<!-- 			UPLOAD_FILE_SEQ.NEXTVAL, #{fdto.origin_name}, #{fdto.stored_name}, SYSDATE, 'N', #{fdto.board_type}, #{fdto.id},  -->
+<!-- 			<choose> -->
+<!-- 				<when test="fdto.post_seq==0"> -->
+<!-- 					<if test="fdto.board_type.equals('WANTED_POST')"> -->
+<!-- 						WANTED_POST_SEQ.CURRVAL -->
+<!-- 					</if> -->
+<!-- 					<if test="fdto.board_type.equals('REPORTLIST')"> -->
+<!-- 						REPRTLIST_SEQ.CURRVAL -->
+<!-- 					</if> -->
+<!-- 					<if test="fdto.board_type.equals('PROFILE')"> -->
+<!-- 						0 -->
+<!-- 					</if> -->
+<!-- 					<if test="fdto.board_type.equals('NOTICE')"> -->
+<!-- 						NOTICE_SEQ.CURRVAL -->
+<!-- 					</if> -->
+<!-- 					<if test="fdto.board_type.equals('QNA')"> -->
+<!-- 						QNA_SEQ.CURRVAL -->
+<!-- 					</if> -->
+<!-- 				</when> -->
+<!-- 				<otherwise> -->
+<!-- 					#{fdto.post_seq} -->
+<!-- 				</otherwise> -->
+<!-- 			</choose> -->
+<!-- 		</foreach> -->
+<!-- 		SELECT * FROM dual -->
+<!-- 	</insert> -->
 	
 	<!-- 첨부파일 삭제 -->
 	<update id="delFiles" parameterType="map">

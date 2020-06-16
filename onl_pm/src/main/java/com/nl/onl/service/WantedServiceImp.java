@@ -58,7 +58,11 @@ public class WantedServiceImp implements IWantedService{
 	public boolean insertWantedT(WantedDto wdto, List<FileDto> flist) {
 
 		boolean isS = wantedDaoImp.insertWanted(wdto);
-		isS = fileDaoImp.insertMultiFile(flist);
+		
+		for(FileDto fdto:flist) {
+			isS = fileDaoImp.insertFile(fdto);
+		}
+		
 		return isS;
 	}
 

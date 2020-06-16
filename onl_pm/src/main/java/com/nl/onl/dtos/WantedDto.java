@@ -3,6 +3,7 @@ package com.nl.onl.dtos;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 public class WantedDto {
@@ -11,7 +12,10 @@ public class WantedDto {
 	private int category;
 	private String title;
 	private Date regdate;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date deadline;
+	
 	private String sdate;
 	private String edate;
 	private String location;

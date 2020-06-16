@@ -7,7 +7,9 @@ import com.nl.onl.dtos.FileDto;
 
 public interface IFileService {
 	
-	public boolean insertMultiFile(List<FileDto> list);
+//	public boolean insertMultiFile(List<FileDto> list);
+	
+	public boolean insertFile(FileDto fdto);
 	
 	public boolean delFiles(String[] seqs);
 	

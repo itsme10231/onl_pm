@@ -213,6 +213,11 @@
 					</td>
 				</tr>
 				<tr>
+					<th>긴급여부</th>
+					<td><input type="radio" name="sosflag" id="sosY" value="Y"><label for="sosY">긴급</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="sosflag" id="sosN" value="N" checked="checked"><label for="sosN">일반</label></td>
+				</tr>
+				<tr>
 					<th>제목</th>
 					<td><input type="text" style="width: 600px;" name="title" required="required"></td>
 				</tr>
@@ -224,6 +229,7 @@
 					<th>제안금액</th>
 					<td><input type="number" style="width: 200px;" name="salary" required="required">원</td>
 				</tr>
+				
 				<tr>
 					<th>위치</th>
 					<td>
@@ -255,8 +261,7 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td>		
-					</td>
+					<td></td>
 				</tr>
 				<tr>
 					<th>연락처</th>
@@ -268,7 +273,7 @@
 				<tr>
 					<th>지원마감날짜</th>
 					<td>
-						<input type="date" style="width: 300px;">
+						<input type="date" name="deadline" style="width: 300px;">
 					</td>	
 				</tr>
 				<tr>
