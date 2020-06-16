@@ -29,7 +29,7 @@ public interface IWantedService {
 	
 	public List<CategoryDto> getCategory();
 	
-	public boolean updateWantedT(WantedDto wdto);
+	public boolean updateWantedT(WantedDto wdto, List<FileDto> flist, String preLocation);
 	
 	public boolean deleteWanted(String seq);
 	

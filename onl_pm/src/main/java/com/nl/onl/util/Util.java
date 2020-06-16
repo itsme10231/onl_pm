@@ -25,12 +25,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nl.onl.dtos.FileDto;
 
 
@@ -314,5 +316,26 @@ public class Util {
 		}
 		
 		return thisdate;
+	}
+	
+	public JSONArray toJArr(List<? extends Object> list) {
+		ObjectMapper mapper = new ObjectMapper();
+		JSONParser parser = new JSONParser();
+		JSONArray jArr = new JSONArray();
+		
+			try {
+				for(int i = 0; i < list.size(); i++) {
+					jArr.add(parser.parse(mapper.writeValueAsString(list.get(i))));
+				}
+			} catch (JsonProcessingException e) {
+
+				e.printStackTrace();
+			} catch (ParseException e) {
+
+				e.printStackTrace();
+			}	
+		
+		
+		return jArr;
 	}
 }

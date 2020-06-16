@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -142,14 +141,7 @@ public class WantedController {
 		
 		List<CategoryDto> clist = wantedServiceImp.getCategory();
 		
-		JSONArray cArray = new JSONArray();
-		JSONParser parser = new JSONParser();
-		
-		for(CategoryDto cdto:clist) {
-			cArray.add(parser.parse(mapper.writeValueAsString(cdto)));
-		}
-		
-		System.out.println(cArray);
+		JSONArray cArray = onlUtil.toJArr(clist);
 		
 		String location = onlUtil.getCookie("locationCookie", request).getValue();
 		location = URLDecoder.decode(location, "utf-8");
@@ -161,14 +153,16 @@ public class WantedController {
 	
 	
 	//내가 쓴 구인글 가져오기
-	@RequestMapping(value="getmydoclist.do", method=RequestMethod.GET)
-	public JSONObject getMyWantedDocList(Authentication auth) {
-		JSONObject jObj = null;
+	@RequestMapping(value="getmydoclist.do", method=RequestMethod.POST)
+	@ResponseBody
+	public JSONArray getMyWantedDocList(Authentication auth) {
+		JSONArray jArr = null;
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		List<WantedDto> wlist = wantedServiceImp.getMyDoc(ldto.getId());
+		jArr = onlUtil.toJArr(wlist);
 		
-		
-		return jObj;
+		return jArr;
 	}
 	
 	
@@ -178,14 +172,14 @@ public class WantedController {
 	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub, MultipartFile[] file) {
 		
 		boolean isS = false;
-		
+		System.out.println(wdto.getLoc_name());
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
 
 		wdto.setId(ldto.getId());
 		wdto.setPhone(telpub+ldto.getPhone());
 		
 		
-		System.out.println("files: " +file);
+//		System.out.println("files: " +file);
 		
 		List<FileDto> flist = onlUtil.letUpload("WANTED_POST", file, ldto.getId());
 		
@@ -214,9 +208,16 @@ public class WantedController {
 		return "modifywanted";
 	}
 	
+	
+	//-----------------수정중
 	@RequestMapping(value="modifywanted.do", method=RequestMethod.POST)
-	public String modifyWanted(Model model, Authentication auth, WantedDto wdto) {
+	public String modifyWanted(Model model, Authentication auth, WantedDto wdto, MultipartFile[] file, String preLocation) {
+		List<FileDto> flist = null;
+		boolean isS = wantedServiceImp.updateWantedT(wdto, flist, preLocation);
 		
+		if(!isS) {
+			model.addAttribute("msg", "글 수정에 실패했습니다. 관리자에게 문의해주세요.");
+		}
 		
 		return "redirect:/wanted.do?seq="+wdto.getSeq();
 	}

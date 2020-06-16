@@ -122,11 +122,7 @@
 	
 	
 	function getMyWantedList(){
-		$.ajax({
-			url:
-			
-			
-		});
+		console.log("");
 	}
 	
 </script>
@@ -281,12 +277,12 @@
 						시작일 <input type="date" name="sdate" style="width: 300px;"><br/>
 						시작시간 <select name="shour">
 							<c:forEach begin="0" end="23" varStatus="i">
-								<option value="${i.index}">${i.index}</option>
+								<option value="${i.index < 10? '0':''}${i.index}">${i.index < 10? '0':''}${i.index}</option>
 							</c:forEach>
 						</select> 시
 						<select name='smin'>
 							<c:forEach begin="0" end="50" varStatus="i" step="10">
-								<option value="${i.index}">${i.index}</option>
+								<option value="${i.index < 10? '0':''}${i.index}">${i.index < 10? '0':''}${i.index}</option>
 							</c:forEach>
 						</select> 분
 						<input type="hidden" name="stime">
@@ -299,12 +295,12 @@
 						종료시간 
 						<select name="ehour">
 							<c:forEach begin="0" end="23" varStatus="i">
-								<option value="${i.index}">${i.index}</option>
+								<option value="${i.index < 10? '0':''}${i.index}">${i.index < 10? '0':''}${i.index}</option>
 							</c:forEach>
 						</select> 시
 						<select name='emin'>
 							<c:forEach begin="0" end="50" varStatus="i" step="10">
-								<option value="${i.index}">${i.index}</option>
+								<option value="${i.index < 10? '0':''}${i.index}">${i.index < 10? '0':''}${i.index}</option>
 							</c:forEach>
 						</select> 분
 						<input type="hidden" name="etime">
