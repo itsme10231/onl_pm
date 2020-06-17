@@ -214,11 +214,13 @@ $(function(){
 		dataType:"json",
 		method:"get",
 		success:function(cjson){
+			$("#test").html(cjson);
 			makeCategory(cjson);
 		},
 		fail:function(){
 			console.log("서버 통신 실패");
 		}
+		
 	});
 
 	
@@ -304,7 +306,7 @@ function makeCategory(cjson){
 		
 		<div class="headerWrapper">
 		
-			
+			<p id="test"></p>
 			
 			<div class="searchbox">
 				<div class="headerlogo">

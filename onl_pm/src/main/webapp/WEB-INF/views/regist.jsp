@@ -20,6 +20,7 @@
 	var code;
 	var inputLoc = $("input[name='loc_name']").val();
 	var email = "";    // 사용자 입력
+	var regflag = "${param.regflag}";
 	
 	var mailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
@@ -31,8 +32,9 @@
 		var width = "500";
 		var height = "600";
 		
-		//페이지가 로드되었을때 토큰이 있다면
-		Kakao.init("4256f43891c9d18b2a718ee8751b2b5a");
+		if(regflag!=null && regflag!=""){
+			//페이지가 로드되었을때 토큰이 있다면
+			Kakao.init("4256f43891c9d18b2a718ee8751b2b5a");
 			Kakao.API.request({
 		        url: '/v2/user/me',
 		        success: function(res) {
@@ -55,8 +57,8 @@
 		              JSON.stringify(error)
 		          )
 		        },
-		});
-		
+			});
+		}
 		
 		
 		

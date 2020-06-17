@@ -15,7 +15,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
-	var inputLoc = $("input[name='loc_name']").val();
+	var inputLoc = "";
 
 	$(function() {
 		var today = new Date();
@@ -129,6 +129,8 @@
 				left: (window.screen.width / 2) - (width / 2),
 			    top: (window.screen.height / 2) - (height / 2)
 			});
+			
+			
 		});
 		
 		
@@ -308,7 +310,7 @@
 					<td></td>
 					<td>		
 
-						<input type="button" value="위치 새로고침" onclick="setMap()">
+						<input type="button" value="위치 새로고침" onclick="setMap(this)">
 						<div id="map" style="width: 500px; height: 400px;"></div>
 					</td>
 				</tr>
@@ -399,7 +401,7 @@
 
 // 	var inputLocationD = $("input[name='detail']")[0].val();
 
-	function setMap(){
+	function setMap(obj){
 		
 		var location = "${location}";
 		
@@ -417,8 +419,9 @@
 		//주소-좌표 변환 객체를 생성합니다
 		var geocoder = new kakao.maps.services.Geocoder();
 		
-		if(inputLoc != null && inputLoc != ""){	
+		if(obj!=null){	
 			location = inputLoc;
+			console.log(location);
 		}
 		
 		console.log(location);

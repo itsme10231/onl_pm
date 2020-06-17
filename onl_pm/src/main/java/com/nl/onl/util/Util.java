@@ -288,6 +288,7 @@ public class Util {
 			
 			if(originName == null || originName.equals("")) {
 				//파일이름이 없을경우
+				isS = true;
 				break;
 			}
 
