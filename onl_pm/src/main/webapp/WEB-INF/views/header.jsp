@@ -314,7 +314,7 @@ function makeCategory(cjson){
 			
 			<div class="searchbox">
 				<div class="headerlogo">
-					<h2>ONL</h2> 			
+					<h2><a href="index.do">ONL</a></h2> 			
 				</div>
 				<div class="searchElement">
 					<input class="searchfield" type="text" placeholder="검색어를 입력하세요" name="searchval"><input class="searchbto" type="button" name="searchbto" value="검색">

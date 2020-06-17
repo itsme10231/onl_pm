@@ -139,17 +139,17 @@ public class WantedController {
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewantedform.do", method=RequestMethod.GET)
 	public String writeWantedForm(Model model, Authentication auth, HttpServletRequest request) throws UnsupportedEncodingException, JsonProcessingException, ParseException {
-		ObjectMapper mapper = new ObjectMapper();
-		
-		
-		List<CategoryDto> clist = wantedServiceImp.getCategory();
-		
-		JSONArray cArray = onlUtil.toJArr(clist);
+//		ObjectMapper mapper = new ObjectMapper();
+//		
+//		
+//		List<CategoryDto> clist = wantedServiceImp.getCategory();
+//		
+//		JSONArray cArray = onlUtil.toJArr(clist);
 		
 		String location = onlUtil.getCookie("locationCookie", request).getValue();
 		location = URLDecoder.decode(location, "utf-8");
 		model.addAttribute("location", location);
-		model.addAttribute("cArray", cArray);
+//		model.addAttribute("cArray", cArray);
 		
 		return "wantedform";
 	}

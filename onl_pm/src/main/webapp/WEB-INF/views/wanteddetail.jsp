@@ -230,11 +230,30 @@
 		margin-right: 10px;
 	}
 	
+	.modal-content{
+		min-width: 600px;
+	
+	}
+	
 	.disable{
 		display: none;
 	}
 </style>
+<script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script type="text/javascript">
+	
+	$(function(){
+		$('#exampleModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget) // Button that triggered the modal
+			  var recipient = button.data('whatever') // Extract info from data-* attributes
+			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+			  var modal = $(this)
+			  modal.find('.modal-title').text('신고하기: ' + recipient)
+			  modal.find('.modal-body input').val(recipient)
+		});
+	});
+	
 	
 	var wanted_seq = "";
 	
@@ -354,7 +373,7 @@
 				</div>
 				<div class="button">
 					<sec:authorize access="hasRole('ROLE_USER')">
-						<input type="button" value="신고하기">
+						<input type="button" value="신고하기" data-toggle="modal" data-target="#reportModal" data-whatever="${nickname}">
 						<input type="button" value="문의하기">
 						<input type="button" value="프로필">
 
@@ -406,8 +425,39 @@
 		</div>
 	</div>
 </div>
+
+<!-- 모달 영역 -->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">신고하기</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="reportForm" method="post" action="doreport.do">
+        	<input type="hidden" name="reported_id" value="${wdto.id}">;
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">유형:</label>
+            <select name="category_seq"></select>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">상세내용:</label>
+            <textarea class="form-control" id="content" name="content"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        <input type="submit" class="btn btn-primary" value="신고">
+      </div>
+    </div>
+  </div>
+</div>
 </body>
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="resources/js/ckeditor.js"></script>
 <script type="text/javascript">
 $(function(){
 	
