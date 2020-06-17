@@ -60,8 +60,10 @@ public class WantedServiceImp implements IWantedService{
 
 		boolean isS = wantedDaoImp.insertWanted(wdto);
 		
-		for(FileDto fdto:flist) {
-			isS = fileDaoImp.insertFile(fdto);
+		if(flist!=null && flist.size() != 0) {
+			for(FileDto fdto:flist) {
+				isS = fileDaoImp.insertFile(fdto);
+			}
 		}
 		
 		return isS;

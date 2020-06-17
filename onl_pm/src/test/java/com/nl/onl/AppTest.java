@@ -62,9 +62,9 @@ public class AppTest {
 		
 		Map<String, String> map = new HashMap<>();
 		map.put("id", "O1");
-		map.put("seq", "46");
-		
-
+		map.put("seq", "50");
+		List<WantedDto> wlist = wantedServiceImp.getWantedDetailLoginT(map);
+		System.out.println(wlist);
 //		u.getCurrLocation();
 	}
 	

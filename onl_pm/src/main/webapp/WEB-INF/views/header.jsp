@@ -188,17 +188,27 @@
 	}
 	
 	body{
-		font-family: source-han-sans-korean, sans-serif;
+		font-family: 'Noto Sans KR', sans-serif;
 		background-color: whitesmoke;
 	}
+	
+	
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+
 <script type="text/javascript" src="/onl/resources/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="/onl/resources/js/jquery-ui.min.js"></script>
+
+
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script type="text/javascript">
 
 $(function(){
+	
+
 	$.ajax({
 		url:"getcategory.do",
 		dataType:"json",
@@ -210,6 +220,7 @@ $(function(){
 			console.log("서버 통신 실패");
 		}
 	});
+
 	
 	$("body").on("mouseenter", ".bigC", function(e){
 		$(this).find(".innerUl").stop().show();
@@ -266,18 +277,18 @@ function makeCategory(cjson){
 		
 	}
 	
-	$(".categoryfield").append(categories);
+	$("#defaultC").replaceWith(categories);
 }
 
 //Adobe font
-(function(d) {
-    var config = {
-      kitId: 'fpr3sxh',
-      scriptTimeout: 3000,
-      async: true
-    },
-    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-  })(document);
+// (function(d) {
+//     var config = {
+//       kitId: 'fpr3sxh',
+//       scriptTimeout: 3000,
+//       async: true
+//     },
+//     h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+//   })(document);
 </script>
 </head>
 <body>
@@ -315,7 +326,7 @@ function makeCategory(cjson){
 		</div>
 		
 		<div class="categoryfield">
-	
+			<ul class='outUl nav justify-content-center' id="defaultC"><li>&nbsp;</li></ul>
 		</div>
 
 		<div class="clear"></div>

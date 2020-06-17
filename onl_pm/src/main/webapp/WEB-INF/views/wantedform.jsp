@@ -11,12 +11,46 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> -->
+<script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
 	var inputLoc = $("input[name='loc_name']").val();
-	
+
 	$(function() {
+		var today = new Date();
+		
+		$(".pickdate").val(today.toISOString().substring(0, 10));
+		
+		
+		
+		$( "#deadline" ).datepicker({
+			dateFormat: "yy-mm-dd",
+			altField: "input[name='deadline']",
+			changeMonth: "true",
+			changeYear: "true",
+			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+			minDate: today,
+			defaultDate: today
+	    });
+		
+		$( ".workdate" ).datepicker({
+			showButtonPanel: "true",
+			changeMonth: "true",
+			changeYear: "true",
+			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+			dateFormat: "yy-mm-dd",
+			currnetText: "오늘 날짜",
+			minDate: today
+	    });
+		
+		$("input[name='sdate']").change(function(){
+			$("input[name='edate']").datepicker("option","minDate",$(this).val());
+		});
+		$("input[name='edate']").change(function(){
+			$("input[name='sdate']").datepicker("option","maxDate",$(this).val());
+		});
+		
 		
 		setMap();
 		
@@ -27,7 +61,7 @@
 		//카테고리 셋팅
 		
 
-		console.log(categories);
+// 		console.log(categories);
 		for(var i = 0; i < categories.length; i++){
 			if(categories[i].category_name1 != " "){
 				var bigC = $("<option value='"+categories[i].code1+"'>"+categories[i].category_name1+"</option>");
@@ -51,6 +85,7 @@
 		});
 		
 		//카테고리 셋팅 끝
+
 		
 		
 		$("#getJuso").click(function(){
@@ -100,6 +135,8 @@
 		$("form").submit(function(){
 			
 			if(confirm("글을 등록하시겠습니까?")){
+
+				
 				$("input[name='stime']").val(
 					"" +$("select[name='shour']").val() +$("select[name='smin']").val()
 				);
@@ -117,6 +154,7 @@
 			}
 			
 		});
+		
 		
 	});
 	
@@ -178,7 +216,20 @@
  		width: 500px; 
  		height: 300px; 
  	} 
+ 	
+ 	.ck-editor__editable {
+ 		min-height: 500px;
+
+ 	}
+ 	
+ 	.non-visible{
+ 		display: none;
+ 	}
+
 </style>
+<link href="resources/css/jquery-ui.css" rel="stylesheet" >
+
+
 </head>
 <body>
 <div class="headerWrapper">
@@ -223,7 +274,9 @@
 				</tr>
 				<tr>
 					<th>내용</th>
-					<td><input type="text" style="width: 600px; height: 200px;" name="content" required="required"></td>
+					<td>
+						<textarea id="content" name="content"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<th>제안금액</th>
@@ -273,13 +326,14 @@
 				<tr>
 					<th>지원마감날짜</th>
 					<td>
-						<input type="date" name="deadline" style="width: 300px;">
+						<input type="text" id="deadline" class="pickdate" style="width: 300px;" required="required" >
+						<input type="date" name="deadline" class="non-visible pickdate" >
 					</td>	
 				</tr>
 				<tr>
 					<th>일하는 날</th>
 					<td>
-						시작일 <input type="date" name="sdate" style="width: 300px;"><br/>
+						시작일 <input type="text" class="pickdate workdate" name="sdate" style="width: 300px;"><br/>
 						시작시간 <select name="shour">
 							<c:forEach begin="0" end="23" varStatus="i">
 								<option value="${i.index < 10? '0':''}${i.index}">${i.index < 10? '0':''}${i.index}</option>
@@ -296,7 +350,7 @@
 				<tr>
 					<td></td>
 					<td>
-						종료일 <input type="date" name="edate" style="width: 300px;"><br/>
+						종료일 <input type="text" class="pickdate workdate" name="edate" style="width: 300px;"><br/>
 						종료시간 
 						<select name="ehour">
 							<c:forEach begin="0" end="23" varStatus="i">
@@ -340,6 +394,7 @@
 </div>
 </body>
 
+<script src="resources/js/ckeditor.js"></script>
 <script type="text/javascript">
 
 // 	var inputLocationD = $("input[name='detail']")[0].val();
@@ -348,7 +403,7 @@
 		
 		var location = "${location}";
 		
-		console.log(inputLoc);
+// 		console.log(inputLoc);
 		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		mapOption = {

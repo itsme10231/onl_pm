@@ -117,13 +117,12 @@ public class WantedController {
 		
 		List<CategoryDto> clist = wantedServiceImp.getCategory();
 		
-		JSONArray cArray = new JSONArray();
+		JSONArray cArray = null;
 		
-		for(CategoryDto cdto:clist) {
-			cArray.add(cdto);
-		}
+		cArray = onlUtil.toJArr(clist);
 		
-		
+		HttpSession session = request.getSession();
+		session.setAttribute("cArray", cArray);
 		
 		return cArray;
 	}
@@ -172,7 +171,7 @@ public class WantedController {
 	//구인글 작성 메소드
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewanted.do", method=RequestMethod.POST)
-	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub, @DateTimeFormat(pattern = "yyyy-MM-dd") Date sdate, @DateTimeFormat(pattern = "yyyy-MM-dd") Date edate, MultipartFile[] file) {
+	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub,  MultipartFile[] file) {
 		
 		boolean isS = false;
 		System.out.println(wdto.getLocation());
@@ -182,13 +181,14 @@ public class WantedController {
 
 		wdto.setId(ldto.getId());
 		wdto.setPhone(telpub+ldto.getPhone());
-		wdto.setSdate(onlUtil.toDateString(sdate));
-		wdto.setEdate(onlUtil.toDateString(edate));
+
+		wdto.setSdate(wdto.getSdate().replace("-", ""));
+		wdto.setEdate(wdto.getEdate().replace("-", ""));
 		
-		
-//		System.out.println("files: " +file);
-		
+
+		System.out.println(wdto.getContent());
 		List<FileDto> flist = onlUtil.letUpload("WANTED_POST", file, ldto.getId());
+		
 		
 		if(flist != null) {
 			//실제 수행

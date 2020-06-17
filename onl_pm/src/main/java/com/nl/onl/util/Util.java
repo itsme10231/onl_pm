@@ -285,6 +285,12 @@ public class Util {
 		for(MultipartFile file:files) {
 			
 			String originName = file.getOriginalFilename();
+			
+			if(originName == null || originName.equals("")) {
+				//파일이름이 없을경우
+				break;
+			}
+
 			String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
 			String storedName = creatUUID +originName.substring(originName.indexOf("."));
 			

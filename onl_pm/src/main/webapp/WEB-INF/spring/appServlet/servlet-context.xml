@@ -23,6 +23,8 @@
 	<resources mapping="/resources/img/**" location="/resources/img/" />
 	<resources mapping="/resources/icon/**" location="/resources/icon/" />
 	<resources mapping="/resources/uploadimg/**" location="/resources/uploadimg/" />
+	<resources mapping="/resources/css/**" location="/resources/css/" />
+	<resources mapping="/resources/font_sans/**" location="/resources/font_sans/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

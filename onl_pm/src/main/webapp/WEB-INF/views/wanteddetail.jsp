@@ -24,6 +24,9 @@
 		padding: 20px;
 		border-radius: 5px;
 		background-color: white;
+		
+		margin-top: 50px;
+		margin-bottom: 50px;
 	}
 	
 	h1{
@@ -373,8 +376,7 @@
 			<div><b>내용</b></div><br>
 			<div>
 				<c:forEach items="${wlist}" var="wdto">
-					
-					${wdto.fileDto.stored_name}
+					<img src="resources/uploadimg/${wdto.fileDto.stored_name}" style="max-width:100%; height: auto;">
 				</c:forEach>
 				<p>${wlist[0].content}</p>
 			</div>

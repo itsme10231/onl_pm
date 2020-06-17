@@ -34,7 +34,16 @@
 		<result column="APPLY" property="apply"/>
 		<result column="APPLY_C" property="apply_c"/>
 		<result column="SELECTED" property="selected"/>
-		<collection property="fileDto" resultMap="FileDtoMap" />
+		
+		<result column="F_SEQ" property="fileDto.seq"/>
+		<result column="ORIGIN_NAME" property="fileDto.origin_name"/>
+		<result column="STORED_NAME" property="fileDto.stored_name"/>
+		<result column="F_REGDATE" property="fileDto.regdate"/>
+		<result column="F_DELFLAG" property="fileDto.delflag"/>
+		<result column="BOARD_TYPE" property="fileDto.board_type"/>
+		<result column="F_ID" property="fileDto.id"/>
+		<result column="POST_SEQ" property="fileDto.post_seq"/>
+		
 		<collection property="categoryDto" resultMap="CategoryDtoMap"/>
 	</resultMap>
 	
