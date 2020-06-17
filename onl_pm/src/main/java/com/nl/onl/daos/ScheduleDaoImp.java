@@ -6,9 +6,10 @@ import javax.xml.stream.events.Namespace;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.nl.onl.dtos.WantedDto;
-
+@Repository
 public class ScheduleDaoImp implements IScheduleDao{
 
 	@Autowired
