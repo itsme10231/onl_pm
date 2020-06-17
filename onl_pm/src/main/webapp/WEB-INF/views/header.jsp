@@ -207,20 +207,24 @@
 <script type="text/javascript">
 
 $(function(){
-	
+	var cjsonLoc = "resources/common/category.json";
 
-	$.ajax({
-		url:"getcategory.do",
-		dataType:"json",
-		method:"get",
-		success:function(cjson){
-			$("#test").html(cjson);
-			makeCategory(cjson);
-		},
-		fail:function(){
-			console.log("서버 통신 실패");
-		}
+// 	$.ajax({
+// 		url:"getcategory.do",
+// 		dataType:"json",
+// 		method:"get",
+// 		success:function(cjson){
+// 			$("#test").html(cjson);
+// 			makeCategory(cjson);
+// 		},
+// 		fail:function(){
+// 			console.log("서버 통신 실패");
+// 		}
 		
+// 	});
+
+	$.getJSON(cjsonLoc, function(data){	
+		makeCategory(data);
 	});
 
 	

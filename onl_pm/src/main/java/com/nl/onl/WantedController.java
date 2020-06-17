@@ -111,6 +111,7 @@ public class WantedController {
 		return "wanteddetail";
 	}
 	
+	//카테고리 얻어오기
 	@RequestMapping(value="/getcategory.do", method=RequestMethod.GET)
 	@ResponseBody
 	public JSONArray getCategory(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
