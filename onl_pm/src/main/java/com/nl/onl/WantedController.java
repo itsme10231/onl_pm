@@ -114,16 +114,13 @@ public class WantedController {
 	//카테고리 얻어오기
 	@RequestMapping(value="/getcategory.do", method=RequestMethod.GET)
 	@ResponseBody
-	public JSONArray getCategory(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+	public JSONArray getCategory() throws UnsupportedEncodingException {
 		
 		List<CategoryDto> clist = wantedServiceImp.getCategory();
 		
 		JSONArray cArray = null;
 		
 		cArray = onlUtil.toJArr(clist);
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("cArray", cArray);
 		
 		return cArray;
 	}
@@ -331,4 +328,6 @@ public class WantedController {
 		}
 		
 	}
+	
+	
 }

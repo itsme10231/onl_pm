@@ -50,5 +50,16 @@ public class AdminDaoImp implements IAdminDao{
 		int count=sqlSession.update(nameSpace+"flagAdmin", map);
 		return count>0?true:false;
 	}
+	
+	@Override
+	public List<ReportDto> getReportCategory() {
+		return sqlSession.selectList(nameSpace+"getReportCategory");
+	}
+	
+	@Override
+	public boolean insertReport(ReportDto rdto) {
+		int count=sqlSession.update(nameSpace+"insertReport", rdto);
+		return count>0?true:false;
+	}
 
 }

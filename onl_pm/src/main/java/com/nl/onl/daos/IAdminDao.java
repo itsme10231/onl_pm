@@ -26,4 +26,7 @@ public interface IAdminDao{
 //	관리자 페이지 회원 활동/정지 기능
 	public boolean flagAdmin(Map<String, String> map);
 	
+	public boolean insertReport(ReportDto rdto);
+	
+	public List<ReportDto> getReportCategory();
 }

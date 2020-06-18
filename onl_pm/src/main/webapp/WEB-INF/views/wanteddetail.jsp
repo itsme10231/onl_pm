@@ -12,20 +12,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
+
 	.wantedDetail{
 /* 		border: solid gray 1px; */
 /* 		margin: 0 auto; */
 /* 		padding: 20px; */
 /* 		border-radius: 5px; */
 		
-		border: solid lightgray 1px;
+
 /* 		width: 800px; */
 		margin: 0 auto;
 		padding: 20px;
 		border-radius: 5px;
 		background-color: white;
 		
-		margin-top: 50px;
+		
 		margin-bottom: 50px;
 	}
 	
@@ -203,7 +204,7 @@
 		overflow: auto;
 		margin-left: 150px;
 		margin-bottom: 10px;
-		
+		margin-top: 50px;
 	}
 	
 	.apply{
@@ -222,6 +223,7 @@
 	.button{
 		margin-left: 70px;
 		margin-top: 10px;
+		both: clean;
 	}
 	
 	.button input{
@@ -234,6 +236,10 @@
 		min-width: 600px;
 	
 	}
+	
+	.ck-editor__editable {
+ 		min-height: 200px;
+ 	}
 	
 	.disable{
 		display: none;
@@ -251,24 +257,34 @@
 			  var modal = $(this)
 			  modal.find('.modal-title').text('신고하기: ' + recipient)
 			  modal.find('.modal-body input').val(recipient)
+			  
+// 			  editor.setData("<p>500자 이내로 신고내용을 적어주세요.<br/>자세하게 적어주실수록 신고내용을 처리하는데 도움이 됩니다.</p>");
 		});
+		
+
 	});
-	
 	
 	var wanted_seq = "";
 	
-	function addApply(){
-		wanted_seq = $("input[name='seq']").val();
+	function toggleApply(){
+		var wanted_seq = $("input[name='seq']").val();
+		var targetUrl = "apply.do";
+		var textValue = "지원하기";
+		
+		if($(this).hasClass("already")){
+			targetUrl = "cancelapply.do";
+			textValue = "지원취소";
+		}
 		
 		$.ajax({
-			url: "apply.do",
+			url: targetUrl,
 			method: "post",
 			data: {"wanted_seq":wanted_seq},
 			dataType: "text",
 			success: function(msg){
-				$("#apply").toggleClass("disable");
-				$("#cancelApply").toggleClass("disable");
+				$(this).toggleClass("already").val(textValue);
 				alert(msg);
+				$("#closeR").trigger("click");
 			},
 			fail: function(msg){
 				alert(msg);
@@ -277,11 +293,42 @@
 		});
 	}
 	
-	function cancelApply(){
-		wanted_seq = $("input[name='seq']").val();
+	
+	function getReportC(){
+		if($(this).hasClass("already")){
+			return;
+		}else{
+			$.ajax({
+				url: "getreportc.do",
+				method: "post",
+				dataType: "json",
+				success: function(data){
+					
+					
+					for(var i = 0; i < data.length; i++){
+						var opt = $("<option value='"+data[i].category_seq+"'>"+data[i].category_seq +". " +data[i].c_content+"</option>");
+						$("#reportC").append(opt);
+					}
+					
+					$(this).toggleClass("already");
+				},
+				fail: function(){
+					alert("error: 신고 카테고리 불러오기 실패");
+				}
+			});
+		}
+	}
+	
+	function toggleWish(){
+		var wanted_seq = $("input[name='seq']").val();
+		var targetUrl = "addwish.do";
+		
+		if($(this).hasClass("already")){
+			targetUrl = "delwish.do";
+		}
 		
 		$.ajax({
-			url: "cancelapply.do",
+			url: targetUrl,
 			method: "post",
 			data: {"wanted_seq":wanted_seq},
 			dataType: "text",
@@ -297,12 +344,34 @@
 		});
 	}
 
+	function doReport(){
+		var queryString = $("form[name='reportForm']").serialize();
+
+			$.ajax({
+				url:"doreport",
+				method: "post",
+				data: queryString,
+				dataType: "text",
+				success: function(result){
+					if(result == "success"){
+						alert("신고되었습니다. 관리자가 확인 후 처리할때까지 기다려주세요.");
+					}
+				},
+				fail: function(){
+					alert("신고 작성 실패");
+				}
+				
+			});
+
+		
+		console.log(queryString);
+	}
 </script>
 </head>
 <body>
 <div class="headerWrapper">
 	<div class="depth">
-		<div class="depth1">홈</div><div>></div><div>${wlist[0].categoryDto.category_name1}</div><div>></div><div class="depth5">${wdto.categoryDto.category_name2}</div>
+		<div class="depth1">홈</div><div>></div><div>${wlist[0].categoryDto.category_name1}</div><div>></div><div class="depth5">${wlist[0].categoryDto.category_name2}</div>
 	</div>	
 	<div class="wantedDetail">
 		<input type="hidden" name="seq" value="${wlist[0].seq}">
@@ -369,21 +438,19 @@
 				</div>	
 				<div class="apply">
 					<div>지원자</div>
-					<div>${wlist[0].apply_c}명</div>
+					<div id="applycount">${wlist[0].apply_c}명</div>
 				</div>
 				<div class="button">
 					<sec:authorize access="hasRole('ROLE_USER')">
-						<input type="button" value="신고하기" data-toggle="modal" data-target="#reportModal" data-whatever="${nickname}">
+						<input type="button" value="신고하기" data-toggle="modal" data-target="#reportModal" data-whatever="${nickname}" onclick="getReportC()">
 						<input type="button" value="문의하기">
 						<input type="button" value="프로필">
 
-						<input type="button" id="apply" class="${wlist[0].apply eq 'Y'? '':'disable'}" value="지원취소" onclick="cancelApply()">
-
-						<input type="button" id="cancelApply" class="${wlist[0].apply eq 'N'? '':'disable'}" value="지원하기" onclick="addApply()">
+						<input type="button" id="applyBto" class="${wlist[0].apply eq 'Y'? 'already':''}" value="${wlist[0].apply eq 'Y'? '지원취소':'지원하기'}" onclick="toggleApply()">
 
 					</sec:authorize>
 					<sec:authorize access="isAnonymous()">
-						<input type="button" value="로그인이 필요한 기능입니다.">
+						<p><a href='login.do'>로그인 해주세요!</a></p>
 					</sec:authorize>
 				</div>
 			</div>
@@ -407,7 +474,14 @@
 			<div id="phone">
 				<c:choose>
 					<c:when test="${fn:substring(wlist[0].phone,0,1)=='Y'}">
-						매칭시 공개
+						<c:choose>
+							<c:when test="${wlist[0].selected eq 'Y'}">
+								${fn:substring(wlist[0].phone,1,length-1)=='Y'}
+							</c:when>
+							<c:otherwise>
+								매칭시 공개
+							</c:otherwise>
+						</c:choose>
 					</c:when>
 					<c:otherwise>
 						비공개
@@ -437,21 +511,23 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="reportForm" method="post" action="doreport.do">
-        	<input type="hidden" name="reported_id" value="${wdto.id}">;
+      
+        <form name="reportForm">
+        	<input type="hidden" name="reported_id" value="${wlist[0].id}">
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">유형:</label>
-            <select name="category_seq"></select>
+            <select name="category_seq" id="reportC"></select>
           </div>
           <div class="form-group">
             <label for="message-text" class="col-form-label">상세내용:</label>
-            <textarea class="form-control" id="content" name="content"></textarea>
+            <textarea class="form-control" id="content" name="content">이 구인글의 번호: ${wlist[0].seq}<br>500자 이내로 신고내용을 적어주세요. 자세하게 적어주실수록 신고내용을 처리하는데 도움이 됩니다.</textarea>
           </div>
         </form>
+        
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <input type="submit" class="btn btn-primary" value="신고">
+        <button type="button" class="btn btn-secondary" id="closeR" data-dismiss="modal">닫기</button>
+        <input type="button" class="btn btn-primary" value="신고" onclick="doReport()">
       </div>
     </div>
   </div>
@@ -459,9 +535,7 @@
 </body>
 <script src="resources/js/ckeditor.js"></script>
 <script type="text/javascript">
-$(function(){
-	
-});
+
 </script>
 </html>
 <%@include file="footer.jsp" %>

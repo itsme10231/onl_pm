@@ -34,13 +34,20 @@
 	
 	<!-- 신고하기 -->
 	<insert id="insertReport" parameterType="ReportDto">
-	INSERT INTO REPORTLIST VALUES(
-		REPORTLIST_SEQ.NEXTVAL, #{id}, #{reported_id}, #{category_seq}, #{content}, 'WAIT', SYSDATE
-	)
+		INSERT INTO REPORTLIST VALUES(
+			REPORTLIST_SEQ.NEXTVAL, #{id}, #{reported_id}, #{category_seq}, #{content}, 'WAIT', SYSDATE
+		)
 	</insert>
+	
+	<!-- 신고카테고리 가져오기 -->
+	<select id="getReportCategory" resultMap="ReportDtoMap">
+		SELECT	CODE AS CATEGORY_SEQ, CONTENT AS C_CONTENT
+		FROM	REPORT_CATEGORY
+	</select>
+	
 
 <!-- 	신고목록보기 -->
-	<select id="getAllLi stReport" resultMap="ReportDtoMap"
+	<select id="getAllListReport" resultMap="ReportDtoMap"
 	 parameterType="String">
 	SELECT SEQ ,REGDATE ,CONTENT AS C_CONTENT ,ID ,REPORTED_ID , PROCESS
 	FROM (

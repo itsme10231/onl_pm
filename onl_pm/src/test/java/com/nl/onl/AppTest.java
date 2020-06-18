@@ -26,8 +26,10 @@ import com.nl.onl.daos.ILoginDao;
 import com.nl.onl.daos.IWantedDao;
 import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
+import com.nl.onl.dtos.ReportDto;
 import com.nl.onl.dtos.WantedDto;
 import com.nl.onl.security.OnlAuthProvider;
+import com.nl.onl.service.IAdminService;
 import com.nl.onl.service.ILoginService;
 import com.nl.onl.service.IWantedService;
 import com.nl.onl.util.FileWrite;
@@ -48,16 +50,16 @@ public class AppTest {
 	IWantedService wantedServiceImp;
 	
 	@Autowired
+	IAdminService adminServiceImp;
+	
+	@Autowired
 	Util onlUtil;
 	
 	@Test
-	public void test() throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		String s = mapper.writeValueAsString(wantedServiceImp.getCategory());
+	public void test() {
+		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		FileWrite writer = new FileWrite();
-		
-		writer.writeFile("D:\\onl_pm\\onl_pm\\src\\main\\webapp\\resources\\common\\category.json", s);
+		System.out.println(adminServiceImp.getReportCategory());
 	}
 	
 }
