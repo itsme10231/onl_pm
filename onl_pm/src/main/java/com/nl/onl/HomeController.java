@@ -20,10 +20,10 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/home.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		System.out.println("!!!");
-		return "home";
+
+		return "redirect:/";
 	}
 	
 //	@RequestMapping(value = "/", method = RequestMethod.GET)

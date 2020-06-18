@@ -15,7 +15,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
-	var inputLoc = "";
+	var defaultLoc = "${location}";
 
 	$(function() {
 		var today = new Date();
@@ -57,7 +57,12 @@
 		var width = "500";
 		var height = "600";
 		
-		var categories = ${cArray};
+		
+		var categories = "";
+		var cjsonLoc = "resources/common/category.json";
+		$.getJSON(cjsonLoc, function(result){	
+			categories = result;
+		});
 		//카테고리 셋팅
 		
 
@@ -90,7 +95,7 @@
 		
 		$("#getJuso").click(function(){
 			new daum.Postcode({
-				q: inputLoc,
+				q: $("input[name='location']").val(),
 				popupName: "주소찾기",
 				width: width,
 				height: height,
@@ -118,6 +123,7 @@
 // 	                document.getElementById("sample4_roadAddress").value = roadAddr;
 	                document.getElementById("jibun").value = data.jibunAddress;
 					
+	                defaultLoc = data.jibunAddress;
 // 	                if(roadAddr !== ''){
 // 	                    document.getElementById("jibun_detail").value = extraRoadAddr;
 // 	                } else {
@@ -132,6 +138,8 @@
 			
 			
 		});
+		
+		
 		
 		
 		$("form").submit(function(){
@@ -310,7 +318,7 @@
 					<td></td>
 					<td>		
 
-						<input type="button" value="위치 새로고침" onclick="setMap(this)">
+						<input type="button" value="위치 새로고침" onclick="setMap()">
 						<div id="map" style="width: 500px; height: 400px;"></div>
 					</td>
 				</tr>
@@ -401,9 +409,10 @@
 
 // 	var inputLocationD = $("input[name='detail']")[0].val();
 
-	function setMap(obj){
+	
+	function setMap(){
 		
-		var location = "${location}";
+		$("#map").empty();
 		
 // 		console.log(inputLoc);
 		
@@ -419,15 +428,9 @@
 		//주소-좌표 변환 객체를 생성합니다
 		var geocoder = new kakao.maps.services.Geocoder();
 		
-		if(obj!=null){	
-			location = inputLoc;
-			console.log(location);
-		}
-		
-		console.log(location);
 		
 		//주소로 좌표를 검색합니다
-		geocoder.addressSearch(location, function(result, status) {
+		geocoder.addressSearch(defaultLoc, function(result, status) {
 	
 			// 정상적으로 검색이 완료됐으면 
 			if (status === kakao.maps.services.Status.OK) {
