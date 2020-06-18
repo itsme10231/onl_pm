@@ -348,13 +348,14 @@
 		var queryString = $("form[name='reportForm']").serialize();
 
 			$.ajax({
-				url:"doreport",
+				url:"doreport.do",
 				method: "post",
 				data: queryString,
 				dataType: "text",
 				success: function(result){
 					if(result == "success"){
 						alert("신고되었습니다. 관리자가 확인 후 처리할때까지 기다려주세요.");
+						$("#closeR").trigger("click");
 					}
 				},
 				fail: function(){
