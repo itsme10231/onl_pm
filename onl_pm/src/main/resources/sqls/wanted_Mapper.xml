@@ -405,7 +405,7 @@
 	</insert>
 	
 	<!-- 찜글 삭제 -->
-	<delete id="delWishlist" parameterType="map">
+	<delete id="delWishList" parameterType="map">
 		DELETE FROM WISHLIST 
 		WHERE ID = #{id} AND WANTED_SEQ = #{wanted_seq}
 	</delete>

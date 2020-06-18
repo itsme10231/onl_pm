@@ -36,12 +36,16 @@
 	<context:component-scan base-package="com.nl.onl" />
 	
 	<!-- 웹소켓 핸들러 -->
-	<websocket:handlers>
-		<websocket:mapping handler="echoHandler" path="/chat"/>
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping handler="echoHandler" path="/echo"/>
 		<websocket:handshake-interceptors>
 			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
 		</websocket:handshake-interceptors>
+		<websocket:sockjs/>
 	</websocket:handlers>
+	
+	<beans:bean id="echoHandler" class="com.nl.onl.util.EchoHandler"/>
+	
 	
 	<!-- 
 		multipart 요청정보를 얻기 위한 객체 작업

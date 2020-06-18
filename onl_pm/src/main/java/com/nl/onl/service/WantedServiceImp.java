@@ -127,6 +127,12 @@ public class WantedServiceImp implements IWantedService{
 	}
 	
 	@Override
+	public boolean delWishList(Map<String, String> map) {
+		return wantedDaoImp.delWishList(map);
+	}
+	
+	
+	@Override
 	public List<WantedDto> getMyDoc(String id) {
 		return wantedDaoImp.getMyDoc(id);
 	}

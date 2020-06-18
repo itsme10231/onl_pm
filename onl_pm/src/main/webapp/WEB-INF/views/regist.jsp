@@ -133,14 +133,14 @@
 				
 			}else{
 				var nickname = $("input[name='nickname']").val();
-				var address_2 = $("input[name='address_2']").val();
-				var address_3 = $("input[name='address_3']").val();
+// 				var address_2 = $("input[name='address_2']").val();
+// 				var address_3 = $("input[name='address_3']").val();
 				
-				$("input[name='address_3']").val(address_2.substring(address_2.indexOf("동")+2) +" " +address_3);
-				$("input[name='address_2']").val(address_2.substring(0,address_2.indexOf("동")+1));
+// 				$("input[name='address_3']").val(address_2.substring(address_2.indexOf("동")+2) +" " +address_3);
+// 				$("input[name='address_2']").val(address_2.substring(0,address_2.indexOf("동")+1));
 				
-				console.log(address_2);
-				console.log(address_3);
+// 				console.log(address_2);
+// 				console.log(address_3);
 				
 				$("input[name='phone']").val(
 						$("input[name='phone1']").val()+"-"+

@@ -59,7 +59,11 @@ public class AppTest {
 	public void test() {
 		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		System.out.println(adminServiceImp.getReportCategory());
+		Map<String, String> map = new HashMap<>();
+		map.put("id", "O1");
+		map.put("wanted_seq", "50");
+		
+		wantedServiceImp.delWishList(map);
 	}
 	
 }

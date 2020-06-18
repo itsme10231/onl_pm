@@ -119,6 +119,12 @@ public class WantedDaoImp implements IWantedDao{
 		return isS > 0 ? true:false;
 	}
 	
+	@Override
+	public boolean delWishList(Map<String, String> map) {
+		int isS = sqlSession.insert(nameSpace +"delWishList", map);
+		return isS > 0 ? true:false;
+	}
+	
 
 	
 	@Override

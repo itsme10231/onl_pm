@@ -170,7 +170,7 @@ public class WantedController {
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="writewanted.do", method=RequestMethod.POST)
 	public String writeWanted(Model model, Authentication auth, WantedDto wdto, String telpub,  MultipartFile[] file) {
-		
+	
 		boolean isS = false;
 		System.out.println(wdto.getLocation());
 		wdto.setLocation(wdto.getLocation().trim());
@@ -279,54 +279,61 @@ public class WantedController {
 	@RequestMapping(value="addwish.do", method=RequestMethod.POST)
 	@ResponseBody
 	@Secured({"ROLE_USER"})
-	public String addWish(Model model, Authentication auth, String seq, HttpServletRequest request) {
+	public String addWish(Model model, Authentication auth, String wanted_seq, HttpServletRequest request) {
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
-		WishDto wdto = new WishDto(0, ldto.getId(), Integer.parseInt(seq));
+		WishDto wdto = new WishDto(0, ldto.getId(), Integer.parseInt(wanted_seq));
 
-		if(wantedServiceImp.insertWish(wdto)) {
-			
-			HttpSession session = request.getSession();
-			List<String> wishlist = (List<String>)session.getAttribute("wishlist");
-			wishlist.add(seq);
-			
-			session.setAttribute("wishlist", wishlist);
-			
-			return "success";
-			
-		}else {
-			return "fail";
-		}
+//		if(wantedServiceImp.insertWish(wdto)) {
+//			
+//			HttpSession session = request.getSession();
+//			List<String> wishlist = (List<String>)session.getAttribute("wishlist");
+//			wishlist.add(seq);
+//			
+//			session.setAttribute("wishlist", wishlist);
+//			
+//			return "success";
+//			
+//		}else {
+//			return "fail";
+//		}
+		
+		return wantedServiceImp.insertWish(wdto) ? "success" : "fail";
 		
 	}
 	
 	@RequestMapping(value="delwish.do", method=RequestMethod.POST)
 	@ResponseBody
 	@Secured({"ROLE_USER"})
-	public String delWish(Model model, Authentication auth, String seq, HttpServletRequest request) {
+	public String delWish(Model model, Authentication auth, String wanted_seq, HttpServletRequest request) {
 		
+		Map<String, String> map = new HashMap<>();
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
 		
-		if(myPageServiceImp.delWishlist(seq)) {
-			HttpSession session = request.getSession();
-			List<String> wishlist = (List<String>)session.getAttribute("wishlist");
-			
-			int wIndex = 0;
-			for(String s:wishlist) {
-				if(s.equals(seq)) {
-					wishlist.remove(wIndex);
-				}
-				wIndex++;
-			}
-			
-			session.setAttribute("wishlist", wishlist);
-			
-			return "success";
-			
-		}else {
-			
-			return "fail";
-		}
+		map.put("id", ldto.getId());
+		map.put("wanted_seq", wanted_seq);
 		
+//		if(myPageServiceImp.delWishlist(seq)) {
+//			HttpSession session = request.getSession();
+//			List<String> wishlist = (List<String>)session.getAttribute("wishlist");
+//			
+//			int wIndex = 0;
+//			for(String s:wishlist) {
+//				if(s.equals(seq)) {
+//					wishlist.remove(wIndex);
+//				}
+//				wIndex++;
+//			}
+//			
+//			session.setAttribute("wishlist", wishlist);
+//			
+//			return "success";
+//			
+//		}else {
+//			
+//			return "fail";
+//		}
+		return wantedServiceImp.delWishList(map) ? "success" : "fail";
 	}
 	
 	

@@ -14,10 +14,10 @@
 <style type="text/css">
 
 	.wantedDetail{
-/* 		border: solid gray 1px; */
+ 		border: solid lightgray 1px; 
 /* 		margin: 0 auto; */
 /* 		padding: 20px; */
-/* 		border-radius: 5px; */
+ 		border-radius: 5px; 
 		
 
 /* 		width: 800px; */
@@ -43,11 +43,11 @@
 		height: 25px;
 		position: absolute;
 		right: 223px;
-		top: 115px;
+		top: 110px;
 	}
 	
 	.sos{
-		width: 25px;
+		width: 50px;
 		height: 25px;
 		position: absolute;
 		right: 716px;
@@ -246,6 +246,7 @@
 	}
 </style>
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e887771f798648cba38327947f996ee&libraries=services"></script>
 <script type="text/javascript">
 	
 	$(function(){
@@ -261,19 +262,21 @@
 // 			  editor.setData("<p>500자 이내로 신고내용을 적어주세요.<br/>자세하게 적어주실수록 신고내용을 처리하는데 도움이 됩니다.</p>");
 		});
 		
-
+		setMap();
 	});
 	
 	var wanted_seq = "";
 	
 	function toggleApply(){
 		var wanted_seq = $("input[name='seq']").val();
-		var targetUrl = "apply.do";
-		var textValue = "지원하기";
 		
-		if($(this).hasClass("already")){
+		
+		var targetUrl = "apply.do";
+		var textValue = "지원취소";
+		
+		if($("#applyBto").hasClass("already")){
 			targetUrl = "cancelapply.do";
-			textValue = "지원취소";
+			textValue = "지원하기";
 		}
 		
 		$.ajax({
@@ -282,9 +285,8 @@
 			data: {"wanted_seq":wanted_seq},
 			dataType: "text",
 			success: function(msg){
-				$(this).toggleClass("already").val(textValue);
+				$("#applyBto").toggleClass("already").val(textValue);
 				alert(msg);
-				$("#closeR").trigger("click");
 			},
 			fail: function(msg){
 				alert(msg);
@@ -322,9 +324,13 @@
 	function toggleWish(){
 		var wanted_seq = $("input[name='seq']").val();
 		var targetUrl = "addwish.do";
+		var heartImg = "resources/icon/heart_fill.png";
+		var textMsg = "위시리스트에 추가되었습니다.";
 		
-		if($(this).hasClass("already")){
+		if($("#wishBto").hasClass("already")){
 			targetUrl = "delwish.do";
+			heartImg = "resources/icon/heart_outline.png";
+			textMsg = "위시리스트에서 삭제되었습니다.";
 		}
 		
 		$.ajax({
@@ -333,9 +339,13 @@
 			data: {"wanted_seq":wanted_seq},
 			dataType: "text",
 			success: function(msg){
-				$("#apply").toggleClass("disable");
-				$("#cancelApply").toggleClass("disable");
-				alert(msg);
+				
+				$("#wishBto").attr("src", heartImg).toggleClass("already");
+				
+				if(msg == "success"){
+					alert(textMsg);
+
+				}
 			},
 			fail: function(msg){
 				alert(msg);
@@ -345,12 +355,21 @@
 	}
 
 	function doReport(){
-		var queryString = $("form[name='reportForm']").serialize();
-
-			$.ajax({
+		
+		var ckeditorVal = $(".ck-editor__editable").val();
+		
+		if(ckeditorVal == null || ckeditorVal == ""){
+			alert("신고내용은 한글자 이상 작성해야 합니다.");
+		}else{
+			
+			var option = {
 				url:"doreport.do",
 				method: "post",
-				data: queryString,
+				data: {
+					"category_seq" : $("select[name='category_seq']").val(),
+					"reported_id" : $("input[name='reported_id']").val(),
+					"content" : ckeditorVal
+				},
 				dataType: "text",
 				success: function(result){
 					if(result == "success"){
@@ -360,9 +379,12 @@
 				},
 				fail: function(){
 					alert("신고 작성 실패");
-				}
-				
-			});
+				}	
+					
+			};
+			
+		}
+			
 
 		
 		console.log(queryString);
@@ -381,8 +403,20 @@
 			<div class="process1">
 				<div class="wanted">지원  ></div><div class="process">진행  ></div><div class="complete">완료</div>
 			</div>
-			<img alt="찜하기아이콘" src="resources/icon/WhiteHeart.jpg" class="wish">
-			<img alt="긴급" src="resources/icon/emergency.png" class="sos"><b class="sosText">긴급</b>
+			<div class="wish">
+				<img alt="찜하기" width="30px" src="resources/icon/${wlist[0].wishlist eq 'Y' ? 'heart_fill.png':'heart_outline.png'}" class="${wlist[0].wishlist eq 'Y' ? 'already':''}" id="wishBto" onclick="toggleWish()">
+			</div>
+			<div class="sos">
+				<c:choose>
+					<c:when test="${sosflag eq 'Y'}">
+						<img alt="긴급" src="resources/icon/emergency.png" width="25px"><b>긴급</b>
+					</c:when>
+					<c:otherwise>
+						<b>일반</b>
+					</c:otherwise>
+				</c:choose>
+			</div>
+			
 			<div class=views>조회수
 				<div>${wlist[0].views}</div>
 			</div>
@@ -496,7 +530,7 @@
 			<div><b>위치</b></div><br>
 			<div>${wlist[0].location}&nbsp;${wlist[0].loc_detail}</div>
 			<div><P>위치 설명(생략가능)</P></div>
-			<div id="map" style="width: 300px; height: 300px;"></div>
+			<div id="map" style="width: 780px; height: 300px;"></div>
 		</div>
 	</div>
 </div>
@@ -521,7 +555,7 @@
           </div>
           <div class="form-group">
             <label for="message-text" class="col-form-label">상세내용:</label>
-            <textarea class="form-control" id="content" name="content">이 구인글의 번호: ${wlist[0].seq}<br>500자 이내로 신고내용을 적어주세요. 자세하게 적어주실수록 신고내용을 처리하는데 도움이 됩니다.</textarea>
+            <textarea class="form-control" id="content" name="content">이 구인글의 번호: ${wlist[0].seq}<br>500자 이내로 신고내용을 적어주세요.<br> 자세하게 적어주실수록 신고내용을 처리하는데 도움이 됩니다.</textarea>
           </div>
         </form>
         
@@ -536,7 +570,52 @@
 </body>
 <script src="resources/js/ckeditor.js"></script>
 <script type="text/javascript">
-
+function setMap(){
+	
+		var defaultLoc = "${wlist[0].location}";
+	
+			console.log(defaultLoc);
+		
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		mapOption = {
+		    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+		    level: 3 // 지도의 확대 레벨
+		};  
+	
+		//지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		
+		//주소-좌표 변환 객체를 생성합니다
+		var geocoder = new kakao.maps.services.Geocoder();
+		
+		
+		//주소로 좌표를 검색합니다
+		geocoder.addressSearch(defaultLoc, function(result, status) {
+	
+			// 정상적으로 검색이 완료됐으면 
+			if (status === kakao.maps.services.Status.OK) {
+			
+				var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+				
+				// 결과값으로 받은 위치를 마커로 표시합니다
+				var marker = new kakao.maps.Marker({
+				    map: map,
+				    position: coords
+				});
+		
+				// 인포윈도우로 장소에 대한 설명을 표시합니다
+				var infowindow = new kakao.maps.InfoWindow({
+				    content: '<div style="width:150px;text-align:center;padding:6px 0;">'+result[0].address_name+'</div>'
+				});
+				infowindow.open(map, marker);
+				
+				// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+				map.setCenter(coords);
+		
+			}
+			
+		});
+	}
 </script>
 </html>
 <%@include file="footer.jsp" %>

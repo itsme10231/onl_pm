@@ -329,7 +329,7 @@
 				<tr>
 					<th>연락처</th>
 					<td>
-						<input type="radio" name="telpub" value="N">비공개 &nbsp;&nbsp; &nbsp;&nbsp;
+						<input type="radio" name="telpub" value="N" checked>비공개 &nbsp;&nbsp; &nbsp;&nbsp;
 						<input type="radio" name="telpub" value="Y">매칭시 공개
 					</td>
 				</tr>

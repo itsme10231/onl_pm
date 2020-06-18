@@ -55,4 +55,6 @@ public interface IWantedDao {
 	public boolean deleteReview(String seq);
 	
 	public boolean insertWish(WishDto wdto);
+	
+	public boolean delWishList(Map<String, String> map);
 }
