@@ -1,5 +1,6 @@
 package com.nl.onl.dtos;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -10,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class LoginDto implements UserDetails {
+public class LoginDto implements UserDetails, Principal {
 	private String id;
 	private String password;
 	private String name;

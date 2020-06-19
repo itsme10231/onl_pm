@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nl.onl.daos.IChatDao;
 import com.nl.onl.dtos.ChatDto;
 import com.nl.onl.dtos.ChatlistDto;
 
+@Service
 public class ChatServiceImp implements IChatService{
 
 	@Autowired

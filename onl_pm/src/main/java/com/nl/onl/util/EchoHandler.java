@@ -10,6 +10,7 @@ import java.util.Set;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -40,30 +41,41 @@ public class EchoHandler extends TextWebSocketHandler {
 		//서버에 접속이 성공 했을때
 		@Override
 		public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-			LoginDto ldto = (LoginDto)session.getPrincipal();
+			
+			UsernamePasswordAuthenticationToken ut = (UsernamePasswordAuthenticationToken)session.getPrincipal();
+			LoginDto ldto = (LoginDto)ut.getPrincipal();
 			String id = ldto.getId();
 			
 			loginSessionsMap.put(id, session);
+
 			
+
+			System.out.println("웹소켓 연결 성공");
 		}
 		
 		//소켓에 메세지를 보냈을때
 		@Override
 		protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 			
+			UsernamePasswordAuthenticationToken ut = (UsernamePasswordAuthenticationToken)session.getPrincipal();
+			LoginDto ldto = (LoginDto)ut.getPrincipal();
+			String id1 = ldto.getId();
+			
+			
+			
 			String msg = message.getPayload();
+//			System.out.println(msg);
 			
 			JSONParser parser = new JSONParser();
 			JSONObject jObj = (JSONObject)parser.parse(msg);
 			
-			String id1 = (String)jObj.get("id");
 			String id2 = (String)jObj.get("receive_id");
 			String wanted_seq = (String)jObj.get("wanted_seq");
 			
 			String roomId = makeRoomId(id1, id2);
 			ChatRoom thisRoom = chatRoomMap.get(roomId);
 			
-			System.out.println(jObj);
+//			System.out.println(jObj);
 			
 			if(((String)jObj.get("type")).equals("enter")) {
 				
@@ -74,7 +86,7 @@ public class EchoHandler extends TextWebSocketHandler {
 				}
 				
 				checkedIn.put(id1, roomId);
-				
+//				System.out.println("Room checkin success");
 				
 			}else if(((String)jObj.get("type")).equals("msgSend")){
 				//메시지를 보냈을때
@@ -99,7 +111,8 @@ public class EchoHandler extends TextWebSocketHandler {
 		@Override
 		public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 			
-			LoginDto ldto = (LoginDto)session.getPrincipal();
+			UsernamePasswordAuthenticationToken ut = (UsernamePasswordAuthenticationToken)session.getPrincipal();
+			LoginDto ldto = (LoginDto)ut.getPrincipal();
 			String id = ldto.getId();
 			
 			String roomKey = checkedIn.get(id);
@@ -112,7 +125,7 @@ public class EchoHandler extends TextWebSocketHandler {
 			
 			checkedIn.remove(id);
 			loginSessionsMap.remove(id);
-
+//			System.out.println("Room checkout success");
 		}
 		
 		
