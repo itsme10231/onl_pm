@@ -6,9 +6,10 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ import com.nl.onl.security.OnlAuthProvider;
 import com.nl.onl.service.IAdminService;
 import com.nl.onl.service.ILoginService;
 import com.nl.onl.service.IWantedService;
+import com.nl.onl.util.ChatRoom;
 import com.nl.onl.util.FileWrite;
 import com.nl.onl.util.Util;
 
@@ -57,13 +59,18 @@ public class AppTest {
 	
 	@Test
 	public void test() {
-		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
+//		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		Map<String, String> map = new HashMap<>();
-		map.put("id", "O1");
-		map.put("wanted_seq", "50");
+		Map<String, ChatRoom> map = new HashMap<>();
 		
-		wantedServiceImp.delWishList(map);
+		map.put("test", new ChatRoom());
+		
+		ChatRoom test = map.get("test");
+		test.setUserId("kkk");
+		
+		System.out.println(map.get("test").getId1());
+		System.out.println(test.getId1());
+//		wantedServiceImp.delWishList(map);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.nl.onl.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,29 +14,29 @@ public class ChatServiceImp implements IChatService{
 
 	@Autowired
 	private IChatDao chatDaoImp;
+	
 	@Override
-	public ChatDto getMessage(Map<String, String> map) {
-		
+	public ChatDto getMessageT(Map<String, String> map) {
+		chatDaoImp.checkChkflag(map);
 		return chatDaoImp.getMessage(map);
 	}
 
-	@Override
-	public boolean checkChkflag(Map<String, String> map) {
-		
-		return chatDaoImp.checkChkflag(map);
-	}
 
 	@Override
 	public boolean sendMessage(ChatDto cdto) {
+		Map<String, String> map = new HashMap<>();
+		map.put("id", cdto.getSend_id());
+		map.put("target_id", cdto.getReceive_id());
 		
-		return chatDaoImp.sendMessage(cdto);
+		String result = chatDaoImp.checkDelflag(map);
+		
+		if(result == null || result.equals("")) {
+			return false;
+		}else {
+			return chatDaoImp.sendMessage(cdto);
+		}
 	}
 
-	@Override
-	public String checkDelflag(Map<String, String> map) {
-		
-		return chatDaoImp.checkDelflag(map);
-	}
 
 	@Override
 	public List<ChatlistDto> chatList(Map<String, String> map) {

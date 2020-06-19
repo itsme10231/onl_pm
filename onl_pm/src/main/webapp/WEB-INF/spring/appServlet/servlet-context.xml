@@ -72,6 +72,7 @@
 			<tx:method name="pickSelectorT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="insertWantedT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="updateWantedT" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="getMessageT" propagation="REQUIRED" rollback-for="Exception"/>
 		</tx:attributes>
 	</tx:advice>
 	
