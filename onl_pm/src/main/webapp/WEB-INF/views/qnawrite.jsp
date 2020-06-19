@@ -86,7 +86,7 @@ th {
 </head>
 <body>
 <div style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-		<h2>QNA 작성</h2>
+		<h2><a href="qnalist.do?pnum=1">QNA 작성</a></h2>
 		<form action="qnawrite.do" method="post">
 		<table>
 			<tr>

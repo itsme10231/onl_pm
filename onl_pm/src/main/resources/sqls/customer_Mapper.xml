@@ -21,9 +21,9 @@
 	 parameterType="String">
 		 SELECT a.SEQ,a.ID, a.CATEGORY_NAME,a.TITLE,a.PROCESS,a.REGDATE
 			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
-				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME 
+				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME,q.REF
 					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE ) a
-			    WHERE CEIL(RN/5)=#{pnum}
+			    WHERE CEIL(RN/5)=#{pnum} AND a.REF=a.SEQ
 	</select>
 	
 <!-- 	QNA페이징 -->
@@ -34,7 +34,7 @@
 <!-- 	QNA상세보기 -->
 	<select id="detailQna" resultMap="QnaDtoMap"
 		 parameterType="String">
-		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE
+		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE , q.QNA_CODE
 		FROM QNA q ,QNA_CATEGORY c
 		WHERE q.QNA_CODE = c.QNA_CODE AND SEQ=#{seq}
 		</select>
@@ -49,14 +49,20 @@
 <!-- 	QNA수정 -->
 	<update id="updateQna" parameterType="QnaDto">
 		UPDATE QNA SET QNA_CODE=#{qna_code},TITLE=#{title},CONTENT=#{content}
-		, REGDATE=SYSDATE WHERE SEQ=#{seq} 
+		, REGDATE=SYSDATE WHERE SEQ=#{seq}
 	</update>
 	
 <!-- 	QNA삭제 -->
 	<delete id="deleteQna" parameterType="String">
-		DELETE FROM qna WHERE SEQ =#{seq}
+		DELETE FROM QNA WHERE SEQ =#{seq}
 	
 	</delete>
+
+	<insert id="replyQnaInsert" parameterType="QnaDto">
+		INSERT INTO QNA
+		VALUES (QNA_SEQ.nextval,#{qna_code},#{title},#{content},#{id},SYSDATE,
+		(SELECT REF FROM QNA WHERE SEQ=#{seq}), 'COMPLETE')
+	</insert>
 	
 	<resultMap type="com.nl.onl.dtos.NoticeDto" id="NoticeDtoMap">
 		<result property="seq" column="SEQ" />

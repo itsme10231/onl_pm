@@ -30,7 +30,7 @@ public class CustomDaoImp implements ICustomDao{
 
 	@Override
 	public QnaDto detailQna(String seq) {
-		return sqlSession.selectOne(nameSpace+"getAllListQna", seq);
+		return sqlSession.selectOne(nameSpace+"detailQna", seq);
 	}
 
 	@Override

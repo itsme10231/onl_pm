@@ -170,12 +170,12 @@ th {
 				<th width="150px;">작성일</th>
 			</tr>
 
-			<c:forEach items="${list}" var="dto">
+			<c:forEach items="${list}" var="qdto">
 				<tr>
-					<td>${dto.category_name}</td>
-					<td><a href="qnadetail.do?seqparam=${dto.seq}">${dto.title}</a></td>
-					<td>${dto.process}</td>
-					<td><f:formatDate pattern="yyyy-MM-dd" value="${dto.regdate}"/></td>
+					<td>${qdto.category_name}</td>
+					<td><a href="qnadetail.do?seqparam=${qdto.seq}">${qdto.title}</a></td>
+					<td>${qdto.process}</td>
+					<td><f:formatDate pattern="yyyy-MM-dd" value="${qdto.regdate}"/></td>
 				</tr>
 			</c:forEach>
 <!-- 			<tr> -->

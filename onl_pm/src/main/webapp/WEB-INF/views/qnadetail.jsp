@@ -1,11 +1,25 @@
+<%@page import="com.nl.onl.dtos.QnaDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
 <%response.setContentType("text/html; charset=utf-8"); %>
+<%@include file="header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+		function updateQna(seq){
+			location.href="updateQna.do?seq="+seq;
+		}
+		function deleteQna(seq){
+			var chk = confirm("정말 삭제하시겠습니까?");
+			if (chk) {
+				location.href="deleteQna.do?seq="+seq;
+			}
+		}
+</script>
+
 <style type="text/css">
 h2 {
 	margin-left: 450px;
@@ -72,24 +86,29 @@ th {
 	border: 1px solid #1b5ac2;
 	text-align: center;
 }
+
+#replyForm{display: none;}
+
+
 </style>
 </head>
 <body>
+
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-		<h2>QNA 상세보기</h2>
+		<h2><a href="qnalist.do?pnum=1">QNA 상세보기</a></h2>
 		<table>
 			<tr>
 				<th height="40px">문의유형</th>
-				<td height="40px">${dto.qna_code}</td>
+				<td height="40px">${qdto.category_name}</td>
 			</tr>
 			<tr>
 				<th height="40px">제목</th>
-				<td height="40px">${dto.title}</td>
+				<td height="40px">${qdto.title}</td>
 			</tr>
 			<tr>
 				<th height="230px">문의내용</th>
-				<td><textarea class="form-control" rows="10" cols="60" readonly="readonly">${dto.content}</textarea></td>
+				<td><textarea class="form-control" rows="10" cols="60" readonly="readonly">${qdto.content}</textarea></td>
 			</tr>
 			<tr>
 				<th height="40px">첨부파일</th>
@@ -97,20 +116,46 @@ th {
 			</tr>
 			<tr>
 				<th height="40px">작성자</th>
-				<td height="40px">${dto.id}</td>
+				<td height="40px">${qdto.id}</td>
 			</tr>
 		</table>
 		<div id="div2">
-			<button class="button2" onclick="deleteQna(${dto.seq})">삭제</button>
+			<button class="button2" onclick="deleteQna(${qdto.seq})">삭제</button>
 			</div>
 		<div class="div3">
-			<button class="button2" onclick="updateQna(${dto.seq})">수정</button>
+			<button class="button2" onclick="updateQna(${qdto.seq})">수정</button>
 			</div>
 		<div class="div3">
 			<button class="button2">답글</button>
 			</div>
 
-
+<div id="replyForm">
+	<h1>답글추가하기</h1>
+	<form action="replyBoard.do" method="post">
+		<input type="hidden" name="seq" value="${dto.seq}"/>
+		<table class="table table-striped">
+			<tr>
+				<th>아이디</th>
+				<td><input class="form-control" type="text" name="id" required="required"/></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td><input class="form-control" type="text" name="title" required="required"/></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea class="form-control" rows="10" cols="60" name="content" required="required"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="답글등록"/>
+				</td>
+			</tr>
+		</table>
+	</form>
 	</div>
+</div>
+
 </body>
 </html>
+<%@include file="footer.jsp"%>
