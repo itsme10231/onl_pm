@@ -1,11 +1,11 @@
 package com.nl.onl.util;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+
+
 import java.util.Map;
-import java.util.Set;
+
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -91,6 +91,8 @@ public class EchoHandler extends TextWebSocketHandler {
 			}else if(((String)jObj.get("type")).equals("msgSend")){
 				//메시지를 보냈을때
 				String msgText = (String)jObj.get("msg");
+				ChatDto cdto = new ChatDto(0, id2, id1, msgText, null, null, "N", Integer.parseInt(wanted_seq));
+				
 				
 				//나와의 채팅방에 들어와 있는지
 				if(thisRoom.isIn()) {
@@ -98,11 +100,12 @@ public class EchoHandler extends TextWebSocketHandler {
 					
 					if(ws != null) {
 						ws.sendMessage(new TextMessage(msgText));
+						cdto.setChkflag("Y");
 					}
 				}
 				
 				//최종적으로는 DB에 채팅로그 저장
-				chatServiceImp.sendMessage(new ChatDto(0, id2, id1, msgText, null, null, "N", Integer.parseInt(wanted_seq)));
+				chatServiceImp.sendMessage(cdto);
 			}
 			
 		}

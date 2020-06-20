@@ -84,6 +84,7 @@ public class WantedController {
 	@RequestMapping(value="wanted.do", method=RequestMethod.GET)
 	public String getWantedDetail(Model model, Authentication auth, String seq) {
 		System.out.println(auth == null? true: false);
+		List<WantedDto> wlist = new ArrayList<>();
 		
 		if(seq == null) {
 			seq = "0";
@@ -98,12 +99,12 @@ public class WantedController {
 			map.put("seq", seq);
 			
 
-			List<WantedDto> wlist = wantedServiceImp.getWantedDetailLoginT(map);
+			wlist = wantedServiceImp.getWantedDetailLoginT(map);
 			model.addAttribute("wlist",wlist);
 			System.out.println(wlist);
 		}else{
 			
-			List<WantedDto> wlist = wantedServiceImp.getWantedDetailT(seq);
+			wlist = wantedServiceImp.getWantedDetailT(seq);
 			model.addAttribute("wlist",wlist);
 			
 		}
