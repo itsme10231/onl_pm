@@ -61,15 +61,11 @@ public class AppTest {
 	public void test() {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		Map<String, ChatRoom> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		
-		map.put("test", new ChatRoom());
-		
-		ChatRoom test = map.get("test");
-		test.setUserId("kkk");
-		
-		System.out.println(map.get("test").getId1());
-		System.out.println(test.getId1());
+		map.put("id", "o132435456");
+		map.put("seq", "60");
+		wantedServiceImp.getWantedDetailLoginT(map);
 //		wantedServiceImp.delWishList(map);
 	}
 	

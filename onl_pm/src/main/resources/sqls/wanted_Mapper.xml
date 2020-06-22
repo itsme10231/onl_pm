@@ -242,7 +242,7 @@
 					ELSE 'N'
 				END AS APPLY,
 				CASE 
-					WHEN EXISTS (SELECT 1 FROM APPLYLIST a WHERE a.ID = #{id} AND a.SEQ = wp.SELECTOR ) THEN 'Y'
+					WHEN wp.SELECTOR = #{id} THEN 'Y'
 					ELSE 'N'
 				END AS SELECTED,
 				CASE

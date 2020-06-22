@@ -86,7 +86,7 @@ public class WantedServiceImp implements IWantedService{
 	}
 
 	@Override
-	public boolean insertApply(ApplyDto adto) {
+	public boolean insertApplyT(ApplyDto adto) {
 		return wantedDaoImp.insertApply(adto);
 	}
 

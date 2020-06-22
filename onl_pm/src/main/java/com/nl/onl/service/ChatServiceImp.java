@@ -18,24 +18,25 @@ public class ChatServiceImp implements IChatService{
 	private IChatDao chatDaoImp;
 	
 	@Override
-	public ChatDto getMessageT(Map<String, String> map) {
+	public List<ChatDto> getMessageT(Map<String, String> map) {
 		chatDaoImp.checkChkflag(map);
 		return chatDaoImp.getMessage(map);
 	}
 
 
 	@Override
-	public boolean sendMessage(ChatDto cdto) {
+	public boolean sendMessageT(ChatDto cdto) {
 		Map<String, String> map = new HashMap<>();
 		map.put("id", cdto.getSend_id());
 		map.put("target_id", cdto.getReceive_id());
+		map.put("wanted_seq", cdto.getWanted_seq()+"");
 		
 		String result = chatDaoImp.checkDelflag(map);
 		
 		if(result == null || result.equals("")) {
-			return false;
-		}else {
 			return chatDaoImp.sendMessage(cdto);
+		}else {
+			return false;
 		}
 	}
 

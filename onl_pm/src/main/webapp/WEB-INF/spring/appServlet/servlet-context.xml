@@ -73,6 +73,10 @@
 			<tx:method name="insertWantedT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="updateWantedT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="getMessageT" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="sendMessageT" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="insertApplyT" propagation="REQUIRED" rollback-for="Exception"/>
+<!-- 			<tx:method name="insertQnaT" propagation="REQUIRED" rollback-for="Exception"/> -->
+			<tx:method name="updateAgreeT" propagation="REQUIRED" rollback-for="Exception"/>
 		</tx:attributes>
 	</tx:advice>
 	

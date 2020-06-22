@@ -5,25 +5,26 @@
 	
 <!-- 메시지 받아오기(현재 접속한 유저는 onltest1) -->
 	<select id="getMessage" resultType="ChatDto" parameterType="map">	
-		SELECT 	c.SEQ , c.CONTENT , c.CHATDATE, c.CHKFLAG , m1.NICKNAME as r_nickname, m2.NICKNAME as s_nickname
+		SELECT 	c.SEQ , c.CONTENT , c.CHATDATE, c.CHKFLAG , m1.NICKNAME as r_nickname, m2.NICKNAME as s_nickname, c.SEND_ID
 		FROM 	CHAT_LOG c, "MEMBER" m1, "MEMBER" m2
-		WHERE 	c.RECEIVE_ID = m1.ID AND
-				c.SEND_ID = m2.ID
-				(c.RECEIVE_ID = #{receive_id} AND c.SEND_ID = #{send_id}) OR 
-				(c.RECEIVE_ID = #{send_id} AND c.SEND_ID = #{receive_id}) AND 
+		WHERE 	((c.RECEIVE_ID = #{id} AND c.SEND_ID = #{target_id}) OR 
+				(c.RECEIVE_ID = #{target_id} AND c.SEND_ID = #{id})) AND 
+				c.RECEIVE_ID = m1.ID AND
+				c.SEND_ID = m2.ID AND
+				c.WANTED_SEQ = #{wanted_seq} AND
 				c.DELFLAG = 'N' 
 		ORDER BY c.CHATDATE ASC
 	</select>
 	
 <!-- 메시지 받아오면 chkflag 'Y'로 변경 -->
 	<update id="checkChkflag" parameterType="map">	
-		UPDATE CHAT_LOG SET CHKFLAG = 'Y' WHERE RECEIVE_ID = #{receive_id} AND SEND_ID = #{send_id} AND CHKFLAG = 'N'
+		UPDATE CHAT_LOG SET CHKFLAG = 'Y' WHERE RECEIVE_ID = #{id} AND SEND_ID = #{target_id} AND CHKFLAG = 'N' AND WANTED_SEQ = #{wanted_seq}
 	</update>
 	
 <!-- 메시지 보내기	 -->
 	<insert id="sendMessage" parameterType="ChatDto">
 		INSERT INTO CHAT_LOG VALUES
-		(chat_log_SEQ.nextval, #{receive_id}, #{send_id}, #{content}, sysdate, 'N', #{delflag}, #{wanted_seq})
+		(chat_log_SEQ.nextval, #{receive_id}, #{send_id}, #{content}, sysdate, #{chkflag}, #{delflag}, #{wanted_seq})
 	</insert>
 	
 <!-- 	받는 회원이 탈퇴했거나 정지상태거나 블랙리스트에 등록되었을 경우 -->

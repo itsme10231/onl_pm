@@ -35,7 +35,7 @@ public interface IWantedService {
 	public boolean deleteWanted(String seq);
 	
 	
-	public boolean insertApply(ApplyDto adto);
+	public boolean insertApplyT(ApplyDto adto);
 	
 	//트랜잭션 처리
 	public boolean deleteApplyT(Map<String, String> map);

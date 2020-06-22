@@ -9,7 +9,7 @@ import com.nl.onl.dtos.ChatlistDto;
 public interface IChatDao {
 
 //	메시지 받아오기
-	public ChatDto getMessage(Map<String, String> map);
+	public List<ChatDto> getMessage(Map<String, String> map);
 	
 //	메시지 받아오면 chkfalg 'Y'로 변경
 	public boolean checkChkflag(Map<String, String> map);

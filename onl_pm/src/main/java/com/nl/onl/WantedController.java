@@ -234,7 +234,7 @@ public class WantedController {
 	public String insertApply(Model model, Authentication auth, String wanted_seq) {
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
-		boolean isS = wantedServiceImp.insertApply(new ApplyDto(0, ldto.getId(), Integer.parseInt(wanted_seq), null, 0, null));
+		boolean isS = wantedServiceImp.insertApplyT(new ApplyDto(0, ldto.getId(), Integer.parseInt(wanted_seq), null, 0, null));
 		String msg = "";
 		
 		if(isS) {

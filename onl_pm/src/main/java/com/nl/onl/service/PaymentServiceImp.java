@@ -27,7 +27,7 @@ public class PaymentServiceImp implements IPaymentService{
 	}
 
 	@Override
-	public boolean updateAgree(Map<String, String> map) {
+	public boolean updateAgreeT(Map<String, String> map) {
 		//둘다 Y가 되었을 경우 ONL계정으로부터 출금결제 발생, 받는 이에게 거래기록 insert
 		return paymentDaoImp.updateAgree(map);
 	}

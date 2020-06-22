@@ -20,6 +20,7 @@
 		<typeAlias type="com.nl.onl.dtos.WishDto" alias="WishDto"/>
 		<typeAlias type="com.nl.onl.dtos.UserlistDto" alias="UserlistDto"/>
 		<typeAlias type="com.nl.onl.dtos.LocDto" alias="LocDto"/>
+		<typeAlias type="com.nl.onl.dtos.NotifyDto" alias="NotifyDto"/>
 		
 		
 		<typeAlias type="com.nl.onl.dtos.SearchDto" alias="SearchDto"/>
@@ -36,6 +37,7 @@
 		<mapper resource="./sqls/chat_Mapper.xml"/>
 		<mapper resource="./sqls/file_Mapper.xml"/>
 		<mapper resource="./sqls/location_Mapper.xml"/>
+		<mapper resource="./sqls/notify_Mapper.xml"/>
 	</mappers>
 	
 	

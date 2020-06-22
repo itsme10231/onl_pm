@@ -1,3 +1,4 @@
+<%@include file="header.jsp" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -19,7 +20,7 @@
 	var sock = new SockJS('echo');
 
 	sock.onopen = function() {
-		var sendMsg = {type:"enter", receive_id: "K6"};
+		var sendMsg = {type:"enter", receive_id: "${param.receive_id}"};
 		sock.send(JSON.stringify(sendMsg));
 
 	    $('#console').append('websocket opened' + '<br>');
@@ -30,7 +31,7 @@
 	};
 	
 	sock.onclose = function(event) {
-	    $('#console').append('websocket closed : ' + event);
+	    $('#console').append('연결이 끊겼습니다.');
 	};
 	
 	sock.onerror = function(event) {
@@ -39,8 +40,10 @@
 	
 	function messageSend() {
 // 		JSON.stringify();
-	    sock.send($('#message').val());
-	    $("#console").append($("#message").val());
+		var sendMsg = {type:"msg", receive_id: "${param.receive_id}", msg:$('#message').val()};
+	    sock.send(JSON.stringify(sendMsg));
+	    $("#console").append($("#message").val() +"<br/>");
+	    $("#message").val("");
 	}
 
 </script>
@@ -59,3 +62,4 @@
 
 </body>
 </html>
+<%@include file="footer.jsp"%>

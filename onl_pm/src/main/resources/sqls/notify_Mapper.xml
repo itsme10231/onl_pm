@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nl.onl.notify">
+
+	<!-- 알림 생성(보내기) -->
+	<insert id="insertNotify" parameterType="NotifyDto">
+		INSERT INTO NOTIFICATION VALUES(
+			NOTIFICATION_SEQ.NEXTVAL, #{receive_id}, #{noti_category}, 
+			<choose>
+				<when test="noti_category.equals('1')">
+					#{paramname}||'님에게서 새로운 메시지가 도착했습니다.',
+					'chat.do?target_id='||#{paramid},
+				</when>
+				<when test="noti_category.equals('2')">
+					'내 구인글에 새로운 신청인이 있습니다.',
+					'wanted.do?seq='||#{paramseq},
+				</when>
+				<when test="noti_category.equals('3')">
+					'내가 화이트리스트로 등록한 '||#{paramname}||'님의 새로운 글이 있습니다.',
+					'wanted.do?seq='||#{paramseq},
+				</when>
+				<when test="noti_category.equals('4')">
+					'내 질문에 답변이 달렸습니다.',
+					'qna.do?seq='||#{paramseq},
+				</when>
+				<when test="noti_category.equals('5')">
+					#{paramname}||'님의 지급제안이 도착했습니다.',
+					'wanted.do?seq='||#{paramseq},
+				</when>
+				<when test="noti_category.equals('6')">
+					#{paramname}||'님에게 임금이 지불되었습니다.',
+					'wanted.do?seq='||#{paramseq},
+				</when>
+				<otherwise>
+					'내가 지원한 구인글에 새로운 변동사항이 있습니다.',
+					'wanted.do?seq='||#{paramseq},
+				</otherwise>
+			</choose>
+			
+			SYSDATE, NULL
+		)
+	
+	</insert>
+
+	<!-- 알림 읽음 -->
+	<update id="checkNotify" parameterType="String">
+		UPDATE 	NOTIFICATION 
+		SET		CHKDATE = SYSDATE
+		WHERE	RECEIVE_ID = #{id} AND CHKDATE = NULL
+	</update>
+	
+	<!-- 30일이 지난 알림 삭제 -->
+	<delete id="deleteNotify">
+		DELETE FROM NOTIFICATION WHERE CHKDATE NOT NULL AND CHKDATE+30 &lt;= SYSDATE
+	</delete>
+	
+	
+	<!-- 알림 가져오기 -->
+	<select id="getNotify" resultType="NotifyDto" parameterType="map">
+		SELECT 	SEQ, NOTI_CATEGORY, CONTENT, URL, REGDATE
+		FROM 	NOTIFICATION
+		WHERE	RECEIVE_ID = #{id} <if test="mypageflag!=null"> AND CHKDATE = NULL</if>
+	</select>
+</mapper>

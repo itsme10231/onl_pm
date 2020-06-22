@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <style type="text/css">
 	.headerWrapper{
-		min-width: 1000px;
-		max-width: 60%;
+		min-width: 1200px;
+		max-width: 70%;
 		
 		margin: 0 auto;
 		position: relative;
@@ -105,9 +105,7 @@
 		
 	}
 	
-	.headerlogo{
-	
-	}
+
 	
 	.clear{
 		clear: both;
@@ -170,6 +168,20 @@
 		padding: 0;
 	}
 	
+	.leftside{
+		float: left;
+		width: 250px;
+		margin: 0;
+		padding-right: 20px;
+	}
+	
+	.pagecontent{
+		float: left;
+		min-width: 1000px;
+		margin:0;
+	}
+	
+	
 	h1{
 		margin-left: 80px;
 		margin-top: 30px;
@@ -192,6 +204,9 @@
 		background-color: whitesmoke;
 	}
 	
+/* 	div{ */
+/* 		border: 1px solid red; */
+/* 	} */
 	
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">

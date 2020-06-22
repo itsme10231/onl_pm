@@ -64,7 +64,7 @@ public class EchoHandler extends TextWebSocketHandler {
 			
 			
 			String msg = message.getPayload();
-//			System.out.println(msg);
+			System.out.println(msg);
 			
 			JSONParser parser = new JSONParser();
 			JSONObject jObj = (JSONObject)parser.parse(msg);
@@ -86,26 +86,36 @@ public class EchoHandler extends TextWebSocketHandler {
 				}
 				
 				checkedIn.put(id1, roomId);
-//				System.out.println("Room checkin success");
+				System.out.println("Room checkin success");
 				
-			}else if(((String)jObj.get("type")).equals("msgSend")){
+			}else if(((String)jObj.get("type")).equals("msg")){
 				//메시지를 보냈을때
-				String msgText = (String)jObj.get("msg");
-				ChatDto cdto = new ChatDto(0, id2, id1, msgText, null, null, "N", Integer.parseInt(wanted_seq));
 				
+
+				String msgText = (String)jObj.get("msg");
+				ChatDto cdto = new ChatDto(0, id2, id1, msgText, null, "N", "N", (wanted_seq == null? 0 : Integer.parseInt(wanted_seq)));
+				System.out.println(cdto);
 				
 				//나와의 채팅방에 들어와 있는지
 				if(thisRoom.isIn()) {
-					WebSocketSession ws = loginSessionsMap.get("id2");
-					
+					WebSocketSession ws = loginSessionsMap.get(id2);
+					System.out.println("isIn");
+					System.out.println(ws);
 					if(ws != null) {
-						ws.sendMessage(new TextMessage(msgText));
+						System.out.println("메시지 보내기 전");
+						
+						JSONObject mj = new JSONObject();
+						mj.put("id", id1);
+						mj.put("msg", msgText);
+						
+						ws.sendMessage(new TextMessage(mj.toJSONString()));
+						System.out.println("dd");
 						cdto.setChkflag("Y");
 					}
 				}
 				
 				//최종적으로는 DB에 채팅로그 저장
-				chatServiceImp.sendMessage(cdto);
+				chatServiceImp.sendMessageT(cdto);
 			}
 			
 		}
@@ -128,7 +138,7 @@ public class EchoHandler extends TextWebSocketHandler {
 			
 			checkedIn.remove(id);
 			loginSessionsMap.remove(id);
-//			System.out.println("Room checkout success");
+			System.out.println("Room checkout success");
 		}
 		
 		

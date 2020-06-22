@@ -16,7 +16,7 @@ public interface IPaymentService {
 	public boolean deleteAgree(String seq);
 	
 //	지급동의서 update(지급제안): 패러미터는 구인구직 식별자, 동의여부, 제안금액
-	public boolean updateAgree(Map<String, String> map);
+	public boolean updateAgreeT(Map<String, String> map);
 	
 //	지급제안 보기
 	public PayDto getAgree(String seq);

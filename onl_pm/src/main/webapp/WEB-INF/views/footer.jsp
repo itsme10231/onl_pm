@@ -30,7 +30,7 @@
 	}
 	
 	footer{
-
+		clear: both;
 		min-height: 200px;
 	}
 	

@@ -18,9 +18,9 @@ public class ChatDaoImp implements IChatDao{
 	private String namespace = "com.nl.onl.chat.";
 	
 	@Override
-	public ChatDto getMessage(Map<String, String> map) {
+	public List<ChatDto> getMessage(Map<String, String> map) {
 		
-		return sqlSession.selectOne(namespace+"getMessage", map);
+		return sqlSession.selectList(namespace+"getMessage", map);
 	}
 
 	@Override
