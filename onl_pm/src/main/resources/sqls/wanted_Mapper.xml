@@ -369,14 +369,14 @@
 	<!-- 지원자 선정 -->
 	<update id="pickSelector" parameterType="map">
 		UPDATE WANTED_POST 
-		SET SELECTOR = #{seq}, STATUS = 'PROCESS'
+		SET SELECTOR = #{id}, STATUS = 'PROCESS'
 		WHERE SEQ = #{wanted_seq}
 	</update>
 	
 	<!-- 일 완료 -->
-	<update id="updateStatus" parameterType="String">
+	<update id="updateStatus" parameterType="map">
 		UPDATE WANTED_POST 
-		SET STATUS = 'COMPLETE'
+		SET STATUS = #{state}
 		WHERE SEQ = #{seq}
 	</update>
 	

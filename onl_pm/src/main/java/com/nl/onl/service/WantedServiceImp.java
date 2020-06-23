@@ -13,6 +13,7 @@ import com.nl.onl.daos.IWantedDao;
 
 import com.nl.onl.dtos.ApplyDto;
 import com.nl.onl.dtos.CategoryDto;
+import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.ReviewDto;
 import com.nl.onl.dtos.SearchDto;
@@ -92,22 +93,44 @@ public class WantedServiceImp implements IWantedService{
 
 	@Override
 	public boolean deleteApplyT(Map<String, String> map) {
-		//map의 key: id, wanted_seq
+		//map의 key: id, wanted_seq, wanted_author, salary
 		boolean isS = wantedDaoImp.deleteApply(map);
-		wantedDaoImp.cancelSelector(map);
+		isS = wantedDaoImp.cancelSelector(map);
+		
+		//+선정된 지원자의 지원이었을시 지급동의 테이블 삭제, 구인글 지불금액 환불, 구인글 상태 WANTED 로 업데이트
+		if(isS) {
+			int pay = Integer.parseInt(map.get("salary"));
+			
+			paymentDaoImp.deleteAgree(map.get("wanted_seq"));
+			paymentDaoImp.insertPayment(new ChargeDto(0, map.get("wanted_author"), pay, null, pay, "N", "CANCEL"));
+			
+			map.put("seq", map.get("wanted_seq"));
+			map.put("state", "WANTED");
+			
+			isS = wantedDaoImp.updateStatus(map);
+			
+		}
+		
 		return isS;
 	}
 
 	@Override
 	public boolean pickSelectorT(Map<String, String> map) {
-		//map의 key: seq, wanted_seq, salary
-		boolean isS = paymentDaoImp.insertAgree(map);
-		return wantedDaoImp.pickSelector(map);
+		//map의 key: seq, wanted_seq, salary, isNull
+		//+ 직전의 선택자가 null이었을 경우에만 지급동의 테이블 인서트
+		boolean isS = wantedDaoImp.pickSelector(map);
+		
+		if(map.get("isNull").equals("Y")) {
+			paymentDaoImp.insertAgree(map);
+		}
+		
+		//paymentServiceImp의 payWantedT와 같이 실행할것!
+		return isS;
 	}
 
 	@Override
-	public boolean updateStatus(String seq) {
-		return wantedDaoImp.updateStatus(seq);
+	public boolean updateStatus(Map<String, String> map) {
+		return wantedDaoImp.updateStatus(map);
 	}
 
 	@Override

@@ -29,27 +29,55 @@ public class PaymentServiceImp implements IPaymentService{
 	@Override
 	public boolean updateAgreeT(Map<String, String> map) {
 		//둘다 Y가 되었을 경우 ONL계정으로부터 출금결제 발생, 받는 이에게 거래기록 insert
-		return paymentDaoImp.updateAgree(map);
+		//map의 id는 agree, type, suggestion, wanted_seq, receive_id
+		boolean isS = false;
+		isS = paymentDaoImp.updateAgree(map);
+		
+		if(isS) {
+			PayDto pdto = paymentDaoImp.getAgree(map.get("wanted_seq"));
+			if(pdto.getOffer_agree().equals("Y") && pdto.getSearch_agree().equals("Y")) {
+				ChargeDto cdto = new ChargeDto(0, pdto.getReceive_id(), pdto.getSuggestion(), null, 0, null, "RECEIVE");
+				isS = paymentDaoImp.insertPayment(cdto);
+			}
+		}
+		
+		return isS;
 	}
 
 	@Override
 	public PayDto getAgree(String seq) {
 		return paymentDaoImp.getAgree(seq);
 	}
-
+	
+	//강제지급
 	@Override
-	public List<PayDto> forceSelect() {
-		return paymentDaoImp.forceSelect();
+	public boolean forceSelectT() {
+		
+		boolean isS = false;
+		List<PayDto> plist = paymentDaoImp.forceSelect();
+		
+		if(plist != null && plist.size() != 0) {
+			isS = paymentDaoImp.forceUpdate(plist);
+			if(isS) {
+				for(PayDto pdto:plist) {
+					ChargeDto cdto = new ChargeDto(0, pdto.getReceive_id(), pdto.getSuggestion(), null, 0, null, "RECEIVE");
+					isS = paymentDaoImp.insertPayment(cdto);
+				}
+			}
+		}
+		
+		return isS;
 	}
 
-	@Override
-	public boolean forceUpdate(Map<String, String> map) {
-		return paymentDaoImp.forceUpdate(map);
-	}
 
 	@Override
-	public ChargeDto getPayment(String id) {
-		return paymentDaoImp.getPayment(id);
+	public List<ChargeDto> getPayment(Map<String, String> map) {
+		return paymentDaoImp.getPayment(map);
+	}
+	
+	@Override
+	public int getPaging(String id) {
+		return paymentDaoImp.getPaging(id);
 	}
 
 	@Override
@@ -58,8 +86,55 @@ public class PaymentServiceImp implements IPaymentService{
 	}
 
 	@Override
-	public boolean updatePayment(Map<String, String> map) {
-		return paymentDaoImp.updatePayment(map);
+	public boolean updatePaymentT(Map<String, String> map) {
+		//map의 키: seq, balance, cancelflag, id
+		ChargeDto orig = paymentDaoImp.getPaymentDetail(map.get("seq"));
+		boolean isS = paymentDaoImp.updatePayment(map);
+		
+		int pay = orig.getBalance();
+		ChargeDto cdto = new ChargeDto(0, map.get("id"), pay, null, pay, "N", "CANCEL");
+		
+		if(map.get("cancelflag") != null && orig.getCancelflag().equals("N")) {
+			//환불일 경우
+			cdto.setMoney(-1*cdto.getMoney());
+			cdto.setBalance(-1*cdto.getBalance());
+			cdto.setType("REFUND");
+			cdto.setCancelflag("Y");
+		}
+		
+		paymentDaoImp.insertPayment(cdto);
+		
+		return isS;
 	}
+
+	@Override
+	public boolean payWantedT(Map<String, String> map) {
+		//map의 키 : wanted_pay, id
+		List<ChargeDto> clist = paymentDaoImp.getWillBePayList(map);
+		boolean isS = false;
+		
+		if(clist != null && clist.size() != 0) {
+			
+			map.put("balance", "0");
+			int paid = Integer.parseInt(map.get("wanted_pay"));
+			
+			for(int i = 0; i < clist.size(); i++) {
+				
+				if(i == clist.size()-1) {
+					map.put("balance", (clist.get(i).getBalance()-paid)+"");
+				}
+				map.put("seq", clist.get(i).getSeq()+"");
+				
+				isS = paymentDaoImp.updatePayment(map);
+				paid -= clist.get(i).getBalance();
+			}
+			int pay = -1*Integer.parseInt(map.get("wanted_pay"));
+			
+			isS = paymentDaoImp.insertPayment(new ChargeDto(0, map.get("id"), pay, null, pay, "N", "PAY"));
+		}
+		
+		return isS;
+	}
+	
 
 }

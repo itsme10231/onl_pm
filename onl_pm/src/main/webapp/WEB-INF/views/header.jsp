@@ -168,6 +168,9 @@
 		padding: 0;
 	}
 	
+	
+	
+	
 	.leftside{
 		float: left;
 		width: 250px;
@@ -179,6 +182,13 @@
 		float: left;
 		min-width: 1000px;
 		margin:0;
+	}
+	
+	.depth{
+		overflow: auto;
+		margin-left: 50px;
+		margin-bottom: 10px;
+		margin-top: 50px;
 	}
 	
 	
@@ -222,7 +232,7 @@
 <script type="text/javascript">
 
 $(function(){
-	var cjsonLoc = "resources/common/category.json";
+	var cjsonLoc = "/onl/resources/common/category.json";
 
 // 	$.ajax({
 // 		url:"getcategory.do",

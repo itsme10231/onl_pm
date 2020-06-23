@@ -24,7 +24,7 @@ public interface IWantedDao {
 	public boolean increaseView (String seq);
 	
 	
-	//pay_agree 테이블 인서트와 함께 트랜잭션 처리
+	
 	public boolean insertWanted(WantedDto wdto);
 	
 	
@@ -45,10 +45,10 @@ public interface IWantedDao {
 	public boolean deleteApply(Map<String, String> map);
 	public boolean cancelSelector(Map<String, String> map);
 	
-	
+	//pay_agree 테이블 인서트와 함께 트랜잭션 처리
 	public boolean pickSelector(Map<String, String> map);
 	
-	public boolean updateStatus(String seq);
+	public boolean updateStatus(Map<String, String> map);
 	
 	public boolean insertReview(ReviewDto rdto);
 	

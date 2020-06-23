@@ -23,15 +23,22 @@ public interface IPaymentDao{
 //	한쪽이 Y면서 최종수정일이 7일 이상인경우 자동결제
 	public List<PayDto> forceSelect();
 	
-	public boolean forceUpdate(Map<String, String> map);
+	public boolean forceUpdate(List<PayDto> plist);
 	
 //	예치금 잔액 및 거래내역 조회
-	public ChargeDto getPayment(String id);
+	public List<ChargeDto> getPayment(Map<String, String> map);
+	
+	//예치금 전체페이지
+	public int getPaging(String id);
 	
 //	예치금 기록 생성
 	public boolean insertPayment(ChargeDto CDto);
 	
 //	예치금 기록 변동
 	public boolean updatePayment(Map<String, String> map);
+	
+	public List<ChargeDto> getWillBePayList(Map<String, String> map);
+	
+	public ChargeDto getPaymentDetail(String seq);
 	
 }

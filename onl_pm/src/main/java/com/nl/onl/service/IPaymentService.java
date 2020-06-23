@@ -22,17 +22,24 @@ public interface IPaymentService {
 	public PayDto getAgree(String seq);
 	
 //	한쪽이 Y면서 최종수정일이 7일 이상인경우 자동결제
-	public List<PayDto> forceSelect();
-	
-	public boolean forceUpdate(Map<String, String> map);
+	public boolean forceSelectT();
+
 	
 //	예치금 잔액 및 거래내역 조회
-	public ChargeDto getPayment(String id);
+	public List<ChargeDto> getPayment(Map<String, String> map);
+	
+	//예치금 전체페이지
+	public int getPaging(String id);
 	
 //	예치금 기록 생성
 	public boolean insertPayment(ChargeDto CDto);
 	
 //	예치금 기록 변동
-	public boolean updatePayment(Map<String, String> map);
+	public boolean updatePaymentT(Map<String, String> map);
 	
+//	구인글 예치금 결제
+	public boolean payWantedT(Map<String, String> map);
+	
+	//매칭시 구인글 취소
+//	public boolean cancelWantedT(Map<String, String> map);
 }

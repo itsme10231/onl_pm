@@ -96,8 +96,8 @@ public class WantedDaoImp implements IWantedDao{
 	}
 
 	@Override
-	public boolean updateStatus(String seq) {
-		int isS = sqlSession.update(nameSpace +"updateStatus", seq);
+	public boolean updateStatus(Map<String, String> map) {
+		int isS = sqlSession.update(nameSpace +"updateStatus", map);
 		return isS > 0 ? true:false;
 	}
 

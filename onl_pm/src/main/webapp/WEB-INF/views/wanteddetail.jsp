@@ -209,12 +209,7 @@
 		margin-left: 5px;
 	}
 	
-	.depth{
-		overflow: auto;
-		margin-left: 150px;
-		margin-bottom: 10px;
-		margin-top: 50px;
-	}
+
 	
 	.apply{
 /*   		border: solid 1px;   */

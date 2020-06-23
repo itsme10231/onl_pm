@@ -38,8 +38,8 @@ public class PaymentDaoImp implements IPaymentDao{
 	}
 
 	@Override
-	public PayDto getAgree(String seq) {
-		return sqlSession.selectOne(nameSpace+"getAgree", seq);
+	public PayDto getAgree(String wanted_seq) {
+		return sqlSession.selectOne(nameSpace+"getAgree", wanted_seq);
 	}
 
 	@Override
@@ -48,14 +48,19 @@ public class PaymentDaoImp implements IPaymentDao{
 	}
 
 	@Override
-	public boolean forceUpdate(Map<String, String> map) {
-		int count=sqlSession.update(nameSpace+"forceUpdate" ,map);
-		return count>0?true:false;
+	public boolean forceUpdate(List<PayDto> plist) {
+		int count=sqlSession.update(nameSpace+"forceUpdate" ,plist);
+		return count == plist.size() ? true:false;
 	}
 
 	@Override
-	public ChargeDto getPayment(String id) {
-		return sqlSession.selectOne(nameSpace+"getPayment", id);
+	public List<ChargeDto> getPayment(Map<String, String> map) {
+		return sqlSession.selectList(nameSpace+"getPayment", map);
+	}
+	
+	@Override
+	public int getPaging(String id) {
+		return sqlSession.selectOne(nameSpace +"getPaging", id);
 	}
 
 	@Override
@@ -69,5 +74,14 @@ public class PaymentDaoImp implements IPaymentDao{
 		int count=sqlSession.update(nameSpace+"updatePayment" ,map);
 		return count>0?true:false;
 	}
-
+	
+	@Override
+	public List<ChargeDto> getWillBePayList(Map<String, String> map) {
+		return sqlSession.selectList(nameSpace+"getWillBePayList", map);
+	}
+	
+	@Override
+	public ChargeDto getPaymentDetail(String seq) {
+		return sqlSession.selectOne(nameSpace+"getPaymentDetail", seq);
+	}
 }

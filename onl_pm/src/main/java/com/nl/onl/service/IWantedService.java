@@ -44,7 +44,7 @@ public interface IWantedService {
 	public boolean pickSelectorT(Map<String, String> map);
 	
 	
-	public boolean updateStatus(String seq);
+	public boolean updateStatus(Map<String, String> map);
 	
 	public boolean insertReview(ReviewDto rdto);
 	

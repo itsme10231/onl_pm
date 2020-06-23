@@ -9,6 +9,8 @@ public class PayDto {
 	private Date regdate;
 	private int suggestion;
 	
+	private String receive_id;
+	
 	public int getWanted_seq() {
 		return wanted_seq;
 	}
@@ -38,6 +40,16 @@ public class PayDto {
 	}
 	public void setSuggestion(int suggestion) {
 		this.suggestion = suggestion;
+	}
+	
+	
+	
+	
+	public String getReceive_id() {
+		return receive_id;
+	}
+	public void setReceive_id(String receive_id) {
+		this.receive_id = receive_id;
 	}
 	
 	

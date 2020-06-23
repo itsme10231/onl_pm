@@ -16,13 +16,13 @@
 		DELETE FROM PAY_AGREE WHERE WANTED_SEQ = #{seq}
 	</delete>	
 	
-	<!-- 지급동의서 update(지급제안): 패러미터는 구인구직 식별자, 동의여부, 제안금액 -->
+	<!-- 지급동의서 update(지급제안): 패러미터는 구인구직 식별자, 동의여부, 제안금액, 구인글 번호 -->
 	<update id="updateAgree" parameterType="map">
 		UPDATE 	PAY_AGREE 
 				SET
 				<if test="agree.equals('Y')">
 					<choose>
-					<when test="type.equals('search')">
+					<when test="type.equals('SEARCH')">
 						SEARCH_AGREE = #{agree}, 
 					</when>
 					<otherwise>
@@ -32,7 +32,7 @@
 				</if>
 				<if test="agree.equals('N')">
 					<choose>
-					<when test="type.equals('search')">
+					<when test="type.equals('SEARCH')">
 						SEARCH_AGREE = 'Y', 
 						OFFER_AGREE = 'N'
 					</when>
@@ -46,34 +46,34 @@
 					SUGGESTION = #{suggestion}, 
 				</if>
 				REGDATE = SYSDATE
-		WHERE WANTED_SEQ = #{seq}
+		WHERE WANTED_SEQ = #{wanted_seq}
 	</update>
 	
 	<!-- 지급제안 보기 -->
-	<select id="getAgree" parameterType="String">
+	<select id="getAgree" parameterType="String" resultType="PayDto">
 		SELECT 	wp.TITLE, wp.CONTENT, pa.SUGGESTION
 		FROM 	PAY_AGREE pa, WANTED_POST wp
-		WHERE	wp.SEQ = #{seq}, wp.SEQ = pa.WANTED_SEQ
+		WHERE	wp.SEQ = #{wanted_seq}, wp.SEQ = pa.WANTED_SEQ
 	</select>
 	
 	<!-- 한쪽이 Y면서 최종수정일이 7일이상인 경우(<-select문으로 목록 넘겨받기) 자동결제 -->
 	
-	<select id="forceSelect" resultType="String">
-		SELECT	wp.SEQ
+	<select id="forceSelect" resultType="PayDto">
+		SELECT	wp.SEQ, wp.SELECTOR AS RECEIVE_ID
 		FROM	WANTED_POST wp, PAY_AGREE pa
 		WHERE	wp.SEQ = pa.WANTED_SEQ 
 				AND (pa.SEARCH_AGREE = 'Y' OR pa.SEARCH_AGREE = 'Y')
 				AND NOT (pa.SEARCH_AGREE = 'Y' AND pa.SEARCH_AGREE = 'Y')
 				AND pa.REGDATE+7 &lt;= SYSDATE
 	</select>
-	<update id="forceUpdate" parameterType="map">
+	<update id="forceUpdate" parameterType="java.util.List">
 		UPDATE 	PAY_AGREE
 				SET 
 				SEARCH_AGREE = 'Y',
 				OFFER_AGREE = 'Y'
 		WHERE	WANTED_SEQ IN
-				<foreach collection="array" open="(" close=")" separator="," item="wanted_seq">
-					#{wanted_seq}
+				<foreach collection="list" open="(" close=")" separator="," item="pdto">
+					#{pdto.wanted_seq}
 				</foreach>
 	</update>
 	
@@ -81,20 +81,30 @@
 	<!-- 예치금 관리용 쿼리 -->
 	<!-- 예치금 잔액 및 거래내역 조회 -->
 	
-	<select id="getPayment" parameterType="String" resultType="ChargeDto">
-		SELECT 	p1.SEQ, p1.MONEY, p1.REGDATE, p1.BALANCE, p1.CANCELFLAG, p1."TYPE", ALLBAL
-		FROM 	PREPAID p1,
-				(
-				SELECT	SUM(BALANCE) as ALLBAL, ID 
-				FROM	PREPAID
-				WHERE 	ID = #{id} AND CANCELFLAG = 'N'
-				GROUP BY ID
-				) p2
-		WHERE 	p1.ID = p2.ID
+	<select id="getPayment" parameterType="map" resultType="ChargeDto">
+		SELECT	RN, SEQ, MONEY, REGDATE, BALANCE, CANCELFLAG, "TYPE", ALLBAL
+		FROM	(
+				SELECT 	ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN, p1.SEQ, p1.MONEY, p1.REGDATE, p1.BALANCE, p1.CANCELFLAG, p1."TYPE", ALLBAL
+				FROM 	PREPAID p1,
+						(
+						SELECT	SUM(MONEY) as ALLBAL, ID 
+						FROM	PREPAID
+						WHERE 	ID = #{id} AND "TYPE" != 'RECEIVE'
+						GROUP BY ID
+						) p2
+				WHERE 	p1.ID = p2.ID
+				)
+		WHERE	CEIL(RN/10) = #{pnum}
 	</select>
 	
-	<!-- 예치금 기록 생성 -->
 	
+	<!-- 예치금 거래기록 전체 페이지 수 -->
+	<select id="getPaging" parameterType="String" resultType="int">
+		SELECT CEIL(COUNT(*)/15) FROM PREPAID WHERE ID=#{id}
+	</select>
+	
+	
+	<!-- 예치금 기록 생성 -->
 	<insert id="insertPayment" parameterType="ChargeDto">
 		INSERT INTO PREPAID 
 		VALUES	(
@@ -103,15 +113,61 @@
 	</insert>
 	
 	
-	<!-- 예치금 기록 변동(구인글 결제, 환불, 구인글 취소) -->
+	<!-- 예치금 기록 변동(구인글 결제(따로 취급), 환불, 구인글 결제취소) -->
 	<update id="updatePayment" parameterType="map">
 		UPDATE 	PREPAID
-		SET 	BALANCE = #{balance}
+		SET 	BALANCE = #{balance},
 				<if test="cancelflag!=null">
 				CANCELFLAG = 'Y'
 				</if>
 		WHERE 	SEQ = #{seq}
 	</update>
 	
+	<!-- 가장 먼저 충전해놨던 예치금부터 결제할 금액만큼 선택하기 -->
+	<select id="getWillBePayList" parameterType="map" resultType="ChargeDto">
+		SELECT	 p4.SEQ , p4.BALANCE 
+		FROM 	(
+				SELECT 	SEQ 
+				FROM 	(
+						SELECT	 p2.SEQ , ROW_NUMBER() OVER(ORDER BY p2.SEQ ASC) AS RN2
+						FROM 	(
+								SELECT	SEQ
+								FROM 	(
+										SELECT	SEQ , BALANCE , BALSUM, ROW_NUMBER() OVER(ORDER BY SEQ DESC) AS RN
+										FROM 	(
+												SELECT 	SEQ, BALANCE, SUM(BALANCE) OVER(ORDER BY SEQ ASC) AS BALSUM, REGDATE 
+												FROM 	PREPAID 
+												WHERE	ID = #{id} AND "TYPE" = 'CHARGE' AND CANCELFLAG = 'N'
+												)
+										WHERE 	BALSUM &lt;= #{wanted_pay}
+										)
+								WHERE 	RN = 1
+								) p1, PREPAID p2
+						WHERE 	p2.ID = #{id} AND p2."TYPE" = 'CHARGE' AND p2.CANCELFLAG = 'N' AND p2.SEQ &gt; p1.SEQ
+						)
+				WHERE 	RN2 = 1
+				) p3, PREPAID p4
+		WHERE 	p4.ID = #{id} AND p4."TYPE" = 'CHARGE' AND p4.CANCELFLAG = 'N' AND p4.SEQ &lt;= p3.SEQ
+	</select>
 	
+	
+	<!-- 예치금기록 상세 -->
+	<select id="getPaymentDetail" resultType="ChargeDto" parameterType="String">
+		SELECT 	CANCELFLAG, BALANCE
+		FROM	PREPAID
+		WHERE	SEQ = #{seq}
+	</select>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
