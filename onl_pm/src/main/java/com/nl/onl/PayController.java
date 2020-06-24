@@ -29,7 +29,14 @@ public class PayController {
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/wallet.do", method = {RequestMethod.GET})
-	public String toWallet(Model model, Authentication auth, String pnum) {
+	public String toWallet() {
+		
+		return "redirect:/prepaid.do";
+	}
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@RequestMapping(value = "/prepaid.do", method = {RequestMethod.GET})
+	public String toPrepaid(Model model, Authentication auth, String pnum) {
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
 		String id = ldto.getId();
@@ -50,9 +57,51 @@ public class PayController {
 		model.addAttribute("pnum", pnum);
 		model.addAllAttributes(pageMap);
 		
-		return "wallet";
+		return "prepaid";
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@RequestMapping(value = "/received.do", method = {RequestMethod.GET})
+	public String toReceived(Model model, Authentication auth, String pnum) {
+		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		String id = ldto.getId();
+		
+		Map<String, String> map = new HashMap<>();
+		pnum = (pnum == null? "1":pnum);
+		
+		map.put("id", id);
+		map.put("pnum", pnum);
+		map.put("isReceived", "Y");
+		
+		List<ChargeDto> clist = paymentServiceImp.getPayment(map);
+		int allP = paymentServiceImp.getPaging(id);
+		
+		Map<String, Integer> pageMap = onlUtil.pagingValue(allP, pnum, 5);
+		
+		model.addAttribute("clist", clist);
+		model.addAttribute("allP", allP);
+		model.addAttribute("pnum", pnum);
+		model.addAllAttributes(pageMap);
+		
+		return "received";
+	}
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@RequestMapping(value = "/charge.do", method = {RequestMethod.GET})
+	public String toCharge(Model model, Authentication auth, String pnum) {
+		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		String id = ldto.getId();
+		
+		String allbal = paymentServiceImp.getAllbal(id);
+		
+		model.addAttribute("allbal", allbal);
+		
+		return "charge";
+	}
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/refund.do", method = {RequestMethod.GET})
 	public String chargeRefund(Model model, Authentication auth, String seq) {
 		
@@ -66,9 +115,16 @@ public class PayController {
 		map.put("id", id);
 		map.put("balance", "0");
 		
-		paymentServiceImp.updatePaymentT(map);
+		boolean isS = paymentServiceImp.updatePaymentT(map);
 		
-		return "wallet";
+		if(isS) {
+			model.addAttribute("msg", "성공적으로 환불되었습니다.");
+		}else {
+			model.addAttribute("msg", "환불에 실패했습니다. 관리자에게 문의해주세요");
+		}
+		
+		
+		return "redirect:/prepaid.do";
 	}
 	
 }

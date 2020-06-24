@@ -29,10 +29,10 @@ public class OnlAuthProvider extends DaoAuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		System.out.println("provider 호출");
+//		System.out.println("provider 호출");
 		String email = (String)authentication.getPrincipal();
 		String password = (String)authentication.getCredentials();
-		System.out.println("email: "+ email);
+//		System.out.println("email: "+ email);
 		
 		LoginDto dto = (LoginDto) getUserDetailsService().loadUserByUsername(email);
 		

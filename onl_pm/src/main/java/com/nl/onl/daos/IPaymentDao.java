@@ -38,7 +38,10 @@ public interface IPaymentDao{
 	public boolean updatePayment(Map<String, String> map);
 	
 	public List<ChargeDto> getWillBePayList(Map<String, String> map);
+	public List<ChargeDto> getWillBePayList2(String id);
 	
 	public ChargeDto getPaymentDetail(String seq);
+	
+	public String getAllbal(String id);
 	
 }

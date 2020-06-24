@@ -191,6 +191,10 @@
 		margin-top: 50px;
 	}
 	
+	.centerDiv{
+		width: 90%;
+		margin: 0 auto;
+	}
 	
 	h1{
 		margin-left: 80px;

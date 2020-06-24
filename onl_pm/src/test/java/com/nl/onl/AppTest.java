@@ -32,6 +32,7 @@ import com.nl.onl.dtos.WantedDto;
 import com.nl.onl.security.OnlAuthProvider;
 import com.nl.onl.service.IAdminService;
 import com.nl.onl.service.ILoginService;
+import com.nl.onl.service.IPaymentService;
 import com.nl.onl.service.IWantedService;
 import com.nl.onl.util.ChatRoom;
 import com.nl.onl.util.FileWrite;
@@ -49,10 +50,8 @@ public class AppTest {
 //	ILoginService loginServiceImp;
 	
 	@Autowired
-	IWantedService wantedServiceImp;
+	IPaymentService paymentServiceImp;
 	
-	@Autowired
-	IAdminService adminServiceImp;
 	
 	@Autowired
 	Util onlUtil;
@@ -63,9 +62,9 @@ public class AppTest {
 		
 		Map<String, String> map = new HashMap<>();
 		
-		map.put("id", "o132435456");
-		map.put("seq", "60");
-		wantedServiceImp.getWantedDetailLoginT(map);
+		map.put("id", "o132435465");
+		map.put("wanted_pay", "87000");
+		paymentServiceImp.payWantedT(map);
 //		wantedServiceImp.delWishList(map);
 	}
 	

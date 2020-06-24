@@ -42,4 +42,7 @@ public interface IPaymentService {
 	
 	//매칭시 구인글 취소
 //	public boolean cancelWantedT(Map<String, String> map);
+	
+	//잔액조회: 거래기록이 없을시 null을 반환
+	public String getAllbal(String id);
 }

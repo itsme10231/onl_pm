@@ -50,6 +50,17 @@
 				</li>
 				<li class="nav-item">
 					<a href="wallet.do">나의 지갑</a>
+					<ul class="nav-item sideUl">
+						<li class="nav-item">
+						<a href='prepaid.do'>예치금 내역</a>
+						</li>
+						<li class="nav-item">
+						<a href='charge.do'>예치금 충전</a>
+						</li>
+						<li class="nav-item">
+						<a href="received.do">지급내역</a>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</div>

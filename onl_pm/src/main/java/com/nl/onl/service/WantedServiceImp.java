@@ -117,7 +117,7 @@ public class WantedServiceImp implements IWantedService{
 	@Override
 	public boolean pickSelectorT(Map<String, String> map) {
 		//map의 key: seq, wanted_seq, salary, isNull
-		//+ 직전의 선택자가 null이었을 경우에만 지급동의 테이블 인서트
+		//+ isNull: 직전의 선택자가 null이었을 경우에만 지급동의 테이블 인서트
 		boolean isS = wantedDaoImp.pickSelector(map);
 		
 		if(map.get("isNull").equals("Y")) {

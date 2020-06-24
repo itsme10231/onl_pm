@@ -92,15 +92,37 @@
 						WHERE 	ID = #{id} AND "TYPE" != 'RECEIVE'
 						GROUP BY ID
 						) p2
-				WHERE 	p1.ID = p2.ID
+				WHERE 	p1.ID = p2.ID 
+				<choose>
+					<when test="isReceived!=null">
+						AND p1."TYPE" = 'RECEIVE'
+					</when>
+					<otherwise>
+						AND p1."TYPE" != 'RECEIVE'
+					</otherwise>
+				</choose>
 				)
 		WHERE	CEIL(RN/10) = #{pnum}
+	</select>
+	
+	<select id="getAllbal" parameterType="String" resultType="String">
+		SELECT	SUM(BALANCE) AS ALLBAL
+		FROM	PREPAID
+		WHERE	ID = #{id} AND "TYPE" != 'RECEIVE' AND CANCELFLAG= 'N' AND BALANCE &gt; 0
 	</select>
 	
 	
 	<!-- 예치금 거래기록 전체 페이지 수 -->
 	<select id="getPaging" parameterType="String" resultType="int">
 		SELECT CEIL(COUNT(*)/15) FROM PREPAID WHERE ID=#{id}
+		<choose>
+			<when test="isReceived!=null">
+				AND "TYPE" = 'RECEIVE'
+			</when>
+			<otherwise>
+				AND "TYPE" != 'RECEIVE'
+			</otherwise>
+		</choose>
 	</select>
 	
 	
@@ -116,9 +138,9 @@
 	<!-- 예치금 기록 변동(구인글 결제(따로 취급), 환불, 구인글 결제취소) -->
 	<update id="updatePayment" parameterType="map">
 		UPDATE 	PREPAID
-		SET 	BALANCE = #{balance},
+		SET 	BALANCE = #{balance}
 				<if test="cancelflag!=null">
-				CANCELFLAG = 'Y'
+				, CANCELFLAG = 'Y'
 				</if>
 		WHERE 	SEQ = #{seq}
 	</update>
@@ -148,6 +170,13 @@
 				WHERE 	RN2 = 1
 				) p3, PREPAID p4
 		WHERE 	p4.ID = #{id} AND p4."TYPE" = 'CHARGE' AND p4.CANCELFLAG = 'N' AND p4.SEQ &lt;= p3.SEQ
+	</select>
+	
+	<select id="getWillBePayList2" parameterType="String" resultType="ChargeDto">
+		SELECT 	SEQ, BALANCE, REGDATE , SUM(BALANCE) OVER(ORDER BY SEQ ASC) AS ALLBAL
+		FROM 	PREPAID 
+		WHERE	ID = #{id} AND "TYPE" != 'RECEIVE' AND CANCELFLAG = 'N' AND BALANCE &gt; 0
+		ORDER BY SEQ ASC
 	</select>
 	
 	

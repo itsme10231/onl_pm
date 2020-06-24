@@ -81,7 +81,17 @@ public class PaymentDaoImp implements IPaymentDao{
 	}
 	
 	@Override
+	public List<ChargeDto> getWillBePayList2(String id) {
+		return sqlSession.selectList(nameSpace+"getWillBePayList2", id);
+	}
+	
+	@Override
 	public ChargeDto getPaymentDetail(String seq) {
 		return sqlSession.selectOne(nameSpace+"getPaymentDetail", seq);
+	}
+	
+	@Override
+	public String getAllbal(String id) {
+		return sqlSession.selectOne(nameSpace+"getAllbal", id);
 	}
 }

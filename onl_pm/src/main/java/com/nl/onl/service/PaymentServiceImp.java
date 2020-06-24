@@ -110,31 +110,75 @@ public class PaymentServiceImp implements IPaymentService{
 	@Override
 	public boolean payWantedT(Map<String, String> map) {
 		//map의 키 : wanted_pay, id
-		List<ChargeDto> clist = paymentDaoImp.getWillBePayList(map);
+//		List<ChargeDto> clist = paymentDaoImp.getWillBePayList(map);
+//
+//		boolean isS = false;
+//		
+//		if(clist != null && clist.size() != 0) {
+//			
+//			map.put("balance", "0");
+//			int paid = Integer.parseInt(map.get("wanted_pay"));
+//			
+//			for(int i = 0; i < clist.size(); i++) {
+//				
+//				if(i == clist.size()-1) {
+//					map.put("balance", (clist.get(i).getBalance()-paid)+"");
+//				}
+//				map.put("seq", clist.get(i).getSeq()+"");
+//
+//				
+//				isS = paymentDaoImp.updatePayment(map);
+//				paid -= clist.get(i).getBalance();
+//			}
+//			int pay = -1*Integer.parseInt(map.get("wanted_pay"));
+//			
+//			isS = paymentDaoImp.insertPayment(new ChargeDto(0, map.get("id"), pay, null, pay, "N", "PAY"));
+//		}
+		
+		List<ChargeDto> clist = paymentDaoImp.getWillBePayList2(map.get("id"));
+		int wanted_pay = Integer.parseInt(map.get("salary"));
+		int pay = Integer.parseInt(map.get("salary"));
+		
 		boolean isS = false;
 		
 		if(clist != null && clist.size() != 0) {
 			
-			map.put("balance", "0");
-			int paid = Integer.parseInt(map.get("wanted_pay"));
-			
-			for(int i = 0; i < clist.size(); i++) {
+			if(clist.get(clist.size()-1).getAllbal() < wanted_pay) {
+				//입력한 금액보다 잔고가 적다면
+				return isS;
+			}else {
 				
-				if(i == clist.size()-1) {
-					map.put("balance", (clist.get(i).getBalance()-paid)+"");
+				int i = 0;
+				while(wanted_pay > 0) {
+					
+					ChargeDto cdto = clist.get(i);
+					int currBal = cdto.getBalance();
+					
+					if(wanted_pay < currBal) {
+						wanted_pay = 0;
+						cdto.setBalance(currBal -wanted_pay);
+					}else {
+						wanted_pay -= currBal;
+						cdto.setBalance(0);
+					}
+					
+					map.put("seq", cdto.getSeq()+"");
+					map.put("balance", cdto.getBalance()+"");
+					
+					isS = paymentDaoImp.updatePayment(map);
+					
+					i++;
 				}
-				map.put("seq", clist.get(i).getSeq()+"");
 				
-				isS = paymentDaoImp.updatePayment(map);
-				paid -= clist.get(i).getBalance();
+				isS = paymentDaoImp.insertPayment(new ChargeDto(0, map.get("id"), pay, null, pay, "N", "PAY"));
 			}
-			int pay = -1*Integer.parseInt(map.get("wanted_pay"));
-			
-			isS = paymentDaoImp.insertPayment(new ChargeDto(0, map.get("id"), pay, null, pay, "N", "PAY"));
 		}
-		
+//		
 		return isS;
 	}
 	
-
+	@Override
+	public String getAllbal(String id) {
+		return paymentDaoImp.getAllbal(id);
+	}
 }

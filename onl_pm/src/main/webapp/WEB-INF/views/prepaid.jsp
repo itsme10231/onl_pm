@@ -11,12 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	
-	.centerDiv{
-		width: 90%;
-		margin: 0 auto;
-	}
-	
+
 	.myBal{
 		text-align: right;
 		padding-right: 20px;
@@ -57,10 +52,10 @@
 		<%@include file="sidemenu_mypage.jsp" %>
 		
 		<div class="pageContent">
-			<div class="depth">홈 > 마이페이지 > 나의 지갑</div>
+			<div class="depth">홈 > 마이페이지 > 나의 지갑 > 예치금 내역</div>
 			<div class="contentDetail">
 				<div class="centerDiv">
-					<h2>나의 지갑</h2>
+					<h2>예치금 내역</h2>
 					<div class="walletDetail">
 						<div class="myBal">
 							현재 사용 가능한 예치금 잔액은<br>
@@ -106,7 +101,7 @@
 													<fmt:formatDate value="${cdto.regdate}" pattern="YYYY-MM-dd"/>
 												</td>
 												<td>
-													<c:if test="${cdto.type ne 'RECEIVE'}">${cdto.money > 0 ? '+':'-'}</c:if><fmt:formatNumber value="${cdto.money}" pattern="#,###"/>
+													<c:if test="${cdto.type ne 'RECEIVE'}">${cdto.money > 0 ? '+':''}</c:if><fmt:formatNumber value="${cdto.money}" pattern="#,###"/>
 												</td>
 												<td>
 													<c:choose>
@@ -131,19 +126,19 @@
 													<c:choose>
 														<c:when test="${cdto.type eq 'CHARGE'}">
 															<c:choose>
-																<c:when test="${cdto.money eq cdto.balance}">
+																<c:when test="${cdto.cancelflag eq 'N'}">
 																	<c:choose>
-																		<c:when test="${cdto.cancelflag eq 'N'}">
+																		<c:when test="${cdto.money eq cdto.balance}">
 																			<a href='refund.do?seq=${cdto.seq}'>환불가능</a>
 																		</c:when>
 																		<c:otherwise>
-																			환불완료
-																		</c:otherwise>
+																			환불불가
+																		</c:otherwise>	
 																	</c:choose>
 																</c:when>
 																<c:otherwise>
-																	환불불가
-																</c:otherwise>	
+																	환불완료
+																</c:otherwise>
 															</c:choose>
 														</c:when>
 														<c:otherwise>
@@ -162,15 +157,15 @@
 							<nav aria-label="Page navigation example">
 							  <ul class="pagination justify-content-center">
 							  	
-							  	<li class="page-item"><a class="page-link" href="wallet.do?pnum=1">&Lt;</a></li>
-							    <li class="page-item"><a class="page-link" href="wallet.do?pnum=${prePageNum}">&lt;</a></li>
+							  	<li class="page-item"><a class="page-link" href="prepaid.do?pnum=1">&Lt;</a></li>
+							    <li class="page-item"><a class="page-link" href="prepaid.do?pnum=${prePageNum}">&lt;</a></li>
 							    
 								<c:forEach varStatus="i" begin="${startPage}" end="${endPage}">
-							  		<li class="page-item ${i.index eq pnum? 'active':''}"><a class="page-link" href="wallet.do?pnum=${i.index}" >${i.index}</a></li>
+							  		<li class="page-item ${i.index eq pnum? 'active':''}"><a class="page-link" href="prepaid.do?pnum=${i.index}" >${i.index}</a></li>
 							  	</c:forEach>
 							  	
-							    <li class="page-item"><a class="page-link" href="wallet.do?pnum=${nextPageNum}">&gt;</a></li>
-							    <li class="page-item"><a class="page-link" href="wallet.do?pnum=${allP}">&Gt;</a></li>
+							    <li class="page-item"><a class="page-link" href="prepaid.do?pnum=${nextPageNum}">&gt;</a></li>
+							    <li class="page-item"><a class="page-link" href="prepaid.do?pnum=${allP}">&Gt;</a></li>
 							  </ul>
 							</nav>
 						</div>
