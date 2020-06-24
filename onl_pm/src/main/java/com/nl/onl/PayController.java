@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.LoginDto;
+import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
 import com.nl.onl.service.IPaymentService;
 import com.nl.onl.util.Util;
@@ -100,6 +101,22 @@ public class PayController {
 		
 		return "charge";
 	}
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@RequestMapping(value = "/ajaxcharge.do", method = {RequestMethod.POST})
+	public String doCharge(Model model, Authentication auth) {
+		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		String id = ldto.getId();
+		
+		ChargeDto cdto = new ChargeDto();
+		MerchantDto mdto = new MerchantDto();
+		
+		return "success";
+	}
+	
+	
+	
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/refund.do", method = {RequestMethod.GET})

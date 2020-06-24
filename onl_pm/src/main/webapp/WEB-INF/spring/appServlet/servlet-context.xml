@@ -79,6 +79,7 @@
 			<tx:method name="updateAgreeT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="forceSelectT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="payWantedT" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="insertPaymentT" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="updatePaymentT" propagation="REQUIRED" rollback-for="Exception"/>
 		</tx:attributes>
 	</tx:advice>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.nl.onl.dtos.ChargeDto;
+import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
 
 @Repository
@@ -93,5 +94,11 @@ public class PaymentDaoImp implements IPaymentDao{
 	@Override
 	public String getAllbal(String id) {
 		return sqlSession.selectOne(nameSpace+"getAllbal", id);
+	}
+	
+	@Override
+	public boolean insertMerchant(MerchantDto mdto) {
+		int count=sqlSession.insert(nameSpace+"insertMerchant" ,mdto);
+		return count>0?true:false;
 	}
 }

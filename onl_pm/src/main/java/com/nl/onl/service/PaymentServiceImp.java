@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.nl.onl.daos.IPaymentDao;
 import com.nl.onl.dtos.ChargeDto;
+import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
 
 @Service
@@ -81,8 +82,14 @@ public class PaymentServiceImp implements IPaymentService{
 	}
 
 	@Override
-	public boolean insertPayment(ChargeDto cdto) {
-		return paymentDaoImp.insertPayment(cdto);
+	public boolean insertPaymentT(ChargeDto cdto, MerchantDto mdto) {
+		
+		boolean isS = paymentDaoImp.insertPayment(cdto);
+		if(isS) {
+			isS = paymentDaoImp.insertMerchant(mdto);
+		}
+		
+		return isS;
 	}
 
 	@Override

@@ -31,7 +31,9 @@
 		overflow: visible;
 		display: inline-block;
 		height: 60px;
-		line-height: 45px;
+		line-height: 50px;
+		padding: 0;
+		margin: 0;
 	}
 	
 	.bigC{
@@ -39,7 +41,7 @@
 		margin: 0;
 		padding: 5px 20px;
 		float: left;
-		
+		box-sizing: border-box;
 		position: relative;
 		z-index: 11;
 	}
@@ -196,6 +198,12 @@
 		margin: 0 auto;
 	}
 	
+	.pagingDiv{
+		margin-top: 50px;
+		margin-bottom: 50px;
+		text-align: center;
+	}
+	
 	h1{
 		margin-left: 80px;
 		margin-top: 30px;
@@ -218,10 +226,8 @@
 		background-color: whitesmoke;
 	}
 	
-/* 	div{ */
-/* 		border: 1px solid red; */
-/* 	} */
-	
+
+ 	
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 

@@ -12,10 +12,7 @@
 <title>Insert title here</title>
 <style type="text/css">
 	
-	.centerDiv{
-		width: 90%;
-		margin: 0 auto;
-	}
+
 	
 	.myBal{
 		text-align: right;
@@ -46,10 +43,7 @@
 	
 
 	
-	.pagingDiv{
-		margin-top: 50px;
-		margin-bottom: 50px;
-	}
+	
 </style>
 </head>
 <body>

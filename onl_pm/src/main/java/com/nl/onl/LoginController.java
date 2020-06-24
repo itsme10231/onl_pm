@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.mail.internet.MimeMessage;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -173,6 +175,24 @@ public class LoginController {
 		
 		
 		return "writeprofile";
+	}
+	
+	
+	@RequestMapping(value="ajaxgetinfo.do", method= {RequestMethod.POST})
+	@ResponseBody
+	public JSONObject getInfo(Authentication auth) {
+		
+		JSONObject jObj = new JSONObject();
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		
+		jObj.put("id", ldto.getId());
+		jObj.put("email", ldto.getEmail());
+		jObj.put("name", ldto.getName());
+		jObj.put("phone", ldto.getPhone());
+		jObj.put("address", ldto.getAddress_2() +" " +ldto.getAddress_3());
+		jObj.put("postcode", ldto.getAddress_1());
+		
+		return jObj;
 	}
 
 }

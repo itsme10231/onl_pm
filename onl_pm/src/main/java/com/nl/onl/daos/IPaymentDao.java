@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nl.onl.dtos.ChargeDto;
+import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
 
 public interface IPaymentDao{
@@ -43,5 +44,7 @@ public interface IPaymentDao{
 	public ChargeDto getPaymentDetail(String seq);
 	
 	public String getAllbal(String id);
+	
+	public boolean insertMerchant(MerchantDto mdto);
 	
 }

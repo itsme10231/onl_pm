@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nl.onl.dtos.ChargeDto;
+import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
 
 public interface IPaymentService {
@@ -32,7 +33,7 @@ public interface IPaymentService {
 	public int getPaging(String id);
 	
 //	예치금 기록 생성
-	public boolean insertPayment(ChargeDto CDto);
+	public boolean insertPaymentT(ChargeDto CDto, MerchantDto mdto);
 	
 //	예치금 기록 변동
 	public boolean updatePaymentT(Map<String, String> map);

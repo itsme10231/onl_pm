@@ -186,6 +186,15 @@
 		FROM	PREPAID
 		WHERE	SEQ = #{seq}
 	</select>
+	
+	
+	
+	<!-- 실결제용 테이블 INSERT, 예치금 테이블 INSERT후 실행 -->
+	<insert id="insertMerchant" parameterType="MerchantDto">
+		INSERT INTO MERCHANT_LOG (
+			PREPAID_SEQ.CURRVAL, #{id}, #{pay_method}, #{merchant_uid}, #{paid_amount}, #{apply_num}, SYSDATE
+		)
+	</insert>
 </mapper>
 
 
