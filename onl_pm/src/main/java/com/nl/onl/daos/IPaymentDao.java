@@ -30,7 +30,7 @@ public interface IPaymentDao{
 	public List<ChargeDto> getPayment(Map<String, String> map);
 	
 	//예치금 전체페이지
-	public int getPaging(String id);
+	public int getPaging(Map<String, String> map);
 	
 //	예치금 기록 생성
 	public boolean insertPayment(ChargeDto CDto);

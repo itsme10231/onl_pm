@@ -89,16 +89,24 @@
 						(
 						SELECT	SUM(MONEY) as ALLBAL, ID 
 						FROM	PREPAID
-						WHERE 	ID = #{id} AND "TYPE" != 'RECEIVE'
+						WHERE 	ID = #{id}
+						<choose>
+							<when test="isReceived!=null">
+								AND "TYPE" = 'RECEIVE'
+							</when>
+							<otherwise>
+								AND "TYPE" != 'RECEIVE'
+							</otherwise>
+						</choose>
 						GROUP BY ID
 						) p2
 				WHERE 	p1.ID = p2.ID 
 				<choose>
 					<when test="isReceived!=null">
-						AND p1."TYPE" = 'RECEIVE'
+						AND "TYPE" = 'RECEIVE'
 					</when>
 					<otherwise>
-						AND p1."TYPE" != 'RECEIVE'
+						AND "TYPE" != 'RECEIVE'
 					</otherwise>
 				</choose>
 				)
@@ -113,7 +121,7 @@
 	
 	
 	<!-- 예치금 거래기록 전체 페이지 수 -->
-	<select id="getPaging" parameterType="String" resultType="int">
+	<select id="getPaging" parameterType="map" resultType="int">
 		SELECT CEIL(COUNT(*)/15) FROM PREPAID WHERE ID=#{id}
 		<choose>
 			<when test="isReceived!=null">
@@ -188,6 +196,8 @@
 	</select>
 	
 	
+	<!-- ............................................................. -->
+	<!-- 실결제용 -->
 	
 	<!-- 실결제용 테이블 INSERT, 예치금 테이블 INSERT후 실행 -->
 	<insert id="insertMerchant" parameterType="MerchantDto">
@@ -195,6 +205,16 @@
 			PREPAID_SEQ.CURRVAL, #{id}, #{pay_method}, #{merchant_uid}, #{paid_amount}, #{apply_num}, SYSDATE
 		)
 	</insert>
+	
+	
+	<!-- .............................................................. -->
+	<!-- 오픈뱅킹 api 관련 쿼리 -->
+	
+	<!-- 계좌가 입력되어있는지 검사 및 계좌번호 가져오기-->
+	<select id="">
+		
+	</select>
+	
 </mapper>
 
 

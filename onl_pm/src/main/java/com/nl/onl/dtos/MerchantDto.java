@@ -8,7 +8,7 @@ public class MerchantDto {
 	private String id;
 	private String pay_method;
 	private String merchant_uid;
-	private String paid_amount;
+	private int paid_amount;
 	private String apply_num;
 	private Date regdate;
 	
@@ -20,7 +20,7 @@ public class MerchantDto {
 
 
 
-	public MerchantDto(int seq, String id, String pay_method, String merchant_uid, String paid_amount,
+	public MerchantDto(int seq, String id, String pay_method, String merchant_uid, int paid_amount,
 			String apply_num) {
 		super();
 		this.seq = seq;
@@ -81,13 +81,13 @@ public class MerchantDto {
 
 
 
-	public String getPaid_amount() {
+	public int getPaid_amount() {
 		return paid_amount;
 	}
 
 
 
-	public void setPaid_amount(String paid_amount) {
+	public void setPaid_amount(int paid_amount) {
 		this.paid_amount = paid_amount;
 	}
 

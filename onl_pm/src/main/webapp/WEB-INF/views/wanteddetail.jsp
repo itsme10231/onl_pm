@@ -257,6 +257,12 @@
 		
 	}
 	
+	.dateBalloon{
+		font-size: 5px;
+		text-align: right;
+		padding-right: 10px;
+	}
+	
 	.dialog-target{
 		width: 300px;
 		margin-top: 20px;
@@ -305,7 +311,7 @@
 	});
 	
 	var sock = new SockJS('echo');
-	var today = new Date();
+
 
 	sock.onopen = function() {
 		var sendMsg = {type:"enter", receive_id: "${wlist[0].id}"};
@@ -319,7 +325,13 @@
 		if(message.data.id == "${wlist[0].id}"){
 			var outBalloon = $("<div class='dialog-balloon'></div>");
 			var balloon = $("<div class='dialog-target'></div>");
+			var dateBalloon = $("<div class='dateBalloon'></div>");
+			
+		    dateBalloon.append(jsons[i].chatdate);
+
 		    balloon.append(message.data);
+		    balloon.append(dateBalloon);
+		    
 		    outBalloon,append(balloon);
 		    $('#console').append(outBalloon);
 		    toBottom();
@@ -338,14 +350,22 @@
 	
 	function messageSend() {
 // 		JSON.stringify();
+		var thisDate = new Date();
+		var dateString = thisDate.format('yyyy년 MM월 dd일 HH시 mm분');
 		
 		var myMsg = $('#message').val();
-		var sendMsg = {type:"msg", receive_id: "${wlist[0].id}", msg:myMsg, wanted_seq: "${wlist[0].seq}"};
+		var sendMsg = {type:"msg", receive_id: "${wlist[0].id}", msg:myMsg, wanted_seq: "${wlist[0].seq}", chatdate: dateString };
 	    sock.send(JSON.stringify(sendMsg));
 	    
 	    var outBalloon = $("<div class='dialog-balloon'></div>");
 	    var balloon = $("<div class='dialog-balloon dialog-mine'></div>");
+	    var dateBalloon = $("<div class='dateBalloon'></div>");
+	    
+	    dateBalloon.append(dateString);
+
 	    balloon.append(myMsg);
+	    balloon.append(dateBalloon);
+	    
 	    outBalloon.append(balloon);
 	    
 	    $("#console").append(outBalloon);
@@ -505,13 +525,19 @@
 			
 			var outBalloon = $("<div class='dialog-balloon'></div>");
 			var balloon = $('<div></div>');
+			var dateBalloon = $("<div class='dateBalloon'></div>");
 			
 			if(jsons[i].send_id == "${wlist[0].id}"){
 				balloon.addClass("dialog-target");
 			}else{
 				balloon.addClass("dialog-mine");
 			}
+			console.log(jsons[i].chatdate);
+			dateBalloon.append(jsons[i].chatdate);
+			
 			balloon.append(jsons[i].content);
+			balloon.append(dateBalloon);
+			
 			outBalloon.append(balloon);
 			
 			dialogDiv.append(outBalloon);

@@ -71,6 +71,7 @@ public class EchoHandler extends TextWebSocketHandler {
 			
 			String id2 = (String)jObj.get("receive_id");
 			String wanted_seq = (String)jObj.get("wanted_seq");
+			String chatdate = (String)jObj.get("chatdate");
 			
 			String roomId = makeRoomId(id1, id2);
 			ChatRoom thisRoom = chatRoomMap.get(roomId);
@@ -107,6 +108,7 @@ public class EchoHandler extends TextWebSocketHandler {
 						JSONObject mj = new JSONObject();
 						mj.put("id", id1);
 						mj.put("msg", msgText);
+						mj.put("chatdate", chatdate);
 						
 						ws.sendMessage(new TextMessage(mj.toJSONString()));
 						System.out.println("dd");

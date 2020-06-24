@@ -50,7 +50,7 @@
 			<div class="depth">홈 > 마이페이지 > 나의 지갑 > 예치금 내역</div>
 			<div class="contentDetail">
 				<div class="centerDiv">
-					<h2>예치금 내역</h2>
+					<h2 class="pageTitle">예치금 내역</h2>
 					<div class="walletDetail">
 						<div class="myBal">
 							현재 사용 가능한 예치금 잔액은<br>

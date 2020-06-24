@@ -60,8 +60,8 @@ public class PaymentDaoImp implements IPaymentDao{
 	}
 	
 	@Override
-	public int getPaging(String id) {
-		return sqlSession.selectOne(nameSpace +"getPaging", id);
+	public int getPaging(Map<String, String> map) {
+		return sqlSession.selectOne(nameSpace +"getPaging", map);
 	}
 
 	@Override

@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -49,8 +51,8 @@ public class PayController {
 		map.put("pnum", pnum);
 		
 		List<ChargeDto> clist = paymentServiceImp.getPayment(map);
-		int allP = paymentServiceImp.getPaging(id);
-		
+		int allP = paymentServiceImp.getPaging(map);
+		System.out.println(allP);
 		Map<String, Integer> pageMap = onlUtil.pagingValue(allP, pnum, 5);
 		
 		model.addAttribute("clist", clist);
@@ -76,7 +78,7 @@ public class PayController {
 		map.put("isReceived", "Y");
 		
 		List<ChargeDto> clist = paymentServiceImp.getPayment(map);
-		int allP = paymentServiceImp.getPaging(id);
+		int allP = paymentServiceImp.getPaging(map);
 		
 		Map<String, Integer> pageMap = onlUtil.pagingValue(allP, pnum, 5);
 		
@@ -104,15 +106,24 @@ public class PayController {
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/ajaxcharge.do", method = {RequestMethod.POST})
-	public String doCharge(Model model, Authentication auth) {
+	public String doCharge(Model model, Authentication auth, String pay_method, String merchant_uid, String paid_amount, String apply_num) {
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
 		String id = ldto.getId();
 		
-		ChargeDto cdto = new ChargeDto();
-		MerchantDto mdto = new MerchantDto();
+		int pay_amountI = Integer.parseInt(paid_amount);
 		
-		return "success";
+		ChargeDto cdto = new ChargeDto(0, id, pay_amountI, null, pay_amountI, null, "CHARGE");
+		MerchantDto mdto = new MerchantDto(0, id, pay_method, merchant_uid, pay_amountI, apply_num);
+		
+		boolean isS = paymentServiceImp.insertPaymentT(cdto, mdto);
+		
+		if(isS) {
+			return "success";
+		}else {
+			return "fail";
+		}
+		
 	}
 	
 	

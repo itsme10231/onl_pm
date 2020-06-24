@@ -77,8 +77,8 @@ public class PaymentServiceImp implements IPaymentService{
 	}
 	
 	@Override
-	public int getPaging(String id) {
-		return paymentDaoImp.getPaging(id);
+	public int getPaging(Map<String, String> map) {
+		return paymentDaoImp.getPaging(map);
 	}
 
 	@Override

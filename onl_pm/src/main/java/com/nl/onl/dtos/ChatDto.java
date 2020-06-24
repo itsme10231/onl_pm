@@ -2,13 +2,19 @@ package com.nl.onl.dtos;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ChatDto {
 
 	private int seq;
 	private String receive_id;
 	private String send_id;
 	private String content;
+	
+	@JsonFormat
+    (shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 hh시 mm분")
 	private Date chatdate;
+	
 	private String chkflag;
 	private String delflag;
 	private int wanted_seq;

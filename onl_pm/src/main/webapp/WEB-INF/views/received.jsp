@@ -54,7 +54,7 @@
 			<div class="depth">홈 > 마이페이지 > 나의 지갑 > 지급내역</div>
 			<div class="contentDetail">
 				<div class="centerDiv">
-					<h2>지급내역</h2>
+					<h2 class="pageTitle">지급내역</h2>
 					<div class="walletDetail">
 						<div class="myBal">
 							현재까지 지급받은 금액은<br>

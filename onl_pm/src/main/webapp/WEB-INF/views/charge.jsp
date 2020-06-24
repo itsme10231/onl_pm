@@ -97,11 +97,17 @@
 		        	url:"ajaxcharge.do",
 		        	method: "post",
 		        	data: merchant_log,
-		        	success: function(){
-		        		
+		        	dataType: "text",
+		        	success: function(s){
+		        		if(s == "SUCCESS"){
+		        			alert("화면을 이동합니다.");
+		        			location.href="prepaid.do";
+		        		}else{
+		        			alert("결제에 실패하였습니다. 관리자에게 문의해주세요");
+		        		}
 		        	},
-		        	fail: function(){
-		        		
+		        	fail: function(s){
+		        		alert("결제에 실패하였습니다. 관리자에게 문의해주세요");
 		        	}
 		        });
 		    } else {
@@ -112,6 +118,9 @@
 		});
 		
 	}
+	
+	
+
 </script>
 </head>
 <body>
@@ -123,7 +132,7 @@
 			<div class="contentDetail">
 				<div class="centerDiv">
 					<form action="">
-						<h2>예치금 충전</h2>
+						<h2 class="pageTitle">예치금 충전</h2>
 						<div style="text-align: center; margin-top: 50px; margin-bottom: 20px;">
 							<img alt="wallet" src="resources/icon/wallet.png" style="width:200px;">
 							<h4>예치금 미리 결제해두고<br> 구인글 등록할때 편하게 사용하세요!</h4>
@@ -244,9 +253,9 @@
 							</tbody>
 						</table>
 						<div class="pagingDiv">
-							&nbsp;&nbsp;&nbsp;<input type="radio" id="banking" name="charge_method" value="danal_tpay" checked="checked"> <label for="banking">계좌이체</label> &nbsp;&nbsp;
+							<input type="radio" id="banking" name="charge_method" value="danal_tpay" checked="checked"> <label for="banking">계좌이체</label> &nbsp;&nbsp;
 							<input type="radio" id="card"  name="charge_method" value="html5_inicis"> <label for="card">카드결제</label> &nbsp;&nbsp;
-							<input type="radio" id="kakao" name="charge_method" value="kakaopay"> <label for="kakao">카카오페이</label> &nbsp;&nbsp;
+							<input type="radio" id="kakao" name="charge_method" value="kakaopay"> <label for="kakao">카카오페이</label>
 							<br><br>
 							<input type="button" class="btn btn-danger" style="width: 300px;" value="결제" onclick="getCharge()">
 						</div>
