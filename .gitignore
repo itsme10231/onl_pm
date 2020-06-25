@@ -145,6 +145,7 @@ naverKey.properties
 mailSender.properties
 path.properties
 openbanking.properties
+iamport.properties
 
 pom.properties
 /test/
