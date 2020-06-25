@@ -3,6 +3,7 @@ package com.nl.onl.daos;
 import java.util.List;
 import java.util.Map;
 
+import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
@@ -47,4 +48,5 @@ public interface IPaymentDao{
 	
 	public boolean insertMerchant(MerchantDto mdto);
 	
+	public List<BankCDto> getBankCode();
 }

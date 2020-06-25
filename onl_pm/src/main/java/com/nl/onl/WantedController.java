@@ -98,6 +98,8 @@ public class WantedController {
 			map.put("id", id);
 			map.put("seq", seq);
 			
+			model.addAttribute("hasacc", ldto.getHasacc());
+			
 
 			wlist = wantedServiceImp.getWantedDetailLoginT(map);
 			model.addAttribute("wlist",wlist);

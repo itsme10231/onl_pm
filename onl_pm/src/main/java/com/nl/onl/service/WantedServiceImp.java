@@ -109,6 +109,8 @@ public class WantedServiceImp implements IWantedService{
 			
 			isS = wantedDaoImp.updateStatus(map);
 			
+		}else {
+			isS = true;
 		}
 		
 		return isS;

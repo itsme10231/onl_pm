@@ -21,6 +21,8 @@
 				<value>classpath:properties/naverKey.properties</value>
 				<value>classpath:properties/mailSender.properties</value>
 				<value>classpath:properties/path.properties</value>
+				<value>classpath:properties/openbanking.properties</value>
+				<value>classpath:properties/iamport.properties</value>
 			</list>
 		</property>
 
@@ -70,5 +72,15 @@
 		<property name="accessKey" value="${nk.accessKey}"/>
 		<property name="secretKey" value="${nk.secretKey}"/>
 		<property name="filePath" value="${path.filePath}"/>
+	</bean>
+	
+	<bean id="openBanking" class="com.nl.onl.util.OpenBanking">
+		<property name="client_id" value="${ob.client_id}"/>
+		<property name="secret_key" value="${ob.secret_key}"/>
+	</bean>
+	
+	<bean id="impRest" class="com.nl.onl.util.IamportREST">
+		<property name="imp_key" value="${imp.key}"/>
+		<property name="imp_secret" value="${imp.secret}"/>
 	</bean>
 </beans>

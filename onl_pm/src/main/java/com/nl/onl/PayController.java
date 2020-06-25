@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -13,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.MerchantDto;
@@ -153,6 +156,27 @@ public class PayController {
 		
 		
 		return "redirect:/prepaid.do";
+	}
+	
+	@RequestMapping(value = "/getbank.do", method = {RequestMethod.GET})
+	@ResponseBody
+	public JSONArray getBankCode() {
+		
+		List<BankCDto> blist = paymentServiceImp.getBankCode();
+		
+		JSONArray jArr = onlUtil.toJArr(blist);
+		
+		return jArr;
+	}
+	
+	@RequestMapping(value = "/insertaccount.do", method = {RequestMethod.POST})
+	@ResponseBody
+	public String insertAccount() {
+		
+		
+		
+		
+		return "";
 	}
 	
 }

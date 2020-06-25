@@ -2,6 +2,7 @@ package com.nl.onl;
 
 import static org.junit.Assert.*;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ import com.nl.onl.service.IPaymentService;
 import com.nl.onl.service.IWantedService;
 import com.nl.onl.util.ChatRoom;
 import com.nl.onl.util.FileWrite;
+import com.nl.onl.util.IamportREST;
+import com.nl.onl.util.OpenBanking;
 import com.nl.onl.util.Util;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -52,20 +55,17 @@ public class AppTest {
 	@Autowired
 	IPaymentService paymentServiceImp;
 	
+	@Autowired
+	OpenBanking openBanking;
 	
 	@Autowired
-	Util onlUtil;
+	IamportREST impRest;
 	
 	@Test
-	public void test() {
+	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		Map<String, String> map = new HashMap<>();
-		
-		map.put("id", "o132435465");
-		map.put("wanted_pay", "87000");
-		paymentServiceImp.payWantedT(map);
-//		wantedServiceImp.delWishList(map);
+		System.out.println(openBanking.isRealAccount("891023", "020", "1002938872551"));
 	}
 	
 }

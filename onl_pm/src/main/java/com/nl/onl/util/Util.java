@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -17,8 +18,10 @@ import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.crypto.Mac;
@@ -107,7 +110,7 @@ public class Util {
 		return dom;
 	}
 	
-	public String makeSignature(String url, String accessKey, String secretKey, String timestamp, String userIp) {
+	public String makeSignature(String url, String timestamp, String userIp) {
 		
 		
 	    String space = " ";                    // one space
@@ -171,55 +174,23 @@ public class Util {
 		String requestUrl1 = "/geolocation/v2";
 		String requestUrl2 = "/geoLocation";
 		
-		String accessKey = "vQXABY1T2mnBqEJXJhcZ";
-		String secretKey = "zJL1YbqGV9dUxi2Tk3wCt31nstQ5Vj8iSrBnPYzk";
+
 		String timestamp = getTodayMill();
 
 		
 		String queries = "ip="+ip+"&enc=utf8&ext=t&responseFormatType=json";
-		String signature = makeSignature(requestUrl1+requestUrl2+"?"+queries, accessKey, secretKey, timestamp, ip);
+		String signature = makeSignature(requestUrl1+requestUrl2+"?"+queries, timestamp, ip);
 		
 		String urlS = "https://geolocation.apigw.ntruss.com/geolocation/v2/geoLocation?"
 				+queries
 				;
 		
-		try {
-			
-			
-			URL urlObj = new URL(urlS);
-			HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-//			con.setRequestMethod("GET");
-			con.setRequestProperty("x-ncp-apigw-timestamp", timestamp);
-			con.setRequestProperty("x-ncp-iam-access-key", accessKey);
-			con.setRequestProperty("x-ncp-apigw-signature-v2", signature);
-			
-//			con.connect();
-			
-			InputStream is = con.getInputStream();
-			InputStreamReader isr = new InputStreamReader(is);
-			
-			BufferedReader br = new BufferedReader(isr);
-			
-			String line;
-			
-			
-			while((line = br.readLine()) != null) {
-				result.append(line);
-				result.append("\n");
-			}
-//			System.out.println(result);
-			
-			//받아온 결과값을 제이슨 오브젝트로 가공
-			JSONParser parser = new JSONParser();
-			jObj = (JSONObject)parser.parse(result.toString());
-			
-//			System.out.println(jObj.get("geoLocation"));
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		Map<String, String> map = new HashMap<>();
+		map.put("x-ncp-apigw-timestamp", timestamp);
+		map.put("x-ncp-iam-access-key", accessKey);
+		map.put("x-ncp-apigw-signature-v2", signature);
+		
+		jObj = connectUrl(urlS, null, "GET", map);
 			
 		
 		return jObj;
@@ -383,5 +354,69 @@ public class Util {
 		
 		
 		return map;
+	}
+	
+	//rest api에 연결하여 값을 제이슨객체로 받아오는 메서드
+	public JSONObject connectUrl(String url, String param, String method, Map<String, String> headerVal) {
+		JSONObject jObj = null;
+		StringBuffer result = new StringBuffer();
+		
+		try {
+			URL urlObj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection)urlObj.openConnection();
+			
+			if(headerVal!= null && headerVal.size() != 0) {
+				Set<String> keyset = headerVal.keySet();
+				Iterator<String> it = keyset.iterator();
+				
+				while(it.hasNext()) {
+					
+					String key = it.next();
+					con.setRequestProperty(key, (String)headerVal.get(key));
+				}
+			}
+			
+			if(method.equals("POST")) {
+				con.setRequestMethod(method);
+				con.setDoOutput(true);
+				con.setDoInput(true);
+				con.setUseCaches(false);
+				con.setDefaultUseCaches(false);
+				
+				OutputStream os = con.getOutputStream();
+				os.write(param.getBytes());
+				os.flush();
+				os.close();
+			}
+			
+			InputStream is = con.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+			
+			BufferedReader br = new BufferedReader(isr);
+			
+			String line;
+			
+			
+			while((line = br.readLine()) != null) {
+				result.append(line);
+				result.append("\n");
+			}
+			System.out.println(result);
+			JSONParser parser = new JSONParser();
+			jObj = (JSONObject)parser.parse(result.toString());
+			
+			
+		} catch (MalformedURLException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return jObj;
 	}
 }

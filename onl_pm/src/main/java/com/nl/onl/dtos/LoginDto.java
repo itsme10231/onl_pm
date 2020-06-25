@@ -28,6 +28,7 @@ public class LoginDto implements UserDetails, Principal {
 	private Date regdate;
 	private String role;
 	private String phone;
+	private String hasacc;
 	
 	private String regflag;
 	private ReportDto reportDto;
@@ -167,6 +168,16 @@ public class LoginDto implements UserDetails, Principal {
 
 	
 	
+	public String getHasacc() {
+		return hasacc;
+	}
+
+
+	public void setHasacc(String hasacc) {
+		this.hasacc = hasacc;
+	}
+
+
 	public String getStored_name() {
 		return stored_name;
 	}
@@ -182,7 +193,7 @@ public class LoginDto implements UserDetails, Principal {
 		return "LoginDto [id=" + id + ", password=" + password + ", name=" + name + ", address_1=" + address_1
 				+ ", address_2=" + address_2 + ", address_3=" + address_3 + ", email=" + email + ", nickname="
 				+ nickname + ", birth=" + birth + ", delflag=" + delflag + ", regdate=" + regdate + ", role=" + role
-				+ ", phone=" + phone + ", regflag=" + regflag + ", reportDto=" + reportDto + "]";
+				+ ", phone=" + phone + ", regflag=" + regflag + ", hasacc=" + hasacc + ", reportDto=" + reportDto + "]";
 	}
 
 

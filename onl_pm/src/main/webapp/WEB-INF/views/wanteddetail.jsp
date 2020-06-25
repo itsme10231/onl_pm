@@ -6,6 +6,7 @@
 <%request.setCharacterEncoding("UTF-8"); %>
 <%response.setContentType("text/html; charset=UTF-8"); %>
 <%@include file="header.jsp" %>
+
 <!DOCTYPE>
 <html>
 <head>
@@ -377,7 +378,8 @@
 	
 	function toggleApply(){
 		var wanted_seq = $("input[name='seq']").val();
-		
+		var hasacc = "${hasacc}";
+
 		
 		var targetUrl = "apply.do";
 		var textValue = "지원취소";
@@ -385,6 +387,15 @@
 		if($("#applyBto").hasClass("already")){
 			targetUrl = "cancelapply.do";
 			textValue = "지원하기";
+		}else{
+			if(hasacc == 'N'){
+				if(confirm("계좌를 등록해야 구인글에 지원신청할 수 있습니다.\n계좌를 등록하시겠어요?")){
+					$("#accbto").trigger("click");
+					return;
+				}else{
+					return;
+				}
+			}
 		}
 		
 		$.ajax({
@@ -518,6 +529,44 @@
 		}
 	}
 	
+	
+	function getBankCode(){
+		var thisO = $("#accbto");
+		if(!thisO.hasClass("already")){
+			$.ajax({
+				url: "getbank.do",
+				method: "get",
+				dataType: "json",
+				success: function(result){
+					thisO.addClass("already");
+					var sel = $("#bankC");
+					
+					for(var i = 0; i < result.length; i++){
+						var opt = $("<option value="+ result[i].bank_code+">"+ result[i].bank_name+ "</option>");
+						sel.append(opt);
+					}
+					
+				},
+				fail: function(){
+					alert("은행코드를 불러올수 없습니다.");
+				}
+				
+			});
+		}else{
+			return;
+		}
+	}
+	
+	function insertAccount(){
+		var code= $("select[name='bank_code']").val();
+		var account_num = $("input[name='account_num']").val();
+		
+		$.ajax({
+			url: "ge"
+			
+		});
+	}
+	
 	function makeBalloons(jsons){
 		var dialogDiv = $("#console");
 		
@@ -550,6 +599,7 @@
 </script>
 </head>
 <body>
+
 <div class="headerWrapper">
 	<%@include file="sidemenu.jsp" %>
 	<div class="pagecontent">
@@ -639,6 +689,7 @@
 						<sec:authorize access="hasRole('ROLE_USER')">
 							<input type="button" class="btn btn-outline-danger" value="신고하기" data-toggle="modal" data-target="#reportModal" data-whatever="${nickname}" onclick="getReportC()">
 							<input type="button" class="btn btn-outline-danger" value="문의하기" data-toggle="modal" data-target="#chatModal" id="chatBto" onclick="getChatLog()">
+							<input type="button" value="계좌등록" data-toggle="modal" id="accbto" data-target="#accountModal" style="display:none;" onclick="getBankCode()">
 							<input type="button" class="btn btn-outline-danger" value="프로필">
 	
 							<input type="button" id="applyBto" class="btn btn-danger ${wlist[0].apply eq 'Y'? 'already':''}" value="${wlist[0].apply eq 'Y'? '지원취소':'지원하기'}" onclick="toggleApply()">
@@ -756,6 +807,30 @@
       	</div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+	</div>
+</div>
+
+<div class="modal fade" id="accountModal">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">계좌등록</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body accountModal">
+      	※회원정보에 등록된 실명과 동일한 예금주의 계좌만 등록할 수 있습니다.<br>
+		<label for="recipient-name" class="col-form-label">은행:</label>
+        <select name="bank_code" id="bankC"></select><br>
+        <label for="recipient-name" class="col-form-label">계좌번호:</label>
+        <input name="account_num" style="width:350px;">
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-danger" onclick="insertAccount()">등록</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
       </div>
     </div>

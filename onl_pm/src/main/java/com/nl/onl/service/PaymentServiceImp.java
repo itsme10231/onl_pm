@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nl.onl.daos.IPaymentDao;
+import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
@@ -187,5 +188,10 @@ public class PaymentServiceImp implements IPaymentService{
 	@Override
 	public String getAllbal(String id) {
 		return paymentDaoImp.getAllbal(id);
+	}
+	
+	@Override
+	public List<BankCDto> getBankCode() {
+		return paymentDaoImp.getBankCode();
 	}
 }

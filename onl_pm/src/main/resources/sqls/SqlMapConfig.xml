@@ -22,6 +22,7 @@
 		<typeAlias type="com.nl.onl.dtos.LocDto" alias="LocDto"/>
 		<typeAlias type="com.nl.onl.dtos.NotifyDto" alias="NotifyDto"/>
 		<typeAlias type="com.nl.onl.dtos.MerchantDto" alias="MerchantDto"/>
+		<typeAlias type="com.nl.onl.dtos.BankCDto" alias="BankCDto"/>
 		
 		
 		<typeAlias type="com.nl.onl.dtos.SearchDto" alias="SearchDto"/>

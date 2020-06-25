@@ -211,8 +211,11 @@
 	<!-- 오픈뱅킹 api 관련 쿼리 -->
 	
 	<!-- 계좌가 입력되어있는지 검사 및 계좌번호 가져오기-->
-	<select id="">
-		
+	
+	<!-- 은행코드 가져오기 -->
+	<select id="getBankCode" resultType="BankCDto">
+		SELECT BANK_CODE, BANK_NAME
+		FROM BANK_CODE
 	</select>
 	
 </mapper>

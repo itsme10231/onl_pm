@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
@@ -100,5 +101,10 @@ public class PaymentDaoImp implements IPaymentDao{
 	public boolean insertMerchant(MerchantDto mdto) {
 		int count=sqlSession.insert(nameSpace+"insertMerchant" ,mdto);
 		return count>0?true:false;
+	}
+	
+	@Override
+	public List<BankCDto> getBankCode() {
+		return sqlSession.selectList(nameSpace+"getBankCode");
 	}
 }

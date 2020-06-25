@@ -3,6 +3,7 @@ package com.nl.onl.service;
 import java.util.List;
 import java.util.Map;
 
+import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
@@ -46,4 +47,6 @@ public interface IPaymentService {
 	
 	//잔액조회: 거래기록이 없을시 null을 반환
 	public String getAllbal(String id);
+	
+	public List<BankCDto> getBankCode();
 }
