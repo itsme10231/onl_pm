@@ -1,6 +1,7 @@
 package com.nl.onl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,21 @@ public class ScheduleServiceImp implements IScheduleService{
 	private IScheduleDao scheduleDaoImp;
 	
 	@Override
-	public List<WantedDto> worked(String id) {
+	public List<WantedDto> worked(Map<String, String> map) {
 		
-		return scheduleDaoImp.worked(id);
+		return scheduleDaoImp.worked(map);
 	}
 
 	@Override
-	public List<WantedDto> working(String id) {
+	public List<WantedDto> working(Map<String, String> map) {
 		
-		return scheduleDaoImp.working(id);
+		return scheduleDaoImp.working(map);
 	}
 
 	@Override
-	public List<WantedDto> plan(String id) {
+	public List<WantedDto> plan(Map<String, String> map) {
 		
-		return scheduleDaoImp.plan(id);
+		return scheduleDaoImp.plan(map);
 	}
 
 }

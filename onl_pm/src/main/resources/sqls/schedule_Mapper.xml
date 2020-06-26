@@ -35,24 +35,52 @@
 	</resultMap>
 	
 <!-- 	했던 일 -->
-	<select id="worked" resultMap="WantedDtoMap" parameterType="String">
-		SELECT w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ
-		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
-		WHERE STATE ='COMPLETE' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND w.edate &lt; SYSDATE
+	<select id="worked" resultType="WantedDto" parameterType="map">
+	
+		SELECT SEQ, TITLE, SDATE, EDATE, STIME, ETIME 
+		FROM (SELECT  w.SEQ, w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME 
+			FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
+			WHERE w.STATE ='COMPLETE' AND a.ID = #{id} AND a.id = w.SELECTOR AND w.EDATE &lt; SYSDATE) complete
+		WHERE SUBSTR(SDATE, 1, 6) = #{yyyyMM} OR SUBSTR(EDATE,1, 6) = #{yyyyMM} ORDER BY SDATE
+	
+	
+	
+<!-- 		SELECT w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ -->
+<!-- 		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ  -->
+<!-- 		WHERE STATE ='COMPLETE' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND w.edate &lt; SYSDATE -->
 	</select>
 	
 <!-- 	하고있는 일 -->
-	<select id="working" resultMap="WantedDtoMap" parameterType="String">
-		SELECT  w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ
-		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
-		WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND SYSDATE BETWEEN w.SDATE AND w.EDATE
+	<select id="working" resultType="WantedDto" parameterType="map">
+	
+		SELECT SEQ, TITLE, SDATE, EDATE, STIME, ETIME 
+		FROM (SELECT w.SEQ, w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME 
+			FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
+			WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.ID = w.SELECTOR AND SYSDATE &gt;= w.SDATE AND SYSDATE-1 &lt;= w.EDATE) complete
+		WHERE SUBSTR(SDATE, 0, 6) = #{yyyyMM} OR SUBSTR(EDATE, 0, 6) = #{yyyyMM}
+	
+	
+	
+	
+<!-- 		SELECT  w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ -->
+<!-- 		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ  -->
+<!-- 		WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND SYSDATE BETWEEN w.SDATE AND w.EDATE -->
 	</select>
 	
 <!-- 	할 일 -->
-	<select id="plan" resultMap="WantedDtoMap" parameterType="String">
-		SELECT  w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ AS
-		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
-		WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND SYSDATE &lt; w.SDATE ;
+	<select id="plan" resultType="WantedDto" parameterType="map">
+	
+		SELECT SEQ, TITLE, SDATE, EDATE, STIME, ETIME 
+		FROM (SELECT w.SEQ, w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME 
+			FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ 
+			WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.ID = w.SELECTOR AND SYSDATE &lt; w.SDATE) complete
+		WHERE SUBSTR(SDATE, 0, 6) = #{yyyyMM} OR SUBSTR(EDATE, 0, 6) = #{yyyyMM}
+	
+	
+	
+<!-- 		SELECT  w.TITLE, w.SDATE, w.EDATE, w.STIME, w.ETIME, w.SEQ AS -->
+<!-- 		FROM WANTED_POST w JOIN APPLYLIST a ON w.SEQ = a.WANTED_SEQ  -->
+<!-- 		WHERE w.STATE ='PROCESS' AND a.ID = #{id} AND a.SEQ = w.SELECTOR AND SYSDATE &lt; w.SDATE ; -->
 	</select>
 	
 	

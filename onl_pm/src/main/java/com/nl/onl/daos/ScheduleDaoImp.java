@@ -1,6 +1,7 @@
 package com.nl.onl.daos;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.stream.events.Namespace;
 
@@ -14,24 +15,24 @@ public class ScheduleDaoImp implements IScheduleDao{
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-	private String namespace = "com.nl.onl.scheduel.";
+	private String namespace = "com.nl.onl.schedule.";
 	
 	@Override
-	public List<WantedDto> worked(String id) {
+	public List<WantedDto> worked(Map<String, String> map) {
 		
-		return sqlSession.selectList(namespace+"worked", id);
+		return sqlSession.selectList(namespace+"worked", map);
 	}
 
 	@Override
-	public List<WantedDto> working(String id) {
+	public List<WantedDto> working(Map<String, String> map) {
 		
-		return sqlSession.selectList(namespace+"working", id);
+		return sqlSession.selectList(namespace+"working", map);
 	}
 
 	@Override
-	public List<WantedDto> plan(String id) {
+	public List<WantedDto> plan(Map<String, String> map) {
 		
-		return sqlSession.selectList(namespace+"plan", id);
+		return sqlSession.selectList(namespace+"plan", map);
 	}
 
 	
