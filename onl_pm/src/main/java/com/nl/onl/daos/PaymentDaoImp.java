@@ -105,6 +105,11 @@ public class PaymentDaoImp implements IPaymentDao{
 	}
 	
 	@Override
+	public MerchantDto getMerchant(String seq) {
+		return sqlSession.selectOne(nameSpace+"getMerchant", seq);
+	}
+	
+	@Override
 	public List<BankCDto> getBankCode() {
 		return sqlSession.selectList(nameSpace+"getBankCode");
 	}

@@ -23,7 +23,7 @@ public class MerchantDto {
 
 
 	public MerchantDto(int seq, String id, String pay_method, String merchant_uid, int paid_amount,
-			String apply_num) {
+			String apply_num, String imp_uid) {
 		super();
 		this.seq = seq;
 		this.id = id;
@@ -31,6 +31,7 @@ public class MerchantDto {
 		this.merchant_uid = merchant_uid;
 		this.paid_amount = paid_amount;
 		this.apply_num = apply_num;
+		this.imp_uid = imp_uid;
 	}
 
 

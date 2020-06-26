@@ -187,6 +187,11 @@ public class PaymentServiceImp implements IPaymentService{
 	}
 	
 	@Override
+	public MerchantDto getMerchant(String seq) {
+		return paymentDaoImp.getMerchant(seq);
+	}
+	
+	@Override
 	public String getAllbal(String id) {
 		return paymentDaoImp.getAllbal(id);
 	}

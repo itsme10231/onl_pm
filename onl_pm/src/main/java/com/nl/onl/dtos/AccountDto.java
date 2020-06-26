@@ -24,6 +24,18 @@ public class AccountDto {
 		this.name = name;
 		this.tran_amt = tran_amt;
 	}
+	
+	
+
+
+
+	public AccountDto(String id, String bank_code, String account_number, String name) {
+		super();
+		this.id = id;
+		this.bank_code = bank_code;
+		this.account_number = account_number;
+		this.name = name;
+	}
 
 
 

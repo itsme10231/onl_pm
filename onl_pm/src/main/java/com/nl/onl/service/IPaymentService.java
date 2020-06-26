@@ -54,4 +54,6 @@ public interface IPaymentService {
 	public String getSequence();
 	
 	public boolean insertAccount(AccountDto adto);
+	
+	public MerchantDto getMerchant(String seq);
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -120,6 +121,7 @@ public class PayController {
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/ajaxcharge.do", method = {RequestMethod.POST})
+	@ResponseBody
 	public String doCharge(Model model, Authentication auth, String pay_method, String imp_uid, String merchant_uid, String paid_amount, String apply_num) {
 		boolean isS = false;
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
@@ -128,16 +130,18 @@ public class PayController {
 		int pay_amountI = Integer.parseInt(paid_amount);
 		int charge_amount = calCharge(pay_amountI);
 		
-		MerchantDto mdto = new MerchantDto(0, id, pay_method, merchant_uid, pay_amountI, apply_num);
+		MerchantDto mdto = new MerchantDto(0, id, pay_method, merchant_uid, pay_amountI, apply_num, imp_uid);
 		ChargeDto cdto = new ChargeDto(0, id, charge_amount, null, charge_amount, null, "CHARGE");
-
+		System.out.println(cdto);
+		System.out.println(mdto);
+		
 		isS = paymentServiceImp.insertPaymentT(cdto, mdto);
 		
 		if(isS) {
-			return "success";
+			return "SUCCESS";
 		}else {
 			impRest.getRefund(imp_uid, merchant_uid, "결제정보 저장 오류");
-			return "fail";
+			return "FAIL";
 		}
 		
 	}
@@ -172,9 +176,12 @@ public class PayController {
 		map.put("id", id);
 		map.put("balance", "0");
 		
-		boolean isS = paymentServiceImp.updatePaymentT(map);
+		MerchantDto mdto = paymentServiceImp.getMerchant(seq);
+		
+		boolean isS = impRest.getRefund(mdto.getImp_uid(), mdto.getMerchant_uid(), "사용자 요청 환불");
 		
 		if(isS) {
+			isS = paymentServiceImp.updatePaymentT(map);
 			model.addAttribute("msg", "성공적으로 환불되었습니다.");
 		}else {
 			model.addAttribute("msg", "환불에 실패했습니다. 관리자에게 문의해주세요");
@@ -197,16 +204,16 @@ public class PayController {
 	
 	@RequestMapping(value = "/insertaccount.do", method = {RequestMethod.POST})
 	@ResponseBody
-	public String insertAccount(Model model, Authentication auth, AccountDto adto, String identity) {
+	public String insertAccount(Model model, Authentication auth, String code, String account_num, String identity) {
 		
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
 		String id = ldto.getId();
 		String name = ldto.getName();
 		
-		boolean isS = openBanking.isRealAccount(identity, adto.getBank_code(), adto.getAccount_number(), name);
+		boolean isS = openBanking.isRealAccount(identity, code, account_num, name);
 		
 		if(isS) {
-			isS = paymentServiceImp.insertAccount(adto);
+			isS = paymentServiceImp.insertAccount(new AccountDto(id, code, account_num, ldto.getName()));
 			if(isS) {
 				
 				//회원정보를 새로고침

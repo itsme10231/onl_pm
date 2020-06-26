@@ -564,6 +564,7 @@
 		
 		$.ajax({
 			url: "insertaccount.do",
+			method:"post",
 			data:{
 				"code":code,
 				"account_num":account_num,

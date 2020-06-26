@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class IamportREST {
@@ -37,6 +39,17 @@ public class IamportREST {
 		
 		JSONObject jObj = onlUtil.connectUrl(url, param, "POST", null);
 		
+		String res = jObj.get("response").toString();
+		JSONParser parser = new JSONParser();
+		try {
+			jObj = (JSONObject) parser.parse(res);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		token = (String)jObj.get("access_token");
+		System.out.println(token);
+		
 		return token;
 	}
 	
@@ -48,7 +61,8 @@ public class IamportREST {
 		return jObj;
 	}
 	
-	public JSONObject getRefund(String imp_uid, String merchant_uid, String reason) {
+	public boolean getRefund(String imp_uid, String merchant_uid, String reason) {
+		boolean isS=false;
 		JSONObject jObj = null;
 
 		String url = "https://api.iamport.kr/payments/cancel";
@@ -58,11 +72,21 @@ public class IamportREST {
 				;
 		
 		Map<String, String> headerVal = new HashMap<>();
-		headerVal.put("Authorized", getToken());
+		headerVal.put("Authorization", getToken());
 		
 		jObj = onlUtil.connectUrl(url, param, "POST", headerVal);
+		Object code = jObj.get("code"); 
+		long temp = 0;
 		
-		return jObj;
+		if(code!=null) {
+			if((Long)code==temp) {
+				isS = true;
+			}
+		}else {
+			isS= false;
+		}
+		
+		return isS;
 	}
 	
 }

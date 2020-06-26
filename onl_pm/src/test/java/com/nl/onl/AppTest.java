@@ -66,7 +66,7 @@ public class AppTest {
 	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		loginServiceImp.loadUserByUsername("onlonl@onltest.com");
+		impRest.getRefund("imp_971382452928", "o132435465_1593156212516", "시스템환불테스트");
 	}
 	
 }

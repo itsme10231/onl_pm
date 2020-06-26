@@ -201,16 +201,21 @@
 	
 	<!-- 실결제용 테이블 INSERT, 예치금 테이블 INSERT후 실행 -->
 	<insert id="insertMerchant" parameterType="MerchantDto">
-		INSERT INTO MERCHANT_LOG (
+		INSERT INTO MERCHANT_LOG VALUES(
 			PREPAID_SEQ.CURRVAL, #{id}, #{pay_method}, #{merchant_uid}, #{paid_amount}, #{apply_num}, SYSDATE, #{imp_uid}
 		)
 	</insert>
 	
+	<!-- 실결제용 테이블 가져오기 -->
+	<select id="getMerchant" parameterType="String" resultType="MerchantDto">
+		SELECT	MERCHANT_UID, IMP_UID
+		FROM	MERCHANT_LOG
+		WHERE 	SEQ = #{seq}
+	</select>
 	
 	<!-- .............................................................. -->
 	<!-- 오픈뱅킹 api 관련 쿼리 -->
 	
-	<!-- 계좌가 입력되어있는지 검사 및 계좌번호 가져오기-->
 	
 	<!-- 은행코드 가져오기 -->
 	<select id="getBankCode" resultType="BankCDto">
@@ -229,6 +234,22 @@
 			#{id}, #{bank_code}, #{account_number}, #{name}
 		)
 	</insert>
+	
+	<!-- 계좌 가져오기 -->
+	<select id="getAccount" parameterType="String" resultType="AccountDto">
+		SELECT 	BANK_CODE, ACCOUNT_NUMBER, NAME
+		FROM	MEMBER_ACCOUNT
+		WHERE	ID = #{id}
+	</select>
+	
+	<!-- 계좌 수정하기 -->
+	<update id="updateAccount" parameterType="AccountDto">
+		UPDATE 	MEMBER_ACCOUNT
+		SET		BANK_CODE = #{bank_code},
+				ACCOUNT_NUMBER = #{account_number},
+				NAME = #{name}
+		WHERE	ID = #{id}
+	</update>
 </mapper>
 
 

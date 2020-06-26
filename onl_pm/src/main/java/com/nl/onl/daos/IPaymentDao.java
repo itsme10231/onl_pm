@@ -49,6 +49,8 @@ public interface IPaymentDao{
 	
 	public boolean insertMerchant(MerchantDto mdto);
 	
+	public MerchantDto getMerchant(String seq);
+	
 	public List<BankCDto> getBankCode();
 	
 	public String getSequence();
