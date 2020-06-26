@@ -34,7 +34,7 @@ h2 {
 	text-align: center;
 	border: 2px solid gray;
 	width: 50%;
-	height: 70px;
+	height: 50px;
 	margin-left: 450px;
 	border-collapse: collapse;
 	margin-top: 100px;
@@ -135,8 +135,9 @@ th {
 <body>
 <%
 	List<QnaDto> list=(List<QnaDto>)request.getAttribute("list");
-	int count=(Integer) request.getAttribute("count");
+// 	int count=(Integer) request.getAttribute("count");
 	Map<String,Integer> map=(Map<String,Integer>)request.getAttribute("map");
+	String qna_code = request.getParameter("qna_code");
 %>
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
@@ -147,18 +148,11 @@ th {
 		</div>
 		<table id="table1">
 			<tr>
-				<td class="td1">전체</td>
-				<td class="td1">구인 회원가입</td>
-				<td class="td1">회원정보 수정</td>
-				<td class="td1">채용공고등록/관리</td>
-				<td class="td1">결제</td>
-			</tr>
-			<tr>
-				<td class="td1">기타</td>
-				<td class="td1"></td>
-				<td class="td1"></td>
-				<td class="td1"></td>
-				<td class="td1"></td>
+				<td class="td1"><a href="qnalist.do?pnum=1">전체</a></td>
+				<td class="td1"><a href="qnalist.do?pnum=1&qna_code=1">구인 회원가입</a></td>
+				<td class="td1"><a href="qnalist.do?pnum=1&qna_code=2">회원정보 수정</a></td>
+				<td class="td1"><a href="qnalist.do?pnum=1&qna_code=3">채용공고등록/관리</a></td>
+				<td class="td1"><a href="qnalist.do?pnum=1&qna_code=4">결제</a></td>
 			</tr>
 		</table>
 
@@ -178,26 +172,19 @@ th {
 					<td><f:formatDate pattern="yyyy-MM-dd" value="${qdto.regdate}"/></td>
 				</tr>
 			</c:forEach>
-<!-- 			<tr> -->
-<%-- 				<td colspan="5" style="text-align: center;"><a href="">◀</a> <% --%>
-<!-- //  	for (int i = 1; i <= count; i++) { -->
-<%--  %> <a href="qnalist.do?pnum=<%=i%>"><%=i%></a> --%>
-<%-- 					<% --%>
-<!-- // 						} -->
-<%-- 					%> <a href="">▶</a></td> --%>
-<!-- 			</tr> -->
+
 
 		<tr>
 			<td colspan="5" style="text-align: center;">
-				<a href="qnalist.do?pnum=<%=map.get("prePageNum")%>">◀</a>
+				<a href='qnalist.do?pnum=<%=map.get("prePageNum")%><%=qna_code==null?"":"&qna_code="+list.get(0).getQna_code()%>'>◀</a>
 				<%
 				for(int i=map.get("startPage"); i<=map.get("endPage"); i++){
 						%>
-						<a href="qnalist.do?pnum=<%=i%>"><%=i%></a>
+						<a href="qnalist.do?pnum=<%=i%><%=qna_code==null?"":"&qna_code="+list.get(0).getQna_code()%>"><%=i%></a>
 						<%
 					}
 				%>
-				<a href="qnalist.do?pnum=<%=map.get("nextPageNum")%>">▶</a>
+				<a href="qnalist.do?pnum=<%=map.get("nextPageNum")%><%=qna_code==null?"":"&qna_code="+list.get(0).getQna_code()%>">▶</a>
 			</td>
 		</tr>
 		</table>

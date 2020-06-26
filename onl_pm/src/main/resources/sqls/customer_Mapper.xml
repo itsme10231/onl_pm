@@ -18,26 +18,47 @@
 	
 <!-- 	QNA목록보기 -->
 	<select id="getAllListQna" resultMap="QnaDtoMap"
-	 parameterType="String">
-		 SELECT a.SEQ,a.ID, a.CATEGORY_NAME,a.TITLE,a.PROCESS,a.REGDATE
+	 parameterType="Map">
+		 SELECT a.SEQ,a.ID, a.CATEGORY_NAME,a.TITLE,a.PROCESS,a.REGDATE,a.QNA_CODE
 			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
-				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME,q.REF
-					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE ) a
+				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME,q.REF,q.QNA_CODE
+					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE
+					<if test="qna_code!=null">
+			    		AND q.QNA_CODE=#{qna_code}
+			    	</if>
+					 ) a
 			    WHERE CEIL(RN/5)=#{pnum} AND a.REF=a.SEQ
+			  
 	</select>
 	
-<!-- 	QNA페이징 -->
-	<select id="pcountQna" resultType="int">
-		SELECT CEIL(COUNT(*)/5) FROM QNA
+<!-- 	QNA페이징1    -->
+<!-- 	<select id="pcountQna" resultType="int"> -->
+<!-- 		SELECT CEIL(COUNT(*)/5) FROM QNA  -->
+<!-- 	</select> -->
+	
+	<!-- 	QNA페이징 -->
+	<select id="pcountQna" resultType="int" parameterType="String">
+		SELECT CEIL(COUNT(*)/5) AS COUNT 
+		FROM QNA q , QNA_CATEGORY c 
+		WHERE q.QNA_CODE =c.QNA_CODE 
+		<if test="qna_code!=null">
+			    		AND q.QNA_CODE=#{qna_code}
+		</if>
 	</select>
 	
 <!-- 	QNA상세보기 -->
 	<select id="detailQna" resultMap="QnaDtoMap"
 		 parameterType="String">
-		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE , q.QNA_CODE
+		SELECT q.SEQ, c.CATEGORY_NAME, q.TITLE, q.CONTENT, q.ID, q.REGDATE, q.PROCESS, q.QNA_CODE
 		FROM QNA q ,QNA_CATEGORY c
-		WHERE q.QNA_CODE = c.QNA_CODE AND SEQ=#{seq}
+		WHERE q.QNA_CODE = c.QNA_CODE AND REF=#{seq}
+		ORDER BY REGDATE ASC
 		</select>
+		
+<!-- 		SELECT SEQ ,QNA_CODE ,TITLE ,CONTENT ,ID ,REGDATE ,PROCESS  -->
+<!-- FROM QNA  -->
+<!-- WHERE "REF" =2 -->
+<!-- ORDER BY REGDATE ASC  -->
 
 <!-- 	QNA쓰기 -->
 	<insert id="insertQna" parameterType="QnaDto">
@@ -55,14 +76,19 @@
 <!-- 	QNA삭제 -->
 	<delete id="deleteQna" parameterType="String">
 		DELETE FROM QNA WHERE SEQ =#{seq}
-	
 	</delete>
 
-	<insert id="replyQnaInsert" parameterType="QnaDto">
+<!-- 	QNA댓글쓰기 -->
+	<insert id="insertReplyQna" parameterType="QnaDto">
 		INSERT INTO QNA
 		VALUES (QNA_SEQ.nextval,#{qna_code},#{title},#{content},#{id},SYSDATE,
 		(SELECT REF FROM QNA WHERE SEQ=#{seq}), 'COMPLETE')
 	</insert>
+	
+<!-- 	QNA상태변경 -->
+	<update id="updateProcess" parameterType="QnaDto">
+		UPDATE QNA SET PROCESS = #{process} WHERE SEQ = #{seq}
+	</update>
 	
 	<resultMap type="com.nl.onl.dtos.NoticeDto" id="NoticeDtoMap">
 		<result property="seq" column="SEQ" />
@@ -81,6 +107,7 @@
 					FROM NOTICE )
 			    WHERE CEIL(RN/10)=#{pnum}
 	</select>
+	
 	
 <!-- 	공지사항 페이징 -->
 	<select id="pcountNotice" resultType="int">

@@ -1,3 +1,5 @@
+<%@page import="com.nl.onl.dtos.QnaDto"%>
+<%@page import="com.sun.mail.util.QDecoderStream"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%
 	request.setCharacterEncoding("utf-8");
@@ -80,30 +82,31 @@ th {
 </style>
 </head>
 <body>
+
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
 		<h2><a href="qnalist.do?pnum=1">QNA 수정</a></h2>
 		<form action="qnaUpdate.do" method="post">
-		<input type="hidden" name="seq" value="${qdto.seq}">
+		<input type="hidden" name="seq" value="${qlist[0].seq}">
 			<table>
 				<tr>
 					<th height="40px">문의유형</th>
 					<td height="40px">
 					<select name="qna_code">
-							<option value="1" ${qdto.qna_code==1?"selected":""}>구인 회원가입</option>
-							<option value="2" ${qdto.qna_code==2?"selected":""}>회원정보 수정</option>
-							<option value="3" ${qdto.qna_code==3?"selected":""}>채용공고등록/관리</option>
-							<option value="4" ${qdto.qna_code==4?"selected":""}>결제</option>
+							<option value="1" ${qlist[0].qna_code==1?"selected":""}>구인 회원가입</option>
+							<option value="2" ${qlist[0].qna_code==2?"selected":""}>회원정보 수정</option>
+							<option value="3" ${qlist[0].qna_code==3?"selected":""}>채용공고등록/관리</option>
+							<option value="4" ${qlist[0].qna_code==4?"selected":""}>결제</option>
 					</select>
 					</td>
 				</tr>
 				<tr>
 					<th height="40px">제목</th>
-					<td height="40px"><input type="text" name="title" id="input2" value="${qdto.title}"/></td>
+					<td height="40px"><input type="text" name="title" id="input2" value="${qlist[0].title}"/></td>
 				</tr>
 				<tr>
 					<th height="230px">문의내용</th>
-					<td height="230px"><textarea cols="70" rows="12" name="content">${qdto.content}</textarea></td>
+					<td height="230px"><textarea cols="70" rows="12" name="content">${qlist[0].content}</textarea></td>
 				</tr>
 <!-- 				<tr> -->
 <!-- 					<th height="40px">첨부파일</th> -->
@@ -112,7 +115,7 @@ th {
 <!-- 				</tr> -->
 				<tr>
 				<th height="40px">작성자</th>
-				<td height="40px">${qdto.id}</td>
+				<td height="40px">${qlist[0].id}</td>
 			</tr>
 			</table>
 			<div id="div2">

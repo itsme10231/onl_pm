@@ -1,7 +1,11 @@
+<%@page import="com.nl.onl.dtos.LoginDto"%>
+<%@page import="com.nl.onl.daos.LoginDaoImp"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@page import="com.nl.onl.dtos.QnaDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
 <%response.setContentType("text/html; charset=utf-8"); %>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@include file="header.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -93,6 +97,7 @@ th {
 </style>
 </head>
 <body>
+	<% LoginDto ldto=(LoginDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); %>
 
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
@@ -100,15 +105,15 @@ th {
 		<table>
 			<tr>
 				<th height="40px">문의유형</th>
-				<td height="40px">${qdto.category_name}</td>
+				<td height="40px">${qList[0].category_name}</td>
 			</tr>
 			<tr>
 				<th height="40px">제목</th>
-				<td height="40px">${qdto.title}</td>
+				<td height="40px">${qList[0].title}</td>
 			</tr>
 			<tr>
 				<th height="230px">문의내용</th>
-				<td><textarea class="form-control" rows="10" cols="60" readonly="readonly">${qdto.content}</textarea></td>
+				<td><textarea class="form-control" rows="10" cols="60" readonly="readonly">${qList[0].content}</textarea></td>
 			</tr>
 			<tr>
 				<th height="40px">첨부파일</th>
@@ -116,44 +121,35 @@ th {
 			</tr>
 			<tr>
 				<th height="40px">작성자</th>
-				<td height="40px">${qdto.id}</td>
+				<td height="40px">${qList[0].id}</td>
 			</tr>
+			
 		</table>
 		<div id="div2">
-			<button class="button2" onclick="deleteQna(${qdto.seq})">삭제</button>
+			<button class="button2" onclick="deleteQna(${qList[0].seq})">삭제</button>
 			</div>
 		<div class="div3">
-			<button class="button2" onclick="updateQna(${qdto.seq})">수정</button>
+			<button class="button2" onclick="updateQna(${qList[0].seq})">수정</button>
+			</div>
+			
+			<table>
+				<tr>
+				<th height="230px">답변</th>
+				<td><textarea class="form-control" rows="10" cols="60"<%=ldto.getRole().equals("USER")?"readonly":"" %> >${qList[1].content}</textarea></td>
+			</tr>
+			</table>
+			
+			<div id="div2">
+<%-- 			<sec:authorize access="hasRole('ROLE_ADMIN')" var="u">버튼</sec:authorize> --%>
+			<button class="button2" onclick="deleteQna(${qList[1].seq})">삭제</button>
 			</div>
 		<div class="div3">
-			<button class="button2">답글</button>
+			<button class="button2" onclick="updateQna(${qList[1].seq})">수정</button>
 			</div>
-
-<div id="replyForm">
-	<h1>답글추가하기</h1>
-	<form action="replyBoard.do" method="post">
-		<input type="hidden" name="seq" value="${dto.seq}"/>
-		<table class="table table-striped">
-			<tr>
-				<th>아이디</th>
-				<td><input class="form-control" type="text" name="id" required="required"/></td>
-			</tr>
-			<tr>
-				<th>제목</th>
-				<td><input class="form-control" type="text" name="title" required="required"/></td>
-			</tr>
-			<tr>
-				<th>내용</th>
-				<td><textarea class="form-control" rows="10" cols="60" name="content" required="required"></textarea></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="submit" value="답글등록"/>
-				</td>
-			</tr>
-		</table>
-	</form>
-	</div>
+			<div class="div3">
+			<button class="button2" onclick="qnaAddForm(${qList[1].seq})">답글</button>
+			</div>
+			
 </div>
 
 </body>

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hk.page.Paging;
+import com.nl.onl.daos.LoginDaoImp;
+import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.QnaDto;
 import com.nl.onl.service.ICustomService;
 
@@ -25,15 +28,14 @@ public class CustomerController {
 	
 	//QNA 전체목록
 	@RequestMapping(value = "/qnalist.do", method = {RequestMethod.GET})
-	public String qnalist(Model model,String pnum) {
+	public String qnalist(Model model,String pnum,String qna_code) {
 		if (pnum==null) {
 			pnum="1";
 		}
-		List<QnaDto> list = CustomServiceImp.getAllListQna(pnum);
-		int count= CustomServiceImp.pcountQna();
 		
+		List<QnaDto> list = CustomServiceImp.getAllListQna(pnum,qna_code);
+		int count= CustomServiceImp.pcountQna(qna_code);
 		Map<String, Integer>map=Paging.pagingValue(count, pnum, 5);
-		
 		model.addAttribute("list",list);
 		model.addAttribute("map",map);
 		
@@ -46,10 +48,14 @@ public class CustomerController {
 		 // @RequestParam("seqparam"): "seqparam" 이름으로 파라미터가 전달되면 seq변수에 받겠다 
 //		logger.info("글추가폼이동 {}.", locale);
 		
-		QnaDto qdto=CustomServiceImp.detailQna(seq);
+		List<QnaDto> qList=CustomServiceImp.detailQna(seq);
 		
-		model.addAttribute("qdto",qdto);
-		
+//		if(사용자의 등급이 admin?) {
+//			// 글의 checked 수정 서비스 실행
+//			
+//		}
+		model.addAttribute("qList",qList);
+		System.out.println(qList);
 		return "qnadetail";
 	}
 	
@@ -59,18 +65,19 @@ public class CustomerController {
 	public String addForm(Locale locale, Model model) {
 		 // @RequestParam("seqparam"): "seqparam" 이름으로 파라미터가 전달되면 seq변수에 받겠다 
 //		logger.info("글추가폼이동 {}.", locale);
-
+//		if () {
+//			
+//		}
 		return "qnawrite";
 	}
 	
 	//QNA쓰기
 	
 	@RequestMapping(value = "qnawrite.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String ansAddBoard(QnaDto qdto, Locale locale, Model model) {
+	public String qnawrite(QnaDto qdto, Locale locale, Model model) {
 		 
 //		logger.info("글추가하기 {}.", locale);
 		qdto.setId("O1");
-		System.out.println(qdto);
 		boolean isS=CustomServiceImp.insertQna(qdto);
 		if(isS) {
 			System.out.println("success");
@@ -100,15 +107,15 @@ public class CustomerController {
 		 // @RequestParam("seq"): "seq" 이름으로 파라미터가 전달되면 seq변수에 받겠다 
 	
 		
-		QnaDto qdto=CustomServiceImp.detailQna(seq);
+		List<QnaDto> qdto=CustomServiceImp.detailQna(seq);
 		
-		model.addAttribute("qdto", qdto);
+		model.addAttribute("qlist", qdto);
 		 System.out.println(qdto);
 		return "qnaupdate";
 	}
 	//QNA수정
 	@RequestMapping(value = "qnaUpdate.do", method = {RequestMethod.GET,RequestMethod.POST})
-	public String ansboardUpdate(QnaDto qdto, Locale locale, Model model) {
+	public String qnaUpdate(QnaDto qdto, Locale locale, Model model) {
 //		 System.out.println(qdto);
 	
 		boolean isS=CustomServiceImp.updateQna(qdto);
@@ -117,6 +124,38 @@ public class CustomerController {
 			return "redirect:qnadetail.do?seqparam="+qdto.getSeq();			
 		}else {
 			model.addAttribute("msg", "글수정실패");
+			return "error";
+		}
+		
+	}
+////	QNA댓글수정폼 이동
+//		@RequestMapping(value = "/qnaAddForm.do", method = RequestMethod.GET)
+//		public String qnaAddForm(@RequestParam("seq") String seq,Locale locale, Model model) {
+//			 // @RequestParam("seq"): "seq" 이름으로 파라미터가 전달되면 seq변수에 받겠다 
+//		
+//			
+//			List<QnaDto> rdto=CustomServiceImp.detailQna(seq);
+//			
+//			model.addAttribute("rdto", rdto);
+//			 System.out.println(rdto);
+//			return "qnareplyupdate";
+//		}
+	
+	//QNA댓글쓰기
+	@RequestMapping(value = "qnareplyupdate.do", method = {RequestMethod.GET,RequestMethod.POST})
+	public String insertReplyQna(Authentication auth, QnaDto rdto, Locale locale, Model model) {
+		LoginDto ldto=(LoginDto) auth.getPrincipal();
+		System.out.println(rdto);
+		boolean isS=CustomServiceImp.insertReplyQna(rdto);
+		if(isS) {
+////			if(사용자의 등급이 admin?) {
+////			// 글의  수정 서비스 실행
+////			
+////		}
+			System.out.println("success");
+			return "redirect:qnadetail.do?seaparam="+rdto.getSeq();
+		}else {
+			model.addAttribute("msg", "글추가실패");
 			return "error";
 		}
 		

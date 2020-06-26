@@ -1,6 +1,7 @@
 package com.nl.onl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.nl.onl.dtos.NoticeDto;
 import com.nl.onl.dtos.QnaDto;
@@ -8,13 +9,13 @@ import com.nl.onl.dtos.QnaDto;
 public interface ICustomService {
 	
 //	QNA목록보기
-	public List<QnaDto> getAllListQna(String pnum);
+	public List<QnaDto> getAllListQna(String pnum,String qna_code);
 	
 //	QNA페이징
-	public int pcountQna();
+	public int pcountQna(String qna_code);
 	
 //	QNA상세보기
-	public QnaDto detailQna(String seq);
+	public List<QnaDto> detailQna(String seq);
 	
 //	QNA쓰기
 	public boolean insertQna(QnaDto qdto);
@@ -24,6 +25,12 @@ public interface ICustomService {
 	
 //	QNA삭제
 	public boolean deleteQna(String seq);
+	
+//	QNA댓글쓰기
+	public boolean insertReplyQna(QnaDto rdto);
+	
+//	QNA상태변경
+	public boolean updateProcess(QnaDto qdto);
 	
 //	공지사항목록보기
 	public List<NoticeDto> getAllListNotice(String pnum);

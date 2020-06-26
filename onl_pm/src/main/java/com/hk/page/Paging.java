@@ -33,6 +33,8 @@ public class Paging {
 		int startPage=pageEndNum-(pageRange-1);//현재페이지번호가 8일경우 10-(5-1)= 6
 		int endPage=pageEndNum>count?count:pageEndNum;//
 		
+		
+		
 		map.put("prePageNum", prePageNum);
 		map.put("nextPageNum", nextPageNum);
 		map.put("startPage", startPage);

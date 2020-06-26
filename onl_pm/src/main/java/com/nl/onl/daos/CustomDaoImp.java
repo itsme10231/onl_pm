@@ -1,6 +1,8 @@
 package com.nl.onl.daos;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,21 @@ public class CustomDaoImp implements ICustomDao{
 	
 	
 	@Override
-	public List<QnaDto> getAllListQna(String pnum) {
-		return sqlSession.selectList(nameSpace+"getAllListQna", pnum);
+	public List<QnaDto> getAllListQna(String pnum,String qna_code) {
+		Map<String, String> map=new HashMap<String, String>();
+		map.put("pnum",pnum );
+		map.put("qna_code", qna_code);
+		return sqlSession.selectList(nameSpace+"getAllListQna", map);
 	}
 	
 	@Override
-	public int pcountQna() {
-		return sqlSession.selectOne(nameSpace+"pcountQna");
+	public int pcountQna(String qna_code) {
+		return sqlSession.selectOne(nameSpace+"pcountQna", qna_code);
 	}
 
 	@Override
-	public QnaDto detailQna(String seq) {
-		return sqlSession.selectOne(nameSpace+"detailQna", seq);
+	public List<QnaDto> detailQna(String seq) {
+		return sqlSession.selectList(nameSpace+"detailQna", seq);
 	}
 
 	@Override
@@ -51,6 +56,18 @@ public class CustomDaoImp implements ICustomDao{
 		return count>0?true:false;
 	}
 
+	@Override
+	public boolean insertReplyQna(QnaDto rdto) {
+		int count=sqlSession.insert(nameSpace+"insertReplyQna",rdto);
+		return count>0?true:false;
+	}
+	
+	@Override
+	public boolean updateProcess(QnaDto qdto) {
+		int count=sqlSession.update(nameSpace+"updateProcess",qdto);
+		return count>0?true:false;
+	}
+	
 	@Override
 	public List<NoticeDto> getAllListNotice(String pnum) {
 		return sqlSession.selectList(nameSpace+"getAllListNotice", pnum);
