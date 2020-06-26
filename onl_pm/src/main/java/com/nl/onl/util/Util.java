@@ -372,7 +372,7 @@ public class Util {
 				while(it.hasNext()) {
 					
 					String key = it.next();
-					con.setRequestProperty(key, (String)headerVal.get(key));
+					con.setRequestProperty(key, headerVal.get(key));
 				}
 			}
 			

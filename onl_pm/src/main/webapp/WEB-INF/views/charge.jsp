@@ -86,7 +86,9 @@
 		        msg += '결제 금액 : ' + rsp.paid_amount;
 		        msg += '카드 승인번호 : ' + rsp.apply_num;
 		        
+		        
 		        var merchant_log = {
+		        		imp_uid: rsp.imp_uid,
 		        		pay_method: p_pay_method,
 		        		merchant_uid: rsp.merchant_uid,
 		        		paid_amount: p_amount,
@@ -118,8 +120,6 @@
 		});
 		
 	}
-	
-	
 
 </script>
 </head>

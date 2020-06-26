@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.nl.onl.dtos.AccountDto;
 import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.MerchantDto;
@@ -106,5 +107,16 @@ public class PaymentDaoImp implements IPaymentDao{
 	@Override
 	public List<BankCDto> getBankCode() {
 		return sqlSession.selectList(nameSpace+"getBankCode");
+	}
+	
+	@Override
+	public String getSequence() {
+		return sqlSession.selectOne(nameSpace +"getSequence");
+	}
+	
+	@Override
+	public boolean insertAccount(AccountDto adto) {
+		int isS = sqlSession.insert(nameSpace+"insertAccount", adto);
+		return isS > 0 ? true: false;
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,10 +49,12 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/regist.do", method = {RequestMethod.POST})
-	public String regist(Model model, LoginDto ldto) {
+	public String regist(Model model, @ModelAttribute LoginDto ldto) {
 		
+
 		Date defaultDate = onlUtil.toDate("1900-01-01");
 		boolean isS = false;
+		
 		
 		if(ldto.getBirth().compareTo(defaultDate) == 0) {
 			ldto.setBirth(null);	

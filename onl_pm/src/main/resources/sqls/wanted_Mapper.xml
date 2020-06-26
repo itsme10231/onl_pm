@@ -318,19 +318,19 @@
 	<!-- 구인글 수정 -->
 	<update id="updateWanted" parameterType="WantedDto">
 		UPDATE 	WANTED_POST 
-		SET 	CATEGORY = #{category},
-				TITLE = #{title},
-				REGDATE = SYSDATE,
-				DEADLINE = #{deadline},
-				SDATE = #{sdate},
-				EDATE = #{edate},
-				STIME = #{stime},
-				ETIME = #{etime},
-				SALARY = #{salary},
-				CONTENT = #{content},
-				SOSFLAG = #{sosflag},
-				LOC_DETAIL = #{loc_detail},
-				LOCATION = #{location}
+		SET 	<if test="category!=null">CATEGORY = #{category},</if>
+				<if test="title!=null">TITLE = #{title},</if>
+				<if test="regdate!=null">REGDATE = SYSDATE,</if>
+				<if test="deadline!=null">DEADLINE = #{deadline},</if>
+				<if test="sdate!=null">SDATE = #{sdate},</if>
+				<if test="edate!=null">EDATE = #{edate},</if>
+				<if test="stime!=null">STIME = #{stime},</if>
+				<if test="etime!=null">ETIME = #{etime},</if>
+				<if test="salary!=null">SALARY = #{salary},</if>
+				<if test="content!=null">CONTENT = #{content},</if>
+				<if test="sosflag!=null">SOSFLAG = #{sosflag},</if>
+				<if test="loc_detail!=null">LOC_DETAIL = #{loc_detail},</if>
+				<if test="location!=null">LOCATION = #{location}</if>	
 		WHERE 	SEQ = #{seq}
 	</update>
 	

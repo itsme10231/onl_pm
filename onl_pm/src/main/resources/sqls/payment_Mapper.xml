@@ -202,7 +202,7 @@
 	<!-- 실결제용 테이블 INSERT, 예치금 테이블 INSERT후 실행 -->
 	<insert id="insertMerchant" parameterType="MerchantDto">
 		INSERT INTO MERCHANT_LOG (
-			PREPAID_SEQ.CURRVAL, #{id}, #{pay_method}, #{merchant_uid}, #{paid_amount}, #{apply_num}, SYSDATE
+			PREPAID_SEQ.CURRVAL, #{id}, #{pay_method}, #{merchant_uid}, #{paid_amount}, #{apply_num}, SYSDATE, #{imp_uid}
 		)
 	</insert>
 	
@@ -218,6 +218,17 @@
 		FROM BANK_CODE
 	</select>
 	
+	<!-- 거래고유번호 시퀀스 가져오기 -->
+	<select id="getSequence" resultType="String">
+		SELECT BANKING_SEQ.NEXTVAL FROM DUAL
+	</select>
+	
+	<!-- 계좌 입력하기 -->
+	<insert id="insertAccount" parameterType="AccountDto">
+		INSERT INTO MEMBER_ACCOUNT VALUES(
+			#{id}, #{bank_code}, #{account_number}, #{name}
+		)
+	</insert>
 </mapper>
 
 

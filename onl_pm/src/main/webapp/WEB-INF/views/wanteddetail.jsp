@@ -560,9 +560,28 @@
 	function insertAccount(){
 		var code= $("select[name='bank_code']").val();
 		var account_num = $("input[name='account_num']").val();
+		var identity = $("input[name='identity']").val();
 		
 		$.ajax({
-			url: "ge"
+			url: "insertaccount.do",
+			data:{
+				"code":code,
+				"account_num":account_num,
+				"identity":identity
+			},
+			dataType:"text",
+			success: function(msg){
+				if(msg == "success"){
+					$("#aClose").trigger("click");
+				}else if(msg == "fail_1"){
+					alert("계좌등록에 실패했습니다.");
+				}else{
+					alert("사용할 수 없는 계좌입니다.");
+				}
+			},
+			fail: function(){
+				alert("에러가 발생했습니다.");
+			}
 			
 		});
 	}
@@ -825,13 +844,16 @@
       <div class="modal-body accountModal">
       	※회원정보에 등록된 실명과 동일한 예금주의 계좌만 등록할 수 있습니다.<br>
 		<label for="recipient-name" class="col-form-label">은행:</label>
-        <select name="bank_code" id="bankC"></select><br>
+        <select name="bank_code" id="bankC"></select> 
+        <label for="recipient-name" class="col-form-label">생년월일(6자리): 
+        <input name="identity" style="width:100px" placeholder="예)800101">
+        <br>
         <label for="recipient-name" class="col-form-label">계좌번호:</label>
         <input name="account_num" style="width:350px;">
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-danger" onclick="insertAccount()">등록</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="aClose">닫기</button>
       </div>
     </div>
 	</div>

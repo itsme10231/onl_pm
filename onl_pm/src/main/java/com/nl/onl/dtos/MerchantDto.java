@@ -12,6 +12,8 @@ public class MerchantDto {
 	private String apply_num;
 	private Date regdate;
 	
+	private String imp_uid;
+	
 	
 	public MerchantDto() {
 		super();
@@ -113,14 +115,29 @@ public class MerchantDto {
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
+	
+	
+
+
+	public String getImp_uid() {
+		return imp_uid;
+	}
+
+
+
+	public void setImp_uid(String imp_uid) {
+		this.imp_uid = imp_uid;
+	}
 
 
 
 	@Override
 	public String toString() {
 		return "MerchantDto [seq=" + seq + ", id=" + id + ", pay_method=" + pay_method + ", merchant_uid="
-				+ merchant_uid + ", paid_amount=" + paid_amount + ", apply_num=" + apply_num + "]";
+				+ merchant_uid + ", paid_amount=" + paid_amount + ", apply_num=" + apply_num + ", regdate=" + regdate
+				+ ", imp_uid=" + imp_uid + "]";
 	}
+
 	
 	
 	

@@ -42,4 +42,6 @@ public interface ILoginService {
 		
 		//지원목록 가져오기
 		public List<String> getApplySeq(String id);
+		
+
 }

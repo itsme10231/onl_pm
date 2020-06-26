@@ -8,7 +8,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nl.onl.dtos.AccountDto;
 import com.nl.onl.dtos.BankCDto;
 import com.nl.onl.dtos.ChargeDto;
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.MerchantDto;
 import com.nl.onl.dtos.PayDto;
 import com.nl.onl.service.IPaymentService;
+import com.nl.onl.util.IamportREST;
+import com.nl.onl.util.OpenBanking;
 import com.nl.onl.util.Util;
 
 @Controller
@@ -32,6 +37,12 @@ public class PayController {
 	
 	@Autowired
 	Util onlUtil;
+	
+	@Autowired
+	OpenBanking openBanking;
+	
+	@Autowired
+	IamportREST impRest;
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/wallet.do", method = {RequestMethod.GET})
@@ -109,27 +120,42 @@ public class PayController {
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/ajaxcharge.do", method = {RequestMethod.POST})
-	public String doCharge(Model model, Authentication auth, String pay_method, String merchant_uid, String paid_amount, String apply_num) {
-		
+	public String doCharge(Model model, Authentication auth, String pay_method, String imp_uid, String merchant_uid, String paid_amount, String apply_num) {
+		boolean isS = false;
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
 		String id = ldto.getId();
 		
 		int pay_amountI = Integer.parseInt(paid_amount);
+		int charge_amount = calCharge(pay_amountI);
 		
-		ChargeDto cdto = new ChargeDto(0, id, pay_amountI, null, pay_amountI, null, "CHARGE");
 		MerchantDto mdto = new MerchantDto(0, id, pay_method, merchant_uid, pay_amountI, apply_num);
-		
-		boolean isS = paymentServiceImp.insertPaymentT(cdto, mdto);
+		ChargeDto cdto = new ChargeDto(0, id, charge_amount, null, charge_amount, null, "CHARGE");
+
+		isS = paymentServiceImp.insertPaymentT(cdto, mdto);
 		
 		if(isS) {
 			return "success";
 		}else {
+			impRest.getRefund(imp_uid, merchant_uid, "결제정보 저장 오류");
 			return "fail";
 		}
 		
 	}
 	
-	
+	public int calCharge(int paid_amount) {
+		
+		if(paid_amount >= 10000) {
+			paid_amount = (int) (paid_amount*1.01);
+		}else if(paid_amount >= 100000){
+			paid_amount = (int) (paid_amount*1.02);
+		}else if(paid_amount >= 500000) {
+			paid_amount = (int) (paid_amount*1.03);
+		}else if(paid_amount >= 1000000) {
+			paid_amount = (int) (paid_amount*1.04);
+		}
+		
+		return paid_amount;
+	}
 	
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
@@ -171,12 +197,32 @@ public class PayController {
 	
 	@RequestMapping(value = "/insertaccount.do", method = {RequestMethod.POST})
 	@ResponseBody
-	public String insertAccount() {
+	public String insertAccount(Model model, Authentication auth, AccountDto adto, String identity) {
 		
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		String id = ldto.getId();
+		String name = ldto.getName();
 		
+		boolean isS = openBanking.isRealAccount(identity, adto.getBank_code(), adto.getAccount_number(), name);
 		
+		if(isS) {
+			isS = paymentServiceImp.insertAccount(adto);
+			if(isS) {
+				
+				//회원정보를 새로고침
+				ldto.setHasacc("Y");
+				Authentication newAuth = new UsernamePasswordAuthenticationToken(ldto, auth.getCredentials(), auth.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(newAuth);
+				
+				return "success";
+				
+			}else {
+				return "fail_1";
+			}
+		}else {
+			return "fail_2";
+		}
 		
-		return "";
 	}
 	
 }

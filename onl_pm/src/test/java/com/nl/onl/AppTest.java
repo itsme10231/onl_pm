@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nl.onl.daos.ILoginDao;
 import com.nl.onl.daos.IWantedDao;
+import com.nl.onl.dtos.AccountDto;
 import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ReportDto;
@@ -46,8 +47,8 @@ import com.nl.onl.util.Util;
 @WebAppConfiguration
 public class AppTest {
 	
-//	@Autowired
-//	UserDetailsService loginServiceImp;
+	@Autowired
+	UserDetailsService loginServiceImp;
 	
 //	@Autowired
 //	ILoginService loginServiceImp;
@@ -65,7 +66,7 @@ public class AppTest {
 	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 		
-		System.out.println(openBanking.isRealAccount("891023", "020", "1002938872551"));
+		loginServiceImp.loadUserByUsername("onlonl@onltest.com");
 	}
 	
 }
