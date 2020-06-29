@@ -19,5 +19,12 @@ public class MypageController {
 	IMyPageService myPageServiceImp;
 	
 	
-	
+	@Secured("ROLE_USER")
+	@RequestMapping(value="/mywanted.do", method= {RequestMethod.GET})
+	public String writeProfileform(Model model) {
+		
+		
+		
+		return "mywanted";
+	}
 }

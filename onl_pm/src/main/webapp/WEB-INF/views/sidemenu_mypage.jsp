@@ -43,9 +43,11 @@
 				<h4>-마이페이지</h4>
 			</div>
 			<ul class=".flex-sm-column sideUl">
-				<li class="nav-item">사이드메뉴1
+				<li class="nav-item">사람 구해요
 					<ul class="nav-item sideUl">
-						<li class="nav-item">하위메뉴1</li>
+						<li class="nav-item">모집중</li>
+						<li class="nav-item">진행중</li>
+						<li class="nav-item">완료</li>
 					</ul>
 				</li>
 				<li class="nav-item">
