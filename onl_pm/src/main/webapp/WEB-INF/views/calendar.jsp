@@ -197,10 +197,18 @@ $(function(){
 	
 	//같은 seq끼리 같은 줄에 배치하기
 	var seq = $(".d p").attr("class").split("_")[1]; //클래스명에 있는 seq
+	var seqList = $(".d").find("p");
+	var qq = $(".d").eq(5).find("p");
 	
+// 	var newP = document.createElement("p");
+// 	var newPtext = document.createTextNode("sdfsd");
+// 	newP.before(newPtext)
+// 	document.getElementsByClassName("conT");
 	
-	
-	console.log(seq);
+// 	var fieldset = document.getElementsByClassName("end_64_o");
+// 	var oldChild = document.querySelectorAll(".end_64_o")[0];
+// 	fieldset.insertBefore(newP, oldChild);
+// 	seqList.parent("td p")
 	
 	
 	

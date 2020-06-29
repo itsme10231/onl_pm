@@ -24,6 +24,7 @@
 		<result property="location" column="LOCATION"/>
 		<result property="selector" column="SELECTOR"/>
 		<result property="whitelist" column="WHITELIST"/>
+		<result property="nickname" column="NICKNAME"/>
 		<collection property="applyDto" resultMap="ApplyDtoMap"/>
 	</resultMap>
 	<resultMap type="com.nl.onl.dtos.ApplyDto" id="ApplyDtoMap">
@@ -42,11 +43,19 @@
 
 <!-- 	내가 쓴 글 전체 보기- 지원자 수 표시(페이징) -->
 	<select id="getAllMyList" resultMap="WantedDtoMap" parameterType="map">
-		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.SALARY, wp.STATE
-		FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL wp.STIME, wp.ETIME, 
-			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE
+<!-- 		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.SALARY, wp.STATE -->
+<!-- 		FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL wp.STIME, wp.ETIME,  -->
+<!-- 			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE -->
+<!-- 			FROM WANTED_POST wp, "MEMBER" m -->
+<!-- 			WHERE wp.ID=#{id} AND wp.ID) wp -->
+<!-- 		WHERE CEIL(RN/10)=#{pnum} -->
+		
+		
+		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.SALARY, wp.STATE, wp.NICKNAME 
+		FROM (SELECT ROW_NUMBER() OVER(ORDER BY wp.REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, 
+			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, m.NICKNAME 
 			FROM WANTED_POST wp, "MEMBER" m
-			WHERE wp.ID=#{id} AND wp.ID) wp
+			WHERE wp.ID=#{id} AND wp.ID=m.ID ) wp
 		WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	

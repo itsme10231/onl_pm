@@ -18,7 +18,7 @@ public class MyPageDaoImp implements IMyPageDao{
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-	private String namespace = "com.nl.onl.mypage.";
+	private String namespace = "com.nl.onl.myPage.";
 	
 	@Override
 	public List<WantedDto> getAllMyList(Map<String, String> map) {
