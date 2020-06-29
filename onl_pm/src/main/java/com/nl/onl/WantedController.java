@@ -64,20 +64,20 @@ public class WantedController {
 	@RequestMapping(value="search.do", method=RequestMethod.GET)
 	public String searchWanted(Model model, SearchDto sdto, Authentication auth) {
 		
-		List<WantedDto> wlist = new ArrayList<>(); 
-		
-		if(sdto.getPnum() == null) {
-			sdto.setPnum("1");
-		}
-		
-		if(auth != null && auth.isAuthenticated()) {
-			wantedServiceImp.getWantedListLogin(sdto);
-		}else {
-			wantedServiceImp.getWantedList(sdto);
-		}
-		
-		model.addAttribute("wlist",wlist);
-		return "wantedlist";
+//		List<WantedDto> wlist = new ArrayList<>(); 
+//		
+//		if(sdto.getPnum() == null) {
+//			sdto.setPnum("1");
+//		}
+//		
+//		if(auth != null && auth.isAuthenticated()) {
+//			wantedServiceImp.getWantedListLogin(sdto);
+//		}else {
+//			wantedServiceImp.getWantedList(sdto);
+//		}
+//		
+//		model.addAttribute("wlist",wlist);
+		return "wantedsearch";
 	}
 	
 	//구인글 상세보기

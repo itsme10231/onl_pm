@@ -10,7 +10,19 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>여기에 검색결과가 표시됩니다.</h1>
+<div class="headerWrapper">
+	<%@include file="sidemenu_search.jsp" %>
+	
+	<div class="pageContent">
+		<div class="depth">홈 > 검색결과</div>
+		<div class="contentDetail">
+			<div class="centerDiv">
+				<h2 class="pageTitle">총 n건의 검색결과가 있습니다.</h2>
+				이 아래로 컨텐츠 영역입니다.
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
 <%@include file="footer.jsp" %>

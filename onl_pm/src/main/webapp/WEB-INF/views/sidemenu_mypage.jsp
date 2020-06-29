@@ -34,37 +34,46 @@
 		-moz-box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
 		box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
 	}
+	
+	.sideTitle{
+		
+		border-bottom: 1px solid lightgray;
+		width: 100%;
+		margin-bottom: 30px;
+	}
 </style>
 </head>
 <body>
 	<div class="leftside">
-		<div class="contentDetail" style="margin-top:84px;">
-			<div class="sideTitle">
-				<h4>-마이페이지</h4>
+		<div class="sidewrapper">
+			<div class="contentDetail" style="margin-top:84px;">
+				<div class="sideTitle">
+					<h4>-마이페이지</h4>
+				</div>
+				<ul class=".flex-sm-column sideUl">
+					<li class="nav-item">사람 구해요
+						<ul class="nav-item sideUl">
+							<li class="nav-item">모집중</li>
+							<li class="nav-item">진행중</li>
+							<li class="nav-item">완료</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a href="wallet.do">나의 지갑</a>
+						<ul class="nav-item sideUl">
+							<li class="nav-item">
+							<a href='prepaid.do'>예치금 내역</a>
+							</li>
+							<li class="nav-item">
+							<a href='charge.do'>예치금 충전</a>
+							</li>
+							<li class="nav-item">
+							<a href="received.do">지급내역</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
-			<ul class=".flex-sm-column sideUl">
-				<li class="nav-item">사람 구해요
-					<ul class="nav-item sideUl">
-						<li class="nav-item">모집중</li>
-						<li class="nav-item">진행중</li>
-						<li class="nav-item">완료</li>
-					</ul>
-				</li>
-				<li class="nav-item">
-					<a href="wallet.do">나의 지갑</a>
-					<ul class="nav-item sideUl">
-						<li class="nav-item">
-						<a href='prepaid.do'>예치금 내역</a>
-						</li>
-						<li class="nav-item">
-						<a href='charge.do'>예치금 충전</a>
-						</li>
-						<li class="nav-item">
-						<a href="received.do">지급내역</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
 		</div>
 	</div>
 </body>

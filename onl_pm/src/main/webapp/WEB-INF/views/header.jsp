@@ -208,6 +208,11 @@
 		text-align: center;
 	}
 	
+	.radioField{
+		font-size: 14px;
+		font-weight: 400;
+	}
+	
 	h1{
 		margin-left: 80px;
 		margin-top: 30px;
@@ -230,7 +235,9 @@
 		background-color: whitesmoke;
 	}
 	
-
+	a:link{
+		color: black;
+	}
  	
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
