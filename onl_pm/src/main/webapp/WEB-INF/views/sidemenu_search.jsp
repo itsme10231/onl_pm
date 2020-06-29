@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%request.setCharacterEncoding("UTF-8"); %>
 <%response.setContentType("text/html; charset=UTF-8"); %>
 <!DOCTYPE>
@@ -200,6 +201,15 @@
 					</li>
 					<li class="nav-item">위치
 						<br><span class="sideDesc">※현재 접속위치를 기준으로 합니다.</span>
+						<br>
+						<c:choose>
+							<c:when test="${location ne null}">
+								${location}과
+							</c:when>
+							<c:otherwise>
+								일시적인 오류로 인해 현재 위치를 불러올 수 없습니다.
+							</c:otherwise>
+						</c:choose>
 						<ul class="nav-item sideUl">
 							<li class="nav-item radioField">
 								<input type="radio" name="location" value="00002400" id="l1" class="searchRadio"><label for="l1">전체</label><br>

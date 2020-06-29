@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -250,6 +251,17 @@ public class Util {
         
         return ip;
     }
+	
+	public makeLocStr() {
+	
+		JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
+//		System.out.println(gObj2);
+		addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
+
+		addr = URLEncoder.encode(addr, "utf-8");
+		
+		code = gObj2.get("code").toString();
+	}
 	
 	public List<FileDto> letUpload(String boardType, MultipartFile[] files, String id){
 		

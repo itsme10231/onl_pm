@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -62,7 +63,7 @@ public class WantedController {
 	
 	//구인글 검색
 	@RequestMapping(value="search.do", method=RequestMethod.GET)
-	public String searchWanted(Model model, SearchDto sdto, Authentication auth) {
+	public String searchWanted(Model model, SearchDto sdto, Authentication auth, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 		
 //		List<WantedDto> wlist = new ArrayList<>(); 
 //		
@@ -77,6 +78,18 @@ public class WantedController {
 //		}
 //		
 //		model.addAttribute("wlist",wlist);
+		Cookie cookie = onlUtil.getCookie("locationCookie", request);
+		
+		String location = null;
+		
+		if(cookie != null) {
+			location = URLDecoder.decode(location, "utf-8");
+		}else {
+			
+		}
+		
+
+		model.addAttribute("location", location);
 		return "wantedsearch";
 	}
 	
@@ -147,6 +160,7 @@ public class WantedController {
 //		JSONArray cArray = onlUtil.toJArr(clist);
 		
 		String location = onlUtil.getCookie("locationCookie", request).getValue();
+		System.out.println(location);
 		location = URLDecoder.decode(location, "utf-8");
 		model.addAttribute("location", location);
 //		model.addAttribute("cArray", cArray);

@@ -20,7 +20,7 @@ public class GeoInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		System.out.println("run interceptor");
 		Cookie addressCookie = onlUtil.getCookie("addressCookie", request);
 		
 		String currIp = onlUtil.getRemoteAddr(request);
@@ -35,6 +35,7 @@ public class GeoInterceptor extends HandlerInterceptorAdapter{
 				JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
 //				System.out.println(gObj2);
 				addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
+
 				addr = URLEncoder.encode(addr, "utf-8");
 				
 				code = gObj2.get("code").toString();

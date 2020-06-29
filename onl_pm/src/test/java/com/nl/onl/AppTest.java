@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,13 +61,13 @@ public class AppTest {
 	OpenBanking openBanking;
 	
 	@Autowired
-	IamportREST impRest;
+	Util onlUtil;
 	
 	@Test
 	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
-		
-		impRest.getRefund("imp_971382452928", "o132435465_1593156212516", "시스템환불테스트");
+
+		System.out.println(onlUtil.getCurrLocation("118.46.222.252"));
 	}
 	
 }
