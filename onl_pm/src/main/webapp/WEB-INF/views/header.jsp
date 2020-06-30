@@ -235,7 +235,7 @@
 		background-color: whitesmoke;
 	}
 	
-	a:link{
+	a, a:link, a:hover, a:visited{
 		color: black;
 	}
  	
@@ -281,6 +281,18 @@ $(function(){
 	
 	$("body").on("mouseleave", ".bigC", function(e){
 		$(this).find(".innerUl").stop().hide();
+	});
+	
+	//검색
+	$("input[name='searchbto']").on("click", function(){
+		var param = $("input[name='searchval']").val();
+		
+		if(param.length < 1){
+			alert("검색어는 한글자 이상 입력해주세요.");
+		}else{
+			location.href="search.do?title="+param;
+		}
+		
 	});
 	
 });

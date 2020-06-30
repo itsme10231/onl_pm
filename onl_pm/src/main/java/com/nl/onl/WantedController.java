@@ -65,29 +65,34 @@ public class WantedController {
 	@RequestMapping(value="search.do", method=RequestMethod.GET)
 	public String searchWanted(Model model, SearchDto sdto, Authentication auth, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 		
-//		List<WantedDto> wlist = new ArrayList<>(); 
-//		
-//		if(sdto.getPnum() == null) {
-//			sdto.setPnum("1");
-//		}
-//		
-//		if(auth != null && auth.isAuthenticated()) {
-//			wantedServiceImp.getWantedListLogin(sdto);
-//		}else {
-//			wantedServiceImp.getWantedList(sdto);
-//		}
-//		
-//		model.addAttribute("wlist",wlist);
+		List<WantedDto> wlist = new ArrayList<>(); 
+		
+		if(sdto.getPnum() == null) {
+			sdto.setPnum("1");
+		}
+		System.out.println("sdto: "+ sdto);
+		
+		if(auth != null && auth.isAuthenticated()) {
+			
+			LoginDto ldto = (LoginDto)auth.getPrincipal();
+			String id = ldto.getId();
+			sdto.setId(id);
+			
+			wantedServiceImp.getWantedListLogin(sdto);
+		}else {
+			wantedServiceImp.getWantedList(sdto);
+		}
+		
+		model.addAttribute("wlist",wlist);
 		Cookie cookie = onlUtil.getCookie("locationCookie", request);
 		
 		String location = null;
 		
 		if(cookie != null) {
-			location = URLDecoder.decode(location, "utf-8");
-		}else {
-			
+			location = URLDecoder.decode(cookie.getValue(), "utf-8");
 		}
 		
+		System.out.println(wlist);
 
 		model.addAttribute("location", location);
 		return "wantedsearch";

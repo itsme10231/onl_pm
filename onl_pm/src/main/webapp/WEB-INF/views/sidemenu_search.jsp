@@ -82,9 +82,16 @@
 		color: orange;
 	}
 </style>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 	$(function(){
 		var cjsonLoc = "/onl/resources/common/category.json";
+		
+		var width = "500";
+		var height = "600";
+		
+		
+		
 		$.getJSON(cjsonLoc, function(data){	
 			makeCategoryS(data);
 		});
@@ -110,6 +117,36 @@
 				$(this).parents(".sideBC").find("ul").find("input[type='checkbox']").prop("checked",false);
 			}
 
+		});
+		
+		
+		$("#searchNewLoc").click(function(){
+			
+			
+			
+			new daum.Postcode({
+				popupName: "주소찾기",
+				width: width,
+				height: height,
+				oncomplete: function(data){
+					
+					var roadAddr = data.roadAddress; // 도로명 주소 변수
+	                var extraRoadAddr = ''; // 참고 항목 변수	
+	                var newLoc = data.jibunAddress;
+	                
+	                
+	                
+	               	$("textarea[name='location']").val(newLoc);
+					
+
+				}
+				
+			}).open({
+				left: (window.screen.width / 2) - (width / 2),
+			    top: (window.screen.height / 2) - (height / 2)
+			});
+			
+			
 		});
 	});
 
@@ -161,6 +198,8 @@
 		var keyDiv = $(this);
 	}
 	
+	
+	
 
 </script>
 </head>
@@ -200,25 +239,20 @@
 						</ul>
 					</li>
 					<li class="nav-item">위치
-						<br><span class="sideDesc">※현재 접속위치를 기준으로 합니다.</span>
+						<input type="button" class="btn btn-outline-danger" id="searchNewLoc" value="새 위치 지정" style="height:24px; line-height: 12px; font-size: 12px; float: right;">
 						<br>
-						<c:choose>
-							<c:when test="${location ne null}">
-								${location}과
-							</c:when>
-							<c:otherwise>
-								일시적인 오류로 인해 현재 위치를 불러올 수 없습니다.
-							</c:otherwise>
-						</c:choose>
+						<textarea readonly="readonly" name="location" style="border:0px; resize: none; width: 180px; word-break:keep-all; font-size: 16px;">현재 위치: <c:if test="${location ne null}">${location}</c:if></textarea>
+						<span style="color: orange; font-size: 10px;">※현 위치정보는 부정확할 수 있습니다.</span>
 						<ul class="nav-item sideUl">
 							<li class="nav-item radioField">
-								<input type="radio" name="location" value="00002400" id="l1" class="searchRadio"><label for="l1">전체</label><br>
-								<input type="radio" name="location" value="00002400" id="l2" class="searchRadio"><label for="l2">시, 도까지 일치</label><br>
-								<input type="radio" name="location" value="00002400" id="l3" class="searchRadio"><label for="l3">군, 구까지 일치</label><br>
-								<input type="radio" name="location" value="00002400" id="l4" class="searchRadio"><label for="l4">읍, 면, 동, 리까지 일치</label><br>
+								<input type="radio" name="locrange" value="0" id="l1" class="searchRadio"><label for="l1">전체</label><br>
+								<input type="radio" name="locrange" value="1" id="l2" class="searchRadio"><label for="l2">시, 도까지 일치</label><br>
+								<input type="radio" name="locrange" value="2" id="l3" class="searchRadio"><label for="l3">군, 구까지 일치</label><br>
+								<input type="radio" name="locrange" value="3" id="l4" class="searchRadio"><label for="l4">읍, 면, 동, 리까지 일치</label><br>
 								
 							</li>
 						</ul>
+						
 					</li>
 					<li class="nav-item">회원평가
 						<ul class="nav-item sideUl">
@@ -227,6 +261,10 @@
 								점 이상만
 							</li>
 						</ul>
+					</li>
+					<li class="nav-item">
+						<input type="submit" class="btn btn-danger" value="검색" style="margin-bottom: 5px; width:100%;"><br>
+						<input type="button" class="btn btn-outline-secondary" value="검색조건 초기화" style="width:100%;">
 					</li>
 				</ul>
 			</div>

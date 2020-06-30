@@ -29,6 +29,7 @@
 		<result column="LOC_NAME" property="loc_name"/>
 		<result column="WHITELIST" property="whitelist"/>
 		<result column="WISHLIST" property="wishlist"/>
+		<result column="RESULT_C" property="result_c"/>
 
 		<result column="NICKNAME" property="nickname"/>
 		<result column="APPLY" property="apply"/>
@@ -68,44 +69,48 @@
 	
 	<!-- 비로그인 구인글 목록보기&검색(timezone은 8자리의 숫자형태, String 타입) -->
 	<select id="getWantedList" resultMap="WantedDtoMap" parameterType="SearchDto">
-		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOCATION , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
+		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME1, CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOCATION , LOC_DETAIL, SALARY , VIEWS, SOSFLAG , STORED_NAME, RESULT_C
 		FROM	(SELECT ROW_NUMBER() OVER(
 							PARTITION BY w.SOSFLAG
 							ORDER BY w.SOSFLAG DESC 
 							<choose>
-								<when test="sortType.equals('salary')">
-								, w.SALARY
+								<when test="sortType!=null">
 									<choose>
-										<when test="align.equals('asc')">
-										ASC
-										</when>
-										<otherwise>
-										DESC
-										</otherwise>
-									</choose>
-								</when>
-								<when test="sortType.equals('time')">
-								, (TO_DATE(w.ETIME,'HH24MI')-TO_DATE(w.STIME,'HH24MI'))
-									<choose>
-										<when test="align.equals('asc')">
-										ASC
-										</when>
-										<otherwise>
-										DESC
-										</otherwise>
+										<when test="sortType.equals('salary')">
+									, w.SALARY
+										<choose>
+											<when test="align.equals('asc')">
+											ASC
+											</when>
+											<otherwise>
+											DESC
+											</otherwise>
+										</choose>
+									</when>
+									<when test="sortType.equals('time')">
+									, (TO_DATE(w.ETIME,'HH24MI')-TO_DATE(w.STIME,'HH24MI'))
+										<choose>
+											<when test="align.equals('asc')">
+											ASC
+											</when>
+											<otherwise>
+											DESC
+											</otherwise>
+										</choose>
+									</when>
 									</choose>
 								</when>
 								<otherwise>
 								, w.REGDATE DESC
 								</otherwise>
 							</choose>	
-						) AS RN, w.SEQ , w.ID, m.NICKNAME, w.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, w.TITLE , w.REGDATE , w.DEADLINE , w.LOCATION , w.LOC_DETAIL, w.SALARY , w.VIEWS , w.SOSFLAG , f.STORED_NAME,
+						) AS RN, w.SEQ , w.ID, m.NICKNAME, w.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, w.TITLE , w.REGDATE , w.DEADLINE , w.LOCATION , w.LOC_DETAIL, w.SALARY , w.VIEWS , w.SOSFLAG , f.STORED_NAME, COUNT(w.SEQ) OVER() AS RESULT_C
 				FROM 	WANTED_POST w, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
 						, (SELECT STORED_NAME, POST_SEQ
-							FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN, STORED_NAME, POST_SEQ 
+							FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN_F, STORED_NAME, POST_SEQ 
 									FROM UPLOAD_FILE 
-									WHERE BOARD_TYPE = 'WANTED' AND DELFLAG = 'N')
-							WHERE RN = 1) f
+									WHERE BOARD_TYPE = 'WANTED_POST' AND DELFLAG = 'N')
+							WHERE RN_F = 1) f
 						<if test="score!=null">
 						, (SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
@@ -115,10 +120,10 @@
 						</if>
 
 						<if test="title!=null">
-							AND w.TITLE = '%'||#{title}||'%'
+							AND w.TITLE LIKE '%'||#{title}||'%'
 						</if>
 						<if test="category!=null">
-							AND w.CATEGORY = #{category}||'%'
+							AND w.CATEGORY LIKE #{category}||'%'
 						</if>
 						<if test="salary!=null">
 							AND w.SALARY &gt;= #{salary}
@@ -130,46 +135,51 @@
 							AND (TO_DATE(w.ETIME,'HH24MI')-TO_DATE(w.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
 						<if test="location!=null">
-							AND w.LOCATION||' '||w.LOC_DETAIL = '%'||#{location}||'%'
+							AND w.LOCATION||' '||w.LOC_DETAIL LIKE '%'||#{location}||'%'
 						</if>
 						)
-		WHERE CEIL(RN/20) = #{pnum}
+		WHERE 	(CEIL(RN/20) = #{pnum} AND SOSFLAG = 'N') OR (CEIL(RN/5) = #{pnum} AND SOSFLAG = 'Y') 
+		ORDER BY SOSFLAG DESC, RN ASC
 	</select>
 	
 	<!-- 로그인 구인글 목록보기&검색 -->
-	<select id="getWantedListLogin" parameterType="map" resultMap="WantedDtoMap">
-		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME as CATEGORY_NAME1, CATEGORY_NAME as CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOCATION , LOC_DETAIL, SALARY , VIEWS, ID , SOSFLAG , STORED_NAME
+	<select id="getWantedListLogin" parameterType="SearchDto" resultMap="WantedDtoMap">
+		SELECT	SEQ , ID, NICKNAME, CATEGORY, CATEGORY_NAME1, CATEGORY_NAME2, TITLE , REGDATE , DEADLINE , LOCATION , LOC_DETAIL, SALARY , VIEWS, SOSFLAG , STORED_NAME, RESULT_C
 		FROM	(SELECT ROW_NUMBER() OVER(
 						PARTITION BY wp.SOSFLAG
-						ORDER BY wp.SOSFLAG DESC,  
+						ORDER BY wp.SOSFLAG DESC
 							<choose>
-								<when test="sortType.equals('salary')">
-								, wp.SALARY
+								<when test="sortType!=null">
 									<choose>
-										<when test="align.equals('asc')">
-										ASC
-										</when>
-										<otherwise>
-										DESC
-										</otherwise>
-									</choose>
-								</when>
-								<when test="sortType.equals('time')">
-								, (TO_DATE(wp.ETIME,'HH24MI')-TO_DATE(wp.STIME,'HH24MI'))
-									<choose>
-										<when test="align.equals('asc')">
-										ASC
-										</when>
-										<otherwise>
-										DESC
-										</otherwise>
+										<when test="sortType.equals('salary')">
+									, wp.SALARY
+										<choose>
+											<when test="align.equals('asc')">
+											ASC
+											</when>
+											<otherwise>
+											DESC
+											</otherwise>
+										</choose>
+									</when>
+									<when test="sortType.equals('time')">
+									, (TO_DATE(wp.ETIME,'HH24MI')-TO_DATE(wp.STIME,'HH24MI'))
+										<choose>
+											<when test="align.equals('asc')">
+											ASC
+											</when>
+											<otherwise>
+											DESC
+											</otherwise>
+										</choose>
+									</when>
 									</choose>
 								</when>
 								<otherwise>
 								, wp.REGDATE DESC
 								</otherwise>
 							</choose>	
-						) as RN, wp.SEQ , wp.ID, wp.NICKNAME, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.REGDATE , wp.DEADLINE , wp.LOCATION , wc.LOC_DETAIL, wp.SALARY , wp.VIEWS, wp.ID , wp.SOSFLAG , f.STORED_NAME
+						) as RN, wp.SEQ , wp.ID, m.NICKNAME, wp.CATEGORY, wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.REGDATE , wp.DEADLINE , wp.LOCATION , wp.LOC_DETAIL, wp.SALARY , wp.VIEWS, wp.SOSFLAG , f.STORED_NAME,
 						CASE
 							WHEN EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'W' AND ul.LIST_ID = wp.ID) THEN 'Y'
 							ELSE 'N'
@@ -177,13 +187,13 @@
 						CASE
 							WHEN EXISTS (SELECT 1 FROM WISHLIST w WHERE w.ID = #{id} AND w.WANTED_SEQ = wp.SEQ) THEN 'Y'
 							ELSE 'N'
-						END AS WISHLIST
+						END AS WISHLIST, COUNT(wp.SEQ) OVER() AS RESULT_C
 				FROM 	WANTED_POST wp, WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m
 						, (SELECT STORED_NAME, POST_SEQ
-							FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN, STORED_NAME, POST_SEQ 
+							FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN_F, STORED_NAME, POST_SEQ 
 									FROM UPLOAD_FILE 
-									WHERE BOARD_TYPE = 'WANTED' AND DELFLAG = 'N')
-							WHERE RN = 1) f
+									WHERE BOARD_TYPE = 'WANTED_POST' AND DELFLAG = 'N')
+							WHERE RN_F = 1) f
 						<if test="score!=null">
 						,(SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
@@ -193,14 +203,11 @@
 						<if test="score!=null">
 							AND wp.ID = r.TARGET_ID(+) AND NVL(r.SCORE, 0) &gt;= #{score}
 						</if>
-						<if test="target_id!=null">
-							AND wp.ID = '%'||#{target_id}||'%'
-						</if>
 						<if test="title!=null">
-							AND wp.TITLE = '%'||#{title}||'%'
+							AND wp.TITLE LIKE '%'||#{title}||'%'
 						</if>
 						<if test="category!=null">
-							AND wp.CATEGORY = #{category}||'%'
+							AND wp.CATEGORY LIKE #{category}||'%'
 						</if>
 						<if test="salary!=null">
 							AND wp.SALARY &gt;= #{salary}
@@ -212,13 +219,13 @@
 							AND (TO_DATE(wp.ETIME,'HH24MI')-TO_DATE(wp.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
 						<if test="location!=null">
-							AND wp.LOCATION||' '||wp.LOC_DETAIL = '%'||#{location}||'%'
+							AND wp.LOCATION||' '||wp.LOC_DETAIL LIKE '%'||#{location}||'%'
 						</if>
 						 AND wp.SEQ = f.POST_SEQ(+)
 						)
-		WHERE CEIL(RN/20) = #{pnum}
+		WHERE 	(CEIL(RN/20) = #{pnum} AND SOSFLAG = 'N') OR (CEIL(RN/5) = #{pnum} AND SOSFLAG = 'Y') 
+		ORDER BY SOSFLAG DESC, RN ASC
 	</select>
-	
 	
 	<!-- 비로그인 구인글 상세보기 -->
 	<select id="getWantedDetail" parameterType="String" resultMap="WantedDtoMap">

@@ -37,6 +37,7 @@ public class WantedDto {
 	private int apply_c;
 	private String apply;
 	private String selected;
+	private String result_c;
 
 	private String nickname;
 	private ApplyDto applyDto;
@@ -298,6 +299,20 @@ public class WantedDto {
 
 	public void setCategoryDto(CategoryDto categoryDto) {
 		this.categoryDto = categoryDto;
+	}
+
+	
+
+
+	public String getResult_c() {
+		return result_c;
+	}
+
+
+
+
+	public void setResult_c(String result_c) {
+		this.result_c = result_c;
 	}
 
 

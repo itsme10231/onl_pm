@@ -1,6 +1,7 @@
 package com.nl.onl.dtos;
 
 public class SearchDto {
+	private String id;
 	private String title;
 	private String category;
 	private String salary;
@@ -10,7 +11,7 @@ public class SearchDto {
 	private String score;
 	private String sortType;
 	private String align;
-	
+
 	private String pnum;
 	
 
@@ -22,7 +23,7 @@ public class SearchDto {
 	
 
 	public SearchDto(String title, String category, String salary, String timezone, String time, String location,
-			String score, String sortType, String align, String pnum) {
+			String score, String sortType, String align, String pnum, String id) {
 		super();
 		this.title = title;
 		this.category = category;
@@ -34,6 +35,7 @@ public class SearchDto {
 		this.sortType = sortType;
 		this.align = align;
 		this.pnum = pnum;
+		this.id = id;
 	}
 
 
@@ -116,6 +118,28 @@ public class SearchDto {
 
 	public void setPnum(String pnum) {
 		this.pnum = pnum;
+	}
+
+
+
+	public String getId() {
+		return id;
+	}
+
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+
+
+
+	@Override
+	public String toString() {
+		return "SearchDto [id=" + id + ", title=" + title + ", category=" + category + ", salary=" + salary
+				+ ", timezone=" + timezone + ", time=" + time + ", location=" + location + ", score=" + score
+				+ ", sortType=" + sortType + ", align=" + align + ", pnum=" + pnum + "]";
 	}
 	
 	

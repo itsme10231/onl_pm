@@ -59,20 +59,18 @@
 		
 		
 		var categories = "";
-		var cjsonLoc = "resources/common/category.json";
+		var cjsonLoc = "/onl/resources/common/category.json";
 		$.getJSON(cjsonLoc, function(result){	
 			categories = result;
+			for(var i = 0; i < categories.length; i++){
+				console.log(" f");
+				if(categories[i].category_name1 != " "){
+					var bigC = $("<option value='"+categories[i].code1+"'>"+categories[i].category_name1+"</option>");
+					$("select[name='bCategory']").append(bigC);
+				}
+			}
 		});
 		//카테고리 셋팅
-		
-
-// 		console.log(categories);
-		for(var i = 0; i < categories.length; i++){
-			if(categories[i].category_name1 != " "){
-				var bigC = $("<option value='"+categories[i].code1+"'>"+categories[i].category_name1+"</option>");
-				$("select[name='bCategory']").append(bigC);
-			}
-		}
 		
 		
 		$("select[name='bCategory']").change(function(){
@@ -121,8 +119,11 @@
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
 // 	                document.getElementById('sample4_postcode').value = data.zonecode;
 // 	                document.getElementById("sample4_roadAddress").value = roadAddr;
-	                document.getElementById("jibun").value = data.jibunAddress;
-					
+					var newLoc = data.jibunAddress;
+
+	                document.getElementById("jibun").value = newLoc.substring(0, newLoc.lastIndexOf(" "));
+	                document.getElementById("jibun_detail").value = newLoc.substring(newLoc.lastIndexOf(" "));
+	                
 	                defaultLoc = data.jibunAddress;
 // 	                if(roadAddr !== ''){
 // 	                    document.getElementById("jibun_detail").value = extraRoadAddr;

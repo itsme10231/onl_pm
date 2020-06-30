@@ -31,6 +31,7 @@ import com.nl.onl.dtos.AccountDto;
 import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ReportDto;
+import com.nl.onl.dtos.SearchDto;
 import com.nl.onl.dtos.WantedDto;
 import com.nl.onl.security.OnlAuthProvider;
 import com.nl.onl.service.IAdminService;
@@ -49,7 +50,7 @@ import com.nl.onl.util.Util;
 public class AppTest {
 	
 	@Autowired
-	UserDetailsService loginServiceImp;
+	IWantedService wantedServiceImp;
 	
 //	@Autowired
 //	ILoginService loginServiceImp;
@@ -67,7 +68,11 @@ public class AppTest {
 	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 
-		System.out.println(onlUtil.getCurrLocation("118.46.222.252"));
+		SearchDto sdto = new SearchDto();
+		sdto.setPnum("1");
+		sdto.setTitle("코");
+		sdto.setId("onltest1");
+		System.out.println(wantedServiceImp.getWantedListLogin(sdto));
 	}
 	
 }
