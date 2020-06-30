@@ -72,7 +72,7 @@ public class AppTest {
 		sdto.setPnum("1");
 		sdto.setTitle("코");
 		sdto.setId("onltest1");
-		System.out.println(wantedServiceImp.getWantedListLogin(sdto));
+		System.out.println(wantedServiceImp.getWantedList(sdto));
 	}
 	
 }

@@ -38,7 +38,8 @@ public class WantedDto {
 	private String apply;
 	private String selected;
 	private String result_c;
-
+	private int rn;
+	
 	private String nickname;
 	private ApplyDto applyDto;
 	private FileDto fileDto;
@@ -47,7 +48,7 @@ public class WantedDto {
 	private List<MultipartFile> files;
 	
 	
-	
+
 	public WantedDto() {
 
 	}
@@ -313,6 +314,20 @@ public class WantedDto {
 
 	public void setResult_c(String result_c) {
 		this.result_c = result_c;
+	}
+
+	
+
+
+	public int getRn() {
+		return rn;
+	}
+
+
+
+
+	public void setRn(int rn) {
+		this.rn = rn;
 	}
 
 

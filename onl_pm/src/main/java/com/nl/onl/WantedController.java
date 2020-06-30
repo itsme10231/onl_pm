@@ -78,12 +78,12 @@ public class WantedController {
 			String id = ldto.getId();
 			sdto.setId(id);
 			
-			wantedServiceImp.getWantedListLogin(sdto);
+			wlist = wantedServiceImp.getWantedListLogin(sdto);
 		}else {
-			wantedServiceImp.getWantedList(sdto);
+			wlist = wantedServiceImp.getWantedList(sdto);
 		}
 		
-		model.addAttribute("wlist",wlist);
+
 		Cookie cookie = onlUtil.getCookie("locationCookie", request);
 		
 		String location = null;
@@ -92,7 +92,17 @@ public class WantedController {
 			location = URLDecoder.decode(cookie.getValue(), "utf-8");
 		}
 		
-		System.out.println(wlist);
+//		System.out.println(wlist);
+		String allC = wlist.get(0).getResult_c();
+		int allP = (int)Math.ceil(Double.parseDouble(allC)/20);
+		
+		Map<String, Integer> pageMap = onlUtil.pagingValue(allP, sdto.getPnum(), 5);
+		
+		
+		model.addAttribute("wlist",wlist);
+		model.addAttribute("allP", allP);
+		model.addAttribute("pnum", sdto.getPnum());
+		model.addAllAttributes(pageMap);
 
 		model.addAttribute("location", location);
 		return "wantedsearch";
