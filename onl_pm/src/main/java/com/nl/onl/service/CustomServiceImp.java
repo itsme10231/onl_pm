@@ -54,7 +54,7 @@ public class CustomServiceImp implements ICustomService{
 	public boolean updateProcess(QnaDto qdto) {
 		return customDaoImp.updateProcess(qdto);
 	}
-	
+//	
 	@Override
 	public List<NoticeDto> getAllListNotice(String pnum) {
 		return customDaoImp.getAllListNotice(pnum);
