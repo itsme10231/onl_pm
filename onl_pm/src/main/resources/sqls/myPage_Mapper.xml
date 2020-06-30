@@ -51,12 +51,12 @@
 <!-- 		WHERE CEIL(RN/10)=#{pnum} -->
 		
 		
-		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.SALARY, wp.STATE, wp.NICKNAME 
+		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.SALARY, wp.STATE, wp.NICKNAME, wp.CONTENT
 		FROM (SELECT ROW_NUMBER() OVER(ORDER BY wp.REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, 
 			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, m.NICKNAME 
 			FROM WANTED_POST wp, "MEMBER" m
 			WHERE wp.ID=#{id} AND wp.ID=m.ID ) wp
-		WHERE CEIL(RN/10)=#{pnum}
+		WHERE CEIL(RN/5)=#{pnum}
 	</select>
 	
 <!-- 	페이징 -->

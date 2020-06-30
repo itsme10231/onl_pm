@@ -251,7 +251,21 @@ public class Util {
         
         return ip;
     }
+<<<<<<< HEAD
 
+=======
+	
+//	public makeLocStr() {
+//	
+//		JSONObject gObj2 = (JSONObject)gObj.get("geoLocation");
+////		System.out.println(gObj2);
+//		addr = gObj2.get("r1").toString() +" " +gObj2.get("r2").toString() +" " +gObj2.get("r3").toString();
+//
+//		addr = URLEncoder.encode(addr, "utf-8");
+//		
+//		code = gObj2.get("code").toString();
+//	}
+>>>>>>> branch 'master' of https://github.com/itsme10231/onl_pm.git
 	
 	public List<FileDto> letUpload(String boardType, MultipartFile[] files, String id){
 		
