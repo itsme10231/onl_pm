@@ -1,5 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="header.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -39,12 +40,12 @@
 	}
 	
 	.con div{
-/*  		border: solid 1px;  */
+/*   		border: solid 1px;   */
 		width: 150px;
 	}
 	.Capply, .Csalary{
  		position: relative; 
-		margin-left: 520px;
+		margin-left: 540px;
   		bottom: 360px; 
 /*   		height: 50px; */
 		text-align: right;
@@ -57,14 +58,15 @@
 		position: relative;
 		bottom: 180px;
 		height: 50px;
-		width: 300px !important;
+		width: 320px !important;
 	}
 	.Ctitle{
 		margin-bottom: 10px;
 		font-size: 16pt;
+		height: 30px !important;
 	}
 	.Ccontent{
-		height: 120px;
+		height: 140px;
 		
 	}
 	.Capply div{
@@ -102,20 +104,33 @@
 					</select>
 					<br>
 				</div>
-				<c:forEach begin="1" end="${wlist}" step="1" varStatus="i">
+				<c:choose>
+					<c:when test="${fn:length(wlist)-1}==0">
+						작성된 구인글이 없습니다.
+					</c:when>
+				</c:choose>	
+				<c:forEach begin="0" end="${fn:length(wlist)-1}" step="1" varStatus="i" var="wdto" items="${wlist}">
 					<div class="con">
 						<img class="Cimg" alt="썸네일" src="resources/img/service_1.jpg">
-						<div class="Ctitle">${wlist[i].title}</div>
-						<div class="Ccontent">${wlist[i].content}</div>
+						<div class="Ctitle">${wdto.title}</div>
+						<div class="Ccontent">모집기간<br>
+<%-- 							<fmt:formatDate value="${wdto.regdate}" pattern="YYYY년 MM월 dd일  HH시 mm분"/>~<br> --%>
+							<fmt:formatDate value="${wdto.deadline}" pattern="YYYY년 MM월 dd일  HH시 mm분"/> 까지<br>
+							일하는날 <br>
+							${fn:substring(wdto.sdate,0,4)}년 ${fn:substring(wdto.sdate,4,6)}월 ${fn:substring(wdto.sdate,6,8)}일 ~  
+							${fn:substring(wdto.edate,0,4)}년 ${fn:substring(wdto.edate,4,6)}월 ${fn:substring(wdto.edate,6,8)}일 <br>
+							${wdto.content }
+						</div>
 						<div class="Capply">지원자
-							<div>${wlist[i].apply_c}명</div>
+							<div>${wdto.apply_c}명</div>
 						</div>
 						<div class="Csalary">금액
-							<div>${wlist[i].salary}원</div>
+							<div>
+								
+							${wdto.salary}원</div>
 						</div>
 					</div>
 				</c:forEach>
-				
 			</div>
 		</div>
 	</div>
