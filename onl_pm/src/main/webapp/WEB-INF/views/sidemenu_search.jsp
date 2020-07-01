@@ -84,6 +84,7 @@
 </style>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+	var oParams = {};
 	$(function(){
 		var cjsonLoc = "/onl/resources/common/category.json";
 		
@@ -148,7 +149,54 @@
 			
 			
 		});
+		
+		oParams = getUrlParams();
+		setFilters(oParams);
+		
+		
 	});
+	
+	function getUrlParams() {
+	    var params = {};
+	    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
+	    return params;
+	}
+	
+	//필터에 쿼리값 셋팅
+	function setFilters(oParams){
+		console.log(oParams);
+		
+		if(oParams.title != null){
+			$("input[name='title']").val(decodeURI(oParams.title));
+		}
+		if(oParams.score != null){
+			$("input[name='score']").val(oParams.score);
+		}
+		if(oParams.category != null){
+			for(var i = 0; i < oParams.category.length; i++){
+				$("input[name='categories']").each(function() {
+				    if($(this).val() == oParams.category[i]){ //값 비교
+				    	$(this).prop("checked", true); //checked 처리
+				    }
+				});
+			}
+		}
+		if(oParams.salary != null){
+			$("input[name='salary']").val(oParams.salary);
+		}
+		if(oParams.timezone != null){
+			$("#"+oParams.timezone).attr("checked", true);
+		}
+		if(oParams.time != null){
+			$("input[name='time']").val(oParams.time);
+		}
+		if(oParams.locrange != null){
+			$("#"+oParams.locrange).attr("checked", true);
+		}
+		if(oParams.location != null){
+			$("textarea[name='location']").val(oParams.location);
+		}
+	}
 
 	function makeCategoryS(cjson){
 		
@@ -198,7 +246,9 @@
 		var keyDiv = $(this);
 	}
 	
-	
+	function searchDetailS(){
+		$("form[name='detailsearch']").submit();
+	}
 	
 
 </script>
@@ -207,11 +257,12 @@
 	<div class="leftside">
 		<div class="sidewrapper">
 			<div class="contentDetail" style="margin-top:84px;">
+				<form action="search.do" method="get" name="detailsearch">
 				<ul class=".flex-sm-column sideUl">
-					<li class="nav-item">선택된 필터
+					<li class="nav-item">검색어
 						<ul class="nav-item sideUl">
 							<li class="nav-item">
-								<div class="sideK" onclick="selectK()">검색키워드 <span class="cancelK">X</span></div>
+								<input type="text" name="title" style="width:160px;">
 							</li>
 						</ul>
 					</li>
@@ -229,26 +280,34 @@
 							</li>
 						</ul>
 					</li>
+					<li class="nav-item">시간
+						<ul class="nav-item sideUl">
+							<li class="nav-item" style="text-align: right;">
+								<input type="text" name="time" style="width:160px;"><br>
+								시간 이내
+							</li>
+						</ul>
+					</li>
 					<li class="nav-item">시간대
 						<ul class="nav-item sideUl">
 							<li class="nav-item radioField">
-								<input type="radio" name="timezone" value="00002400" id="t1" class="searchRadio"><label for="t1">전체</label><br>
-								<input type="radio" name="timezone" value="00001200" id="t2" class="searchRadio"><label for="t2">오전</label><br>
-								<input type="radio" name="timezone" value="12002400" id="t3" class="searchRadio"><label for="t3">오후</label><br>
+								<input type="radio" name="timezone" value="00002400" id="00002400" class="searchRadio"><label for="00002400">전체</label><br>
+								<input type="radio" name="timezone" value="00001200" id="00001200" class="searchRadio"><label for="00001200">오전</label><br>
+								<input type="radio" name="timezone" value="12002400" id="12002400" class="searchRadio"><label for="12002400">오후</label><br>
 							</li>
 						</ul>
 					</li>
 					<li class="nav-item">위치
 						<input type="button" class="btn btn-outline-danger" id="searchNewLoc" value="새 위치 지정" style="height:24px; line-height: 12px; font-size: 12px; float: right;">
 						<br>
-						<textarea readonly="readonly" name="location" style="border:0px; resize: none; width: 180px; word-break:keep-all; font-size: 16px;">현재 위치: <c:if test="${location ne null}">${location}</c:if></textarea>
+						<textarea readonly="readonly" name="location" style="border:0px; resize: none; width: 180px; word-break:keep-all; font-size: 16px;"><c:if test="${location ne null}">${location}</c:if></textarea>
 						<span style="color: orange; font-size: 10px;">※현 위치정보는 부정확할 수 있습니다.</span>
 						<ul class="nav-item sideUl">
 							<li class="nav-item radioField">
-								<input type="radio" name="locrange" value="0" id="l1" class="searchRadio"><label for="l1">전체</label><br>
-								<input type="radio" name="locrange" value="1" id="l2" class="searchRadio"><label for="l2">시, 도까지 일치</label><br>
-								<input type="radio" name="locrange" value="2" id="l3" class="searchRadio"><label for="l3">군, 구까지 일치</label><br>
-								<input type="radio" name="locrange" value="3" id="l4" class="searchRadio"><label for="l4">읍, 면, 동, 리까지 일치</label><br>
+								<input type="radio" name="locrange" value="l1" id="l1" class="searchRadio"><label for="l1">전체</label><br>
+								<input type="radio" name="locrange" value="l2" id="l2" class="searchRadio"><label for="l2">시, 도까지 일치</label><br>
+								<input type="radio" name="locrange" value="l3" id="l3" class="searchRadio"><label for="l3">군, 구까지 일치</label><br>
+								<input type="radio" name="locrange" value="l4" id="l4" class="searchRadio"><label for="l4">읍, 면, 동, 리까지 일치</label><br>
 								
 							</li>
 						</ul>
@@ -263,10 +322,11 @@
 						</ul>
 					</li>
 					<li class="nav-item">
-						<input type="submit" class="btn btn-danger" value="검색" style="margin-bottom: 5px; width:100%;"><br>
+						<input type="button" class="btn btn-danger" value="검색" style="margin-bottom: 5px; width:100%;" onclick="searchDetailS()"><br>
 						<input type="button" class="btn btn-outline-secondary" value="검색조건 초기화" style="width:100%;">
 					</li>
 				</ul>
+				</form>
 			</div>
 		</div>
 	</div>

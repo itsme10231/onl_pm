@@ -187,6 +187,7 @@
 	.pagecontent{
 		float: left;
 		min-width: 1000px;
+		min-height: 500px;
 		margin:0;
 	}
 	
@@ -237,6 +238,35 @@
 	
 	a, a:link, a:hover, a:visited{
 		color: black;
+	}
+	
+	.pagination > li > a
+	{
+	    background-color: white;
+	    color: #5A4181;
+	}
+	
+	.pagination > li > a:focus,
+	.pagination > li > a:hover,
+	.pagination > li > span:focus,
+	.pagination > li > span:hover
+	{
+	    color: #5a5a5a;
+	    background-color: #eee;
+	    border-color: #ddd;
+	}
+	
+	.pagination > .active > a
+	{
+	    color: white;
+	    background-color: crimson !Important;
+	    border: solid 1px crimson !Important;
+	}
+	
+	.pagination > .active > a:hover
+	{
+	    background-color: crimson !Important;
+	    border: solid 1px crimson;
 	}
  	
 </style>

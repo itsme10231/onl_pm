@@ -12,13 +12,24 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.service.ILoginService;
 
 
 public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+	
+	private RequestCache requestC = new HttpSessionRequestCache();
+	private RedirectStrategy redirectStratgy = new DefaultRedirectStrategy();
+
+	
+	
 	
 	@Autowired
 	ILoginService loginServiceImp;
@@ -28,7 +39,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 
-		HttpSession session = request.getSession();
+
 		LoginDto ldto = (LoginDto)authentication.getPrincipal();
 		
 		//wlist에는 wanted_seq만 담겨서 반환
@@ -38,6 +49,30 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 //		session.setAttribute("wishlist", wlist);
 //		session.setAttribute("applylist", alist);
 		
+		if(ldto.getRole().equals("USER")) {
+			redirectStratgy.sendRedirect(request, response, "");
+		}else {
+			redirectStratgy.sendRedirect(request, response, "reportlist.do");
+		}
+		
+		
+		clearAuthenticationAttributes(request);
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
+	
+	protected void resultRedirectStrategy(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException {
+        
+        SavedRequest savedRequest = requestC.getRequest(request, response);
+        
+        if(savedRequest!=null) {
+            String targetUrl = savedRequest.getRedirectUrl();
+            redirectStratgy.sendRedirect(request, response, targetUrl);
+        } else {
+            redirectStratgy.sendRedirect(request, response, "index.do");
+        }
+        
+    }
+
+
 }

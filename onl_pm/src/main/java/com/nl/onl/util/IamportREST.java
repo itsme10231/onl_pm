@@ -53,13 +53,6 @@ public class IamportREST {
 		return token;
 	}
 	
-	public JSONObject isAbleAccount() {
-		JSONObject jObj = null;
-		//안쓸겁니다~!
-		
-		
-		return jObj;
-	}
 	
 	public boolean getRefund(String imp_uid, String merchant_uid, String reason) {
 		boolean isS=false;

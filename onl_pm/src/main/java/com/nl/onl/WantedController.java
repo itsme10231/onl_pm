@@ -63,13 +63,24 @@ public class WantedController {
 	
 	//구인글 검색
 	@RequestMapping(value="search.do", method=RequestMethod.GET)
-	public String searchWanted(Model model, SearchDto sdto, Authentication auth, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+	public String searchWanted(Model model, SearchDto sdto, String locrange, Authentication auth, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 		
 		List<WantedDto> wlist = new ArrayList<>(); 
 		
 		if(sdto.getPnum() == null) {
 			sdto.setPnum("1");
 		}
+		
+		if(locrange != null && (sdto.getLocation() != null && !sdto.getLocation().trim().equals(""))) {
+			if(locrange.equals("l2")) {
+				
+			}else if(locrange.equals("l3")) {
+				
+			}else if(locrange.equals("l4")){
+				
+			}
+		}
+		
 		System.out.println("sdto: "+ sdto);
 		
 		if(auth != null && auth.isAuthenticated()) {
@@ -93,16 +104,36 @@ public class WantedController {
 		}
 		
 //		System.out.println(wlist);
-		String allC = wlist.get(0).getResult_c();
-		int allP = (int)Math.ceil(Double.parseDouble(allC)/20);
+
 		
-		Map<String, Integer> pageMap = onlUtil.pagingValue(allP, sdto.getPnum(), 5);
+		if(wlist.size() != 0) {
+			int sosCount = 0;
+			for(int i = 0; i < wlist.size(); i++) {
+				
+				if(wlist.get(i).getSosflag().equals("Y")) {
+					sosCount++;
+				}else {
+					break;
+				}
+			}
+			
+			model.addAttribute("sosCount", sosCount);
+			
+			String allC = wlist.get(0).getResult_c();
+			int allP = (int)Math.ceil(Double.parseDouble(allC)/20);
+			
+			Map<String, Integer> pageMap = onlUtil.pagingValue(allP, sdto.getPnum(), 5);
+			
+			
+			model.addAttribute("wlist",wlist);
+			model.addAttribute("allP", allP);
+			model.addAttribute("pnum", sdto.getPnum());
+			model.addAllAttributes(pageMap);
+		}else {
+			model.addAttribute("pnum", "1");
+		}
 		
-		
-		model.addAttribute("wlist",wlist);
-		model.addAttribute("allP", allP);
-		model.addAttribute("pnum", sdto.getPnum());
-		model.addAllAttributes(pageMap);
+
 
 		model.addAttribute("location", location);
 		return "wantedsearch";

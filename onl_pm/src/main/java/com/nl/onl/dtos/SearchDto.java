@@ -3,7 +3,7 @@ package com.nl.onl.dtos;
 public class SearchDto {
 	private String id;
 	private String title;
-	private String category;
+	private String[] category;
 	private String salary;
 	private String timezone;
 	private String time;
@@ -22,7 +22,7 @@ public class SearchDto {
 	
 	
 
-	public SearchDto(String title, String category, String salary, String timezone, String time, String location,
+	public SearchDto(String title, String category[], String salary, String timezone, String time, String location,
 			String score, String sortType, String align, String pnum, String id) {
 		super();
 		this.title = title;
@@ -48,11 +48,11 @@ public class SearchDto {
 		this.title = title;
 	}
 
-	public String getCategory() {
+	public String[] getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(String[] category) {
 		this.category = category;
 	}
 

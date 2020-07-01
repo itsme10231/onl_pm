@@ -123,7 +123,10 @@
 							AND w.TITLE LIKE '%'||#{title}||'%'
 						</if>
 						<if test="category!=null">
-							AND w.CATEGORY LIKE #{category}||'%'
+							AND
+							<foreach collection="category" item="type" open="(" close=")" separator=" OR ">
+								 w.CATEGORY LIKE #{category}||'%'
+							</foreach>
 						</if>
 						<if test="salary!=null">
 							AND w.SALARY &gt;= #{salary}
@@ -138,7 +141,7 @@
 							AND w.LOCATION||' '||w.LOC_DETAIL LIKE '%'||#{location}||'%'
 						</if>
 						)
-		WHERE 	(CEIL(RN/20) = #{pnum} AND SOSFLAG = 'N') OR (CEIL(RN/5) = #{pnum} AND SOSFLAG = 'Y') 
+		WHERE 	(CEIL(RN/20) = #{pnum} AND SOSFLAG = 'N') OR (CEIL(RN/9) = #{pnum} AND SOSFLAG = 'Y') 
 		ORDER BY SOSFLAG DESC, RN ASC
 	</select>
 	
@@ -223,7 +226,7 @@
 						</if>
 						 AND wp.SEQ = f.POST_SEQ(+)
 						)
-		WHERE 	(CEIL(RN/20) = #{pnum} AND SOSFLAG = 'N') OR (CEIL(RN/5) = #{pnum} AND SOSFLAG = 'Y') 
+		WHERE 	(CEIL(RN/20) = #{pnum} AND SOSFLAG = 'N') OR (CEIL(RN/9) = #{pnum} AND SOSFLAG = 'Y') 
 		ORDER BY SOSFLAG DESC, RN ASC
 	</select>
 	

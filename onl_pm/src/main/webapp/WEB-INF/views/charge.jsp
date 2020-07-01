@@ -253,7 +253,7 @@
 							</tbody>
 						</table>
 						<div class="pagingDiv">
-							<input type="radio" id="banking" name="charge_method" value="danal_tpay" checked="checked"> <label for="banking">계좌이체</label> &nbsp;&nbsp;
+					<!-- <input type="radio" id="banking" name="charge_method" value="danal_tpay" checked="checked"> <label for="banking">계좌이체</label> &nbsp;&nbsp; -->
 							<input type="radio" id="card"  name="charge_method" value="html5_inicis"> <label for="card">카드결제</label> &nbsp;&nbsp;
 							<input type="radio" id="kakao" name="charge_method" value="kakaopay"> <label for="kakao">카카오페이</label>
 							<br><br>
