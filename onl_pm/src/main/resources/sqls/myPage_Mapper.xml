@@ -52,16 +52,37 @@
 		
 		
 		SELECT RN, wp.ID, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.SALARY, wp.STATE, wp.NICKNAME, wp.CONTENT
-		FROM (SELECT ROW_NUMBER() OVER(ORDER BY wp.REGDATE DESC) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, 
+		FROM (SELECT ROW_NUMBER() OVER(
+			ORDER BY wp.REGDATE DESC
+			<choose>
+				<when test="sortType!=null">
+					<choose>
+						<when test="sortType.equals('DEADLINE')">
+						,wp.DEADLINE
+						<choose>
+							<when test="aling.equals('ASC')">
+							ASC
+							</when>
+							<otherwise>
+							DESC
+							</otherwise>
+						</choose>
+						</when>
+					</choose>
+				</when>
+			</choose>
+		) AS RN, wp.SEQ, wp.ID, wp.CATEGORY, wp.TITLE, wp.REGDATE, wp.DEADLINE, wp.SDATE, wp.EDATE, wp.LOCATION, wp.LOC_DETAIL, wp.STIME, wp.ETIME, 
 			wp.SALARY, wp.CONTENT, wp.PHONE, wp.VIEWS, wp.STATE, m.NICKNAME 
 			FROM WANTED_POST wp, "MEMBER" m
 			WHERE wp.ID=#{id} AND wp.ID=m.ID ) wp
 		WHERE CEIL(RN/5)=#{pnum}
+		ORDER BY wp.REGDATE DESC 
+		
 	</select>
 	
 <!-- 	페이징 -->
 	<select id="pcount" resultType="int" parameterType="String">
-		SELECT CEIL(COUNT(seq)/10) FROM WANTED_POST WHERE id=#{id}
+		SELECT CEIL(COUNT(seq)/5) FROM WANTED_POST WHERE id=#{id}
 	</select>
 	
 <!-- 	공고 상세보기 -->
