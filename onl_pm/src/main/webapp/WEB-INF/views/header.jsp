@@ -341,7 +341,7 @@ function makeCategory(cjson){
 			var bigC = $("<li class='bigC'></li>");
 			var innerUl = $("<ul class='innerUl'></ul>");
 			
-			var btag = $("<a href='/search.do?code="+cjson[i].code1+"'>"+cjson[i].category_name1+"</a>");
+			var btag = $("<a href='search.do?category="+cjson[i].code1+"'>"+cjson[i].category_name1+"</a>");
 			
 			bigC.append(btag);
 			
@@ -358,7 +358,7 @@ function makeCategory(cjson){
 					runStatus = false;
 				}else{
 					var innerLi = $("<li class='innerLi'></li>");
-					var stag = $("<a href='/search.do?code="+cjson[j].code2+"'>"+cjson[j].category_name2+"</a>");
+					var stag = $("<a href='search.do?category="+cjson[j].code2+"'>"+cjson[j].category_name2+"</a>");
 					
 					innerLi.append(stag);
 					innerUl.append(innerLi);

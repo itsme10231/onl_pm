@@ -111,33 +111,33 @@
 									FROM UPLOAD_FILE 
 									WHERE BOARD_TYPE = 'WANTED_POST' AND DELFLAG = 'N')
 							WHERE RN_F = 1) f
-						<if test="score!=null">
+						<if test="score!=null and !score.equals('')">
 						, (SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
 				WHERE 	w.DELFLAG = 'N' AND w.STATE = 'WANTED' AND w.DEADLINE &gt;= SYSDATE AND SUBSTR(w.CATEGORY, 1, 1) = wc1.CODE AND w.CATEGORY = wc2.CODE AND w.ID = m.ID AND w.SEQ = f.POST_SEQ(+)
-						<if test="score!=null">
+						<if test="score!=null and !score.equals('')">
 							AND w.ID = r.TARGET_ID(+) AND NVL(r.SCORE, 0) &gt;= #{score}
 						</if>
 
-						<if test="title!=null">
+						<if test="title!=null and !title.equals('')">
 							AND w.TITLE LIKE '%'||#{title}||'%'
 						</if>
-						<if test="category!=null">
+						<if test="category!=null and category.size != 0">
 							AND
-							<foreach collection="category" item="type" open="(" close=")" separator=" OR ">
-								 w.CATEGORY LIKE #{category}||'%'
+							<foreach collection="category" item="code" open="(" close=")" separator=" OR ">
+								 w.CATEGORY LIKE #{code}||'%'
 							</foreach>
 						</if>
-						<if test="salary!=null">
+						<if test="salary!=null and !salary.equals('')">
 							AND w.SALARY &gt;= #{salary}
 						</if>
-						<if test="timezone!=null">
+						<if test="timezone!=null and !timezone.equals('')">
 							AND w.STIME &gt;= SUBSTR(#{timezone}, 1, 4) AND w.ETIME &lt;= SUBSTR(#{timezone}, 5, 8)
 						</if>
-						<if test="time!=null">
+						<if test="time!=null and !time.equals('')">
 							AND (TO_DATE(w.ETIME,'HH24MI')-TO_DATE(w.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
-						<if test="location!=null">
+						<if test="location!=null and (locrange!=null and !locrange.equals(''))">
 							AND w.LOCATION||' '||w.LOC_DETAIL LIKE '%'||#{location}||'%'
 						</if>
 						)
@@ -197,31 +197,31 @@
 									FROM UPLOAD_FILE 
 									WHERE BOARD_TYPE = 'WANTED_POST' AND DELFLAG = 'N')
 							WHERE RN_F = 1) f
-						<if test="score!=null">
+						<if test="score!=null and !score.equals('')">
 						,(SELECT TRUNC(AVG(SCORE),1) AS SCORE, TARGET_ID FROM REVIEW_POST GROUP BY TARGET_ID) r 
 						</if>
 				WHERE 	wp.DELFLAG = 'N' AND wp.STATE = 'WANTED' AND wp.DEADLINE >= SYSDATE AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID
 						AND NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.ID = #{id} AND ul."TYPE" = 'B' AND ul.LIST_ID = wp.ID) 
 						AND NOT EXISTS (SELECT 1 FROM USERLIST ul WHERE ul.LIST_ID = #{id} AND ul."TYPE" = 'B' AND ul.ID = wp.ID)
-						<if test="score!=null">
+						<if test="score!=null and !score.equals('')">
 							AND wp.ID = r.TARGET_ID(+) AND NVL(r.SCORE, 0) &gt;= #{score}
 						</if>
-						<if test="title!=null">
+						<if test="title!=null and !title.equals('')">
 							AND wp.TITLE LIKE '%'||#{title}||'%'
 						</if>
-						<if test="category!=null">
+						<if test="category!=null and category.size != 0">
 							AND wp.CATEGORY LIKE #{category}||'%'
 						</if>
-						<if test="salary!=null">
+						<if test="salary!=null and !salary.equals('')">
 							AND wp.SALARY &gt;= #{salary}
 						</if>
-						<if test="timezone!=null">
+						<if test="timezone!=null and !timezone.equals('')">
 							AND wp.STIME &gt;= SUBSTR(#{timezone}, 1, 4) AND wp.ETIME &lt;= SUBSTR(#{timezone}, 5, 8)
 						</if>
-						<if test="time!=null">
+						<if test="time!=null and !time.equals('')">
 							AND (TO_DATE(wp.ETIME,'HH24MI')-TO_DATE(wp.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
-						<if test="location!=null">
+						<if test="location!=null and (locrange!=null and !locrange.equals('')">
 							AND wp.LOCATION||' '||wp.LOC_DETAIL LIKE '%'||#{location}||'%'
 						</if>
 						 AND wp.SEQ = f.POST_SEQ(+)

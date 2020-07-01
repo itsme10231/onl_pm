@@ -24,12 +24,13 @@
 	.sideUl>li{
 		padding-top: 5px;
 		padding-bottom: 5px;
-		padding-left: 7px;
+		padding-left: 3px;
 	}
 	
 	.contentDetail{
  		border: solid lightgray 1px;
-
+		min-height: 800px;
+		
 		margin: 0 auto;
 		padding: 20px;
 
@@ -173,9 +174,12 @@
 			$("input[name='score']").val(oParams.score);
 		}
 		if(oParams.category != null){
+			console.log();
 			for(var i = 0; i < oParams.category.length; i++){
-				$("input[name='categories']").each(function() {
+				$("input[name='category']").each(function() {
+					console.log($(this).val());
 				    if($(this).val() == oParams.category[i]){ //값 비교
+				    	
 				    	$(this).prop("checked", true); //checked 처리
 				    }
 				});
@@ -194,7 +198,7 @@
 			$("#"+oParams.locrange).attr("checked", true);
 		}
 		if(oParams.location != null){
-			$("textarea[name='location']").val(oParams.location);
+			$("textarea[name='location']").val(decodeURI(oParams.location).replace(/\+/g," "));
 		}
 	}
 
@@ -225,7 +229,7 @@
 						runStatus = false;
 					}else{
 						var innerLi = $("<li></li>");
-						var stag = $("<span><input type='checkbox' name='categories' class='sideCA smallS' value='"+cjson[j].code2+"' id='"+cjson[j].code2+"'> <label for='"+cjson[j].code2+"'>"+cjson[j].category_name2+"</label></span>");
+						var stag = $("<span><input type='checkbox' name='category' class='sideCA smallS' value='"+cjson[j].code2+"' id='"+cjson[j].code2+"'> <label for='"+cjson[j].code2+"'>"+cjson[j].category_name2+"</label></span>");
 						
 						innerLi.append(stag);
 						innerUl.append(innerLi);

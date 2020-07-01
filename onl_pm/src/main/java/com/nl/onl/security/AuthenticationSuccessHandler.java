@@ -50,9 +50,9 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 //		session.setAttribute("applylist", alist);
 		
 		if(ldto.getRole().equals("USER")) {
-			redirectStratgy.sendRedirect(request, response, "");
+			redirectStratgy.sendRedirect(request, response, "/");
 		}else {
-			redirectStratgy.sendRedirect(request, response, "reportlist.do");
+			redirectStratgy.sendRedirect(request, response, "/reportlist.do");
 		}
 		
 		

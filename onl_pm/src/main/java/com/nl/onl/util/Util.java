@@ -358,6 +358,30 @@ public class Util {
 		return map;
 	}
 	
+	//주소범위 가공 메서드
+	public String makeLocRange(String location, String locrange) {
+		String[] locs = location.split(" ");
+		
+		if(locrange.equals("l2")) {
+			return locs[0];
+		}else if(locrange.equals("l3")) {
+			return locs[0] +" " +locs[1];
+		}else if(locrange.equals("l4")){
+			return locs[0] +" " +locs[1] +" " +locs[2];
+		}else {
+			
+			String str = "";
+			for(int i = 0; i < locs.length-1; i++) {
+				str += locs[i];
+				if(i != locs.length-2) {
+					str += " ";
+				}
+			}
+			return str;
+		}
+		
+	}
+	
 	//rest api에 연결하여 값을 제이슨객체로 받아오는 메서드
 	public JSONObject connectUrl(String url, String param, String method, Map<String, String> headerVal) {
 		JSONObject jObj = null;

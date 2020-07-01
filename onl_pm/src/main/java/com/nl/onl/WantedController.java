@@ -63,7 +63,8 @@ public class WantedController {
 	
 	//구인글 검색
 	@RequestMapping(value="search.do", method=RequestMethod.GET)
-	public String searchWanted(Model model, SearchDto sdto, String locrange, Authentication auth, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+	public String searchWanted(Model model, SearchDto sdto, Authentication auth, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+//		System.out.println(sdto.getCategory().get(0));
 		
 		List<WantedDto> wlist = new ArrayList<>(); 
 		
@@ -71,14 +72,8 @@ public class WantedController {
 			sdto.setPnum("1");
 		}
 		
-		if(locrange != null && (sdto.getLocation() != null && !sdto.getLocation().trim().equals(""))) {
-			if(locrange.equals("l2")) {
-				
-			}else if(locrange.equals("l3")) {
-				
-			}else if(locrange.equals("l4")){
-				
-			}
+		if((sdto.getLocrange() != null && !sdto.getLocrange().equals("")) && (sdto.getLocation() != null && !sdto.getLocation().trim().equals(""))) {
+			sdto.setLocation(onlUtil.makeLocRange(sdto.getLocation(), sdto.getLocrange()));
 		}
 		
 		System.out.println("sdto: "+ sdto);
@@ -132,7 +127,7 @@ public class WantedController {
 		}else {
 			model.addAttribute("pnum", "1");
 		}
-		
+		System.out.println(wlist);
 
 
 		model.addAttribute("location", location);

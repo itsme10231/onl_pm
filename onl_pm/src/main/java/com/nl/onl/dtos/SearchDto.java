@@ -1,9 +1,11 @@
 package com.nl.onl.dtos;
 
+import java.util.List;
+
 public class SearchDto {
 	private String id;
 	private String title;
-	private String[] category;
+	private List<String> category;
 	private String salary;
 	private String timezone;
 	private String time;
@@ -11,6 +13,7 @@ public class SearchDto {
 	private String score;
 	private String sortType;
 	private String align;
+	private String locrange;
 
 	private String pnum;
 	
@@ -22,7 +25,7 @@ public class SearchDto {
 	
 	
 
-	public SearchDto(String title, String category[], String salary, String timezone, String time, String location,
+	public SearchDto(String title, List<String> category, String salary, String timezone, String time, String location,
 			String score, String sortType, String align, String pnum, String id) {
 		super();
 		this.title = title;
@@ -48,11 +51,11 @@ public class SearchDto {
 		this.title = title;
 	}
 
-	public String[] getCategory() {
+	public List<String> getCategory() {
 		return category;
 	}
 
-	public void setCategory(String[] category) {
+	public void setCategory(List<String> category) {
 		this.category = category;
 	}
 
@@ -132,6 +135,18 @@ public class SearchDto {
 		this.id = id;
 	}
 	
+	
+
+
+	public String getLocrange() {
+		return locrange;
+	}
+
+
+
+	public void setLocrange(String locrange) {
+		this.locrange = locrange;
+	}
 
 
 
