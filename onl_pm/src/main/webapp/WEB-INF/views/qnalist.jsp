@@ -142,10 +142,10 @@ th {
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
 		<h2>사용자 QnA</h2>
-		<div id="div2">
-			<input type="text" placeholder="검색어 입력">
-			<button id="button1">검색</button>
-		</div>
+<!-- 		<div id="div2"> -->
+<!-- 			<input type="text" placeholder="검색어 입력"> -->
+<!-- 			<button id="button1">검색</button> -->
+<!-- 		</div> -->
 		<table id="table1">
 			<tr>
 				<td class="td1"><a href="qnalist.do?pnum=1">전체</a></td>
@@ -188,10 +188,11 @@ th {
 			</td>
 		</tr>
 		</table>
-		
+		<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" var="u">
 		<div id="div3">
 			<button id="button2" onclick="location.href='addForm.do'">글쓰기</button>
 		</div>
+		</sec:authorize>
 	</div>
 </body>
 </html>

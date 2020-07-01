@@ -97,7 +97,7 @@ th {
 </style>
 </head>
 <body>
-	<% LoginDto ldto=(LoginDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); %>
+<%-- 	<% LoginDto ldto=(LoginDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); %> --%>
 
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
@@ -125,31 +125,51 @@ th {
 			</tr>
 			
 		</table>
+		<sec:authorize access="hasRole('ROLE_USER')" var="u">
 		<div id="div2">
-			<button class="button2" onclick="deleteQna(${qList[0].seq})">삭제</button>
+			<button class="button2" type="button" onclick="deleteQna(${qList[0].seq})">삭제</button>
 			</div>
 		<div class="div3">
 			<button class="button2" onclick="updateQna(${qList[0].seq})">수정</button>
 			</div>
-			
+			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_ADMIN')" var="u">
+		<div id="div2">
+			<button class="button2" type="button" onclick="deleteQna(${qList[0].seq})">삭제</button>
+			</div>
+		<div class="div3">
+			<button class="button2" onclick="updateQna(${qList[0].seq})">수정</button>
+			</div>
+			</sec:authorize>
+			<form method="post">
+			<input type="hidden" name="qna_code" value="${qList[0].qna_code}">
+			<input type="hidden" name="seq" value="${qList[0].seq}">
+			<input type="hidden" name="seq1" value="${qList[1].seq}">
 			<table>
 				<tr>
 				<th height="230px">답변</th>
-				<td><textarea class="form-control" rows="10" cols="60"<%=ldto.getRole().equals("USER")?"readonly":"" %> >${qList[1].content}</textarea></td>
+				<td>
+				<sec:authorize access="hasRole('ROLE_ADMIN')" var="u">
+				<textarea class="form-control" rows="10" cols="60" name="content">${qList[1].content}</textarea>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_USER')" var="u">
+				<textarea class="form-control" rows="10" cols="60" readonly="readonly">${qList[1].content}</textarea>
+				</sec:authorize>
+				</td>
 			</tr>
 			</table>
-			
+			<sec:authorize access="hasRole('ROLE_ADMIN')" var="u">
 			<div id="div2">
-<%-- 			<sec:authorize access="hasRole('ROLE_ADMIN')" var="u">버튼</sec:authorize> --%>
-			<button class="button2" onclick="deleteQna(${qList[1].seq})">삭제</button>
+			<button ${qList[1] != null?"":"disabled style='opacity:0.5;'"} class="button2" type="button" onclick="deleteQna(${qList[1].seq})">삭제</button>
 			</div>
 		<div class="div3">
-			<button class="button2" onclick="updateQna(${qList[1].seq})">수정</button>
+			<button ${qList[1] != null?"":"disabled style='opacity:0.5;'"} class="button2" type="submit" formaction="qnaReplyUpdate.do">수정</button>
 			</div>
 			<div class="div3">
-			<button class="button2" onclick="qnaAddForm(${qList[1].seq})">답글</button>
+			<button ${qList[1] == null?"":"disabled style='opacity:0.5;'"}   class="button2" type="submit" formaction="replyQna.do" >쓰기</button>
 			</div>
-			
+			</sec:authorize>
+			</form>
 </div>
 
 </body>

@@ -22,12 +22,12 @@
 		 SELECT a.SEQ,a.ID, a.CATEGORY_NAME,a.TITLE,a.PROCESS,a.REGDATE,a.QNA_CODE
 			    FROM (SELECT ROW_NUMBER() OVER(ORDER BY REGDATE DESC) RN,
 				    q.SEQ, q.ID, q.TITLE, q.CONTENT, q.REGDATE ,q.PROCESS ,c.CATEGORY_NAME,q.REF,q.QNA_CODE
-					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE
+					FROM QNA q , QNA_CATEGORY c WHERE q.QNA_CODE =c.QNA_CODE AND q."REF" =q.SEQ
 					<if test="qna_code!=null">
 			    		AND q.QNA_CODE=#{qna_code}
 			    	</if>
 					 ) a
-			    WHERE CEIL(RN/5)=#{pnum} AND a.REF=a.SEQ
+			    WHERE CEIL(RN/5)=#{pnum}
 			  
 	</select>
 	
@@ -81,7 +81,7 @@
 <!-- 	QNA댓글쓰기 -->
 	<insert id="insertReplyQna" parameterType="QnaDto">
 		INSERT INTO QNA
-		VALUES (QNA_SEQ.nextval,#{qna_code},#{title},#{content},#{id},SYSDATE,
+		VALUES (QNA_SEQ.nextval,#{qna_code},'reply',#{content},'onladmin',SYSDATE,
 		(SELECT REF FROM QNA WHERE SEQ=#{seq}), 'COMPLETE')
 	</insert>
 	
@@ -91,7 +91,7 @@
 	</update>
 	
 	<resultMap type="com.nl.onl.dtos.NoticeDto" id="NoticeDtoMap">
-		<result property="seq" column="SEQ" />
+		<result property="seq" column="SEQ" /> 
 		<result property="noticeflag" column="NOTICEFLAG" />
 		<result property="title" column="TITLE" />
 		<result property="content" column="CONTENT" />
