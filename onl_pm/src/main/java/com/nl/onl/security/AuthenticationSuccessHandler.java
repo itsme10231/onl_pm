@@ -57,7 +57,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 		
 		
 		clearAuthenticationAttributes(request);
-		super.onAuthenticationSuccess(request, response, authentication);
+//		super.onAuthenticationSuccess(request, response, authentication);
 	}
 	
 	protected void resultRedirectStrategy(HttpServletRequest request, HttpServletResponse response,
