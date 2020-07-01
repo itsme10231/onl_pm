@@ -42,7 +42,7 @@
 	<!-- 신고카테고리 가져오기 -->
 	<select id="getReportCategory" resultMap="ReportDtoMap">
 		SELECT	CODE AS CATEGORY_SEQ, CONTENT AS C_CONTENT
-		FROM	REPORT_CATEGORY
+		FROM REPORT_CATEGORY
 	</select>
 	
 
@@ -58,10 +58,10 @@
 	WHERE CEIL(RN/10)=#{pnum}
 	</select>
 	
-<!-- 	신고페이징 -->
-	<select id="pcountReport" resultType="int">
-		SELECT CEIL(COUNT(*)/10) FROM REPORTLIST
-	</select>
+<!-- 	신고페이징	  -->
+<!-- 	<select id="pcountReport" resultMap="ReportDtoMap"> -->
+<!-- 		SELECT CEIL(COUNT(*)/10) FROM REPORTLIST -->
+<!-- 	</select> -->
 	
 <!-- 	신고상세보기 -->
 	<select id="detailReport" resultMap="ReportDtoMap"
@@ -88,6 +88,11 @@
 			WHERE m.ID = cc.REPORTED_ID(+))
 	WHERE CEIL(RN/20)=#{pnum}
 	</select>
+	
+<!--	회원전체페이징 -->
+<!-- 	<select id="pcountAdmin" resultType="int"> -->
+<!-- 		SELECT CEIL(COUNT(*)/20) FROM REPORTLIST -->
+<!-- 	</select> -->
 	
 <!-- 	관리자페이지 회원 상세보기 -->
 	<select id="detailAdmin" resultMap="LoginDtoMap"

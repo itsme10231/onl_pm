@@ -77,6 +77,7 @@ input {
 }
 
 #table2 {
+	
 	border-top: 2px solid gray;
 	border-bottom: 1px solid gray;
 	border-left: none;
@@ -89,25 +90,17 @@ input {
 }
 
 th {
+	padding: 10px; 
 	height: 40px;
+
 	background-color: #E6E6E6;
 }
+td{
+	padding: 10px; 
 
-.td2 {
-	width: 100px;
-	border: none;
-	border-bottom: 1px solid gray;
-	border-top: 1px solid gray;
-	height: 40px;
 }
 
-.td3 {
-	width: 100px;
-	border: none;
-	border-bottom: 2px solid gray;
-	border-top: 1px solid gray;
-	height: 40px;
-}
+
 
 #div3 {
 	height: 40px;
