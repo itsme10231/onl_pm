@@ -152,15 +152,22 @@
 		});
 		
 		oParams = getUrlParams();
+		console.log(oParams);
 		setFilters(oParams);
 		
 		
 	});
 	
 	function getUrlParams() {
-	    var params = {};
-	    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
-	    return params;
+		var a = 
+	    window.location.search.split(/[?&]/).reduce(function(a,b,c){
+	    	  var p=b.split("="), k=p[0], v=decodeURIComponent(p[1]);
+	    	  if(!p[1])return a;
+	    	  a[k]=a[k]||[];
+	    	  a[k].push(v);
+	    	 return a;
+	    	}, {});
+		return a;
 	}
 	
 	//필터에 쿼리값 셋팅
@@ -168,21 +175,21 @@
 		console.log(oParams);
 		
 		if(oParams.title != null){
-			$("input[name='title']").val(decodeURI(oParams.title));
+			$(".searchfield").val(decodeURI(oParams.title));
 		}
 		if(oParams.score != null){
 			$("input[name='score']").val(oParams.score);
 		}
 		if(oParams.category != null){
-			console.log();
+
 			for(var i = 0; i < oParams.category.length; i++){
-				$("input[name='category']").each(function() {
-					console.log($(this).val());
-				    if($(this).val() == oParams.category[i]){ //값 비교
-				    	
-				    	$(this).prop("checked", true); //checked 처리
-				    }
-				});
+				console.log(oParams.category[i]);
+				var objs = document.getElementsByName('category');
+				for(var j = 0; j < objs.length; j++){
+					if(objs.eq(i).value == oParams.category[i]){
+						objs.eq(i).checked = true;
+					}
+				}
 			}
 		}
 		if(oParams.salary != null){
@@ -263,10 +270,10 @@
 			<div class="contentDetail" style="margin-top:84px;">
 				<form action="search.do" method="get" name="detailsearch">
 				<ul class=".flex-sm-column sideUl">
-					<li class="nav-item">검색어
+					<li class="nav-item">선택중인 필터
 						<ul class="nav-item sideUl">
 							<li class="nav-item">
-								<input type="text" name="title" style="width:160px;">
+								<div class="sideK">선택중인 필터</div>
 							</li>
 						</ul>
 					</li>

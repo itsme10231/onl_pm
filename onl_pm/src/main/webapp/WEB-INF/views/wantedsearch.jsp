@@ -114,6 +114,13 @@
 		font-size: 18px;
 	}
 	
+	.allcenter{
+		text-align: center;
+		position: relative;
+		margin: 0 auto;
+
+		top: 200px;
+	}
 
 	
 	.slick-prev{
@@ -276,8 +283,10 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-						
-							<h2 class="pageTitle">검색결과가 없습니다.</h2>
+							<div class="allcenter">
+								<img alt="not-exist" src="resources/icon/emoji_sad.png" style="width:150px;">
+								<h2 class="pageTitle">이런!<br>입력하신 조건에 맞는 검색결과가 없어요!</h2>
+							</div>
 						</c:otherwise>
 					</c:choose>
 

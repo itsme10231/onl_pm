@@ -29,6 +29,13 @@ public class MypageController {
 	Util onlUtil;
 	
 	@Secured("ROLE_USER")
+	@RequestMapping(value="/mypage.do", method= {RequestMethod.GET})
+	public String toMypage() {
+		
+		return "redirect:/mywanted.do";
+	}
+	
+	@Secured("ROLE_USER")
 	@RequestMapping(value="/mywanted.do", method= {RequestMethod.GET})
 	public String writeProfileform(Model model, Authentication auth, String pnum, String sortType, String aling, String regdate) {
 		

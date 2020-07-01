@@ -210,7 +210,10 @@
 							AND wp.TITLE LIKE '%'||#{title}||'%'
 						</if>
 						<if test="category!=null and category.size != 0">
-							AND wp.CATEGORY LIKE #{category}||'%'
+							AND
+							<foreach collection="category" item="code" open="(" close=")" separator=" OR ">
+								 wp.CATEGORY LIKE #{code}||'%'
+							</foreach>
 						</if>
 						<if test="salary!=null and !salary.equals('')">
 							AND wp.SALARY &gt;= #{salary}
@@ -221,7 +224,7 @@
 						<if test="time!=null and !time.equals('')">
 							AND (TO_DATE(wp.ETIME,'HH24MI')-TO_DATE(wp.STIME,'HH24MI'))*24*60 &lt;= #{time}*60
 						</if>
-						<if test="location!=null and (locrange!=null and !locrange.equals('')">
+						<if test="location!=null and (locrange!=null and !locrange.equals(''))">
 							AND wp.LOCATION||' '||wp.LOC_DETAIL LIKE '%'||#{location}||'%'
 						</if>
 						 AND wp.SEQ = f.POST_SEQ(+)

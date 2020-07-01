@@ -82,15 +82,12 @@
 		font-weight: 500;
 	}
 	
-	.searchbox{
-		position: relative;
-/* 		display: inline-block; */
-		height: 100px;
-/* 		top: 40px; */
-	}
+
 	
 	.memberfield{
 		float: right;
+		border: 1px solid red;
+		margin-top: 10px;
 	}
 	
 	.loginbar{
@@ -99,13 +96,7 @@
 		height: 50px;
 	}
 	
-	.headerlogo{
-		position: absolute;
-		top: 50px;
-		left: 170px;
-		display: inline-block;
-		
-	}
+
 	
 
 	
@@ -141,22 +132,40 @@
 
 	}
 	
-	.searchElement{
+	.searchbox{
 		position: relative;
-		top: 50px;
-		margin: 0 auto;
+/* 		display: inline-block; */
+		height: 100px;
+/* 		top: 40px; */
+	}
+	
+	.searchbox div{
+		border: solid 1px red;
+	}
+	
+	.headerlogo{
+		width: 100px;
+		display: inline-block;
+		
+	}
+	
+	.searchElement{
+
 
 	}
 	
 	.searchbto{
 		height: 50px;
-		width: 50px;
-		border: 2px solid lightblue;
+		
+		
+		width: 100px;
+
 	}
 	
 	.searchfield{
-		height: 50px;
-		width: 400px;
+
+		width: 500px;
+
 	}
 	
 	.searchdetail{
@@ -391,9 +400,13 @@ function makeCategory(cjson){
 
 		<div class="loginbar">
 			<div class="headerWrapper">
-				고객센터 | <sec:authorize access="isAnonymous()"><a href='registform.do'>회원가입</a> | </sec:authorize>
-				<sec:authorize access="isAnonymous()"><a href='login.do'>로그인</a></sec:authorize>
-				<sec:authorize access="isAuthenticated()"><a href='logout.do'>로그아웃</a></sec:authorize>
+				<div class="memberfield">
+					고객센터 | <sec:authorize access="isAnonymous()"><a href='registform.do'>회원가입</a> | </sec:authorize>
+					<sec:authorize access="isAuthenticated()"><a href='mypage.do'>마이페이지</a> | </sec:authorize>
+					<sec:authorize access="isAuthenticated()"><a href='memberinfo.do'>회원정보관리</a> | </sec:authorize>
+					<sec:authorize access="isAnonymous()"><a href='login.do'>로그인</a></sec:authorize>
+					<sec:authorize access="isAuthenticated()"><a href='logout.do'>로그아웃</a></sec:authorize>
+				</div>
 			</div>
 		</div>
 		
@@ -402,16 +415,19 @@ function makeCategory(cjson){
 			<p id="test"></p>
 			
 			<div class="searchbox">
-				<div class="headerlogo">
-					<h2><a href="index.do">ONL</a></h2> 			
-				</div>
 				<div class="searchElement">
-					<input class="searchfield" type="text" placeholder="검색어를 입력하세요" name="searchval"><input class="searchbto" type="button" name="searchbto" value="검색">
+					<div class="headerlogo">
+						<h2><a href="index.do">ONL</a></h2> 			
+					</div>
+					<div class="searchfield input-group mb-3">
+						<input class="form-control" type="text" placeholder="검색어를 입력하세요" name="searchval" >
+						<div class="input-group-append">
+							<input class="searchbto btn btn-danger" type="button" name="searchbto" value="검색">
+						</div>
+					</div>
 				</div>
 			</div><br>
-<!-- 			<div class="memberfield"> -->
-<!-- 			<input type="button" value="알림"><input type="button" value="마이페이지"><input type="button" value="회원정보관리"> -->
-<!-- 			</div> -->
+
 		</div>
 		<div class="searchdetail">
 			<p class="downarrow">상세검색<img src="/onl/resources/icon/paragraph_center.png" width="15px"></p>
