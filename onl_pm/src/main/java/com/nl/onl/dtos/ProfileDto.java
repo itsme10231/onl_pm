@@ -1,5 +1,7 @@
 package com.nl.onl.dtos;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ProfileDto {
 	private int seq;
 	private String id;
@@ -64,6 +66,10 @@ public class ProfileDto {
 	public void setFiledto(FileDto filedto) {
 		this.filedto = filedto;
 	}
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "ProfileDto [seq=" + seq + ", id=" + id + ", intro=" + intro + ", location_able=" + location_able

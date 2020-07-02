@@ -8,6 +8,7 @@ public class AccountDto {
 	private String name;
 	
 	private int tran_amt;
+	private String bank_name;
 	
 	public AccountDto() {
 		super();
@@ -75,6 +76,20 @@ public class AccountDto {
 
 	public void setTran_amt(int tran_amt) {
 		this.tran_amt = tran_amt;
+	}
+	
+	
+
+
+
+	public String getBank_name() {
+		return bank_name;
+	}
+
+
+
+	public void setBank_name(String bank_name) {
+		this.bank_name = bank_name;
 	}
 
 

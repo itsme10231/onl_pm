@@ -651,7 +651,7 @@
 					<div>${wlist[0].views}</div>
 				</div>
 				<div class="profileImg">
-					<img alt="프로필사진" src="resources/icon/Peaple2.jpg" class="profileImg">
+					<img alt="프로필사진" src="resources/icon/people2.jpg" class="profileImg">
 				</div>
 				<div class="date">
 					<div class="regdate">

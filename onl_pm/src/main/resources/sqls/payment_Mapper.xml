@@ -237,9 +237,9 @@
 	
 	<!-- 계좌 가져오기 -->
 	<select id="getAccount" parameterType="String" resultType="AccountDto">
-		SELECT 	BANK_CODE, ACCOUNT_NUMBER, NAME
-		FROM	MEMBER_ACCOUNT
-		WHERE	ID = #{id}
+		SELECT 	ma.BANK_CODE, ma.ACCOUNT_NUMBER, ma.NAME, bc.BANK_NAME
+		FROM	MEMBER_ACCOUNT ma, BANK_CODE bc
+		WHERE	ma.ID = #{id} AND 
 	</select>
 	
 	<!-- 계좌 수정하기 -->

@@ -175,7 +175,7 @@
 	}
 	
 	.searchfield input{
-		border: 5px solid crimson;
+ 		border: 1px solid crimson;
 		
 	}
 	

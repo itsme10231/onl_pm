@@ -1,15 +1,19 @@
 package com.nl.onl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nl.onl.daos.IFileDao;
 import com.nl.onl.daos.ILoginDao;
+import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
+import com.nl.onl.dtos.WantedDto;
 
 @Service
 public class LoginServiceImp implements ILoginService{
@@ -20,6 +24,8 @@ public class LoginServiceImp implements ILoginService{
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	@Autowired
+	private IFileDao fileDaoImp;
 //	
 //	@Override
 //	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -62,8 +68,14 @@ public class LoginServiceImp implements ILoginService{
 	}
 
 	@Override
-	public boolean insertProfile(ProfileDto pdto) {
-		return loginDaoImp.insertProfile(pdto);
+	public boolean insertProfileT(ProfileDto pdto, List<FileDto> flist) {
+		boolean isS = loginDaoImp.insertProfile(pdto);
+		if(flist!=null && flist.size() != 0) {
+			for(FileDto fdto:flist) {
+				isS = fileDaoImp.insertFile(fdto);
+			}
+		}
+		return isS;
 	}
 
 	@Override
@@ -77,8 +89,8 @@ public class LoginServiceImp implements ILoginService{
 	}
 	
 	@Override
-	public List<String> getWishList(String id) {
-		return loginDaoImp.getWishList(id);
+	public List<WantedDto> getWishList(Map<String, String> map) {
+		return loginDaoImp.getWishList(map);
 	}
 	
 	@Override

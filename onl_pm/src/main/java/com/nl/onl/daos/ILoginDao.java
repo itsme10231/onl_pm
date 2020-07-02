@@ -1,10 +1,11 @@
 package com.nl.onl.daos;
 
 import java.util.List;
-
+import java.util.Map;
 
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
+import com.nl.onl.dtos.WantedDto;
 
 
 public interface ILoginDao {
@@ -36,7 +37,7 @@ public interface ILoginDao {
 	public boolean updateProfile(ProfileDto pdto);
 	
 	//찜글목록 가져오기
-	public List<String> getWishList(String id);
+	public List<WantedDto> getWishList(Map<String, String> map);
 	
 	//지원글 시퀀스 목록 가져오기
 	public List<String> getApplySeq(String id);

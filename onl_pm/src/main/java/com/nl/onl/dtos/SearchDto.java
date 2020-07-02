@@ -16,7 +16,7 @@ public class SearchDto {
 	private String locrange;
 
 	private String pnum;
-	
+	private List<String> seqs;
 
 	public SearchDto() {
 		super();
@@ -146,6 +146,20 @@ public class SearchDto {
 
 	public void setLocrange(String locrange) {
 		this.locrange = locrange;
+	}
+	
+	
+
+
+
+	public List<String> getSeqs() {
+		return seqs;
+	}
+
+
+
+	public void setSeqs(List<String> seqs) {
+		this.seqs = seqs;
 	}
 
 

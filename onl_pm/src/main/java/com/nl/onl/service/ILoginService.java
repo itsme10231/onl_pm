@@ -1,11 +1,12 @@
 package com.nl.onl.service;
 
 import java.util.List;
+import java.util.Map;
 
-
-
+import com.nl.onl.dtos.FileDto;
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
+import com.nl.onl.dtos.WantedDto;
 
 
 
@@ -29,7 +30,7 @@ public interface ILoginService {
 		public boolean deleteMember();
 		
 		//프로필 작성
-		public boolean insertProfile(ProfileDto pdto);
+		public boolean insertProfileT(ProfileDto pdto, List<FileDto> flist);
 		
 		//프로필 보기
 		public ProfileDto getProfile(String id);
@@ -38,7 +39,7 @@ public interface ILoginService {
 		public boolean updateProfile(ProfileDto pdto);
 		
 		//찜글목록 가져오기
-		public List<String> getWishList(String id);
+		public List<WantedDto> getWishList(Map<String, String> map);
 		
 		//지원목록 가져오기
 		public List<String> getApplySeq(String id);

@@ -54,6 +54,16 @@
 					<li class="nav-item">1대1 문의기록
 
 					</li>
+					<li class="nav-item"><a href="myreview.do">후기</a>
+						<ul class="nav-item sideUl">
+							<li class="nav-item">
+							<a href="myreview.do?type=0">내가 쓴 후기</a>
+							</li>
+							<li class="nav-item">
+							<a href="myreview.do?type=1">내가 받은 후기</a>
+							</li>
+						</ul>
+					</li>
 					<li class="nav-item">
 						<a href="wallet.do">나의 지갑</a>
 						<ul class="nav-item sideUl">
@@ -66,6 +76,12 @@
 							<li class="nav-item">
 							<a href="received.do">지급내역</a>
 							</li>
+						</ul>
+					</li>
+					<li class="nav-item">유저리스트
+						<ul class="nav-item sideUl">
+							<li class="nav-item">블랙리스트</li>
+							<li class="nav-item">화이트리스트</li>
 						</ul>
 					</li>
 					<li class="nav-item">

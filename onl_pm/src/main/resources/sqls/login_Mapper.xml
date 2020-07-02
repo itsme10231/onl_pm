@@ -24,6 +24,57 @@
 		<result column="ID" property="id"/>
 		<result column="POST_SEQ" property="post_seq"/>
 	</resultMap>
+	
+	<resultMap type="WantedDto" id="WantedDtoMap">
+		<result column="SEQ" property="seq"/>
+		<result column="ID" property="id"/>
+		<result column="CATEGORY" property="category"/>
+		<result column="TITLE" property="title"/>
+		<result column="REGDATE" property="regdate"/>
+		<result column="DEADLINE" property="deadline"/>
+		<result column="SDATE" property="sdate"/>
+		<result column="EDATE" property="edate"/>
+		<result column="LOCATION" property="location"/>
+		<result column="STIME" property="stime"/>
+		<result column="ETIME" property="etime"/>
+		<result column="SALARY" property="salary"/>
+		<result column="CONTENT" property="content"/>
+		<result column="PHONE" property="phone"/>
+		<result column="VIEWS" property="views"/>
+		<result column="STATE" property="state"/>
+		<result column="DELFLAG" property="delflag"/>
+		<result column="SOSFLAG" property="sosflag"/>
+		<result column="SELECTOR" property="selector"/>
+		<result column="LOC_DETAIL" property="loc_detail"/>
+		<result column="LOC_NAME" property="loc_name"/>
+		<result column="WHITELIST" property="whitelist"/>
+		<result column="WISHLIST" property="wishlist"/>
+		<result column="RESULT_C" property="result_c"/>
+
+		<result column="NICKNAME" property="nickname"/>
+		<result column="APPLY" property="apply"/>
+		<result column="APPLY_C" property="apply_c"/>
+		<result column="SELECTED" property="selected"/>
+		
+		<result column="F_SEQ" property="fileDto.seq"/>
+		<result column="ORIGIN_NAME" property="fileDto.origin_name"/>
+		<result column="STORED_NAME" property="fileDto.stored_name"/>
+		<result column="F_REGDATE" property="fileDto.regdate"/>
+		<result column="F_DELFLAG" property="fileDto.delflag"/>
+		<result column="BOARD_TYPE" property="fileDto.board_type"/>
+		<result column="F_ID" property="fileDto.id"/>
+		<result column="POST_SEQ" property="fileDto.post_seq"/>
+		
+		<collection property="categoryDto" resultMap="CategoryDtoMap"/>
+	</resultMap>
+	
+		<resultMap type="CategoryDto" id="CategoryDtoMap">
+		<result column="CODE1" property="code1"/>
+		<result column="CODE2" property="code2"/>
+		<result column="CATEGORY_NAME1" property="category_name1"/>
+		<result column="CATEGORY_NAME2" property="category_name2"/>
+	</resultMap>
+	
 	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="LoginDto">
 		INSERT INTO MEMBER 
@@ -98,7 +149,7 @@
 	
 	<!-- 프로필 보기 -->
 	<select id="getProfile" parameterType="String" resultType="ProfileDto">
-		SELECT	 m.ID , m.NICKNAME , NVL(p.INTRO, '아직 작성하지 않았습니다.') AS INTRO, NVL(p.LOCATION_ABLE, '아직 선택된 지역이 없습니다.') AS LOCATION_ABLE,
+		SELECT	 m.ID , m.NICKNAME , NVL(p.INTRO, '아직 작성하지 않았습니다.') AS INTRO, NVL(p.LOCATION_ABLE, '0') AS LOCATION_ABLE,
 				CASE 
 				WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID  = rp.TARGET_ID ) THEN 0
 				ELSE (SELECT AVG(rp.SCORE) FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID = rp.TARGET_ID)
@@ -123,10 +174,15 @@
 	</update>
 	
 	<!-- 찜글 목록 가져오기(로그인) -->
-	<select id="getWishList" resultType="String" parameterType="String">
-		SELECT WANTED_SEQ 
-			FROM WISHLIST 
-			WHERE ID = #{id}
+	<select id="getWishList" resultMap="WantedDtoMap" parameterType="map">
+		SELECT 	SEQ, CATEGORY, CATEGORY_NAME1, CATEGORY_NAME2, TITLE, SALARY, REGDATE, DEADLINE, STATE , RESULT_C, NICKNAME, LOCATION, LOC_DETAIL
+		FROM 	(SELECT ROW_NUMBER() OVER(ORDER BY wl.SEQ DESC) AS rn, wp.SEQ , wp.CATEGORY , wc1.CATEGORY_NAME as CATEGORY_NAME1, wc2.CATEGORY_NAME as CATEGORY_NAME2, wp.TITLE , wp.SALARY , wp.REGDATE , wp.DEADLINE , wp.STATE, COUNT(wp.SEQ) OVER() AS RESULT_C, wp.LOCATION, wp.LOC_DETAIL, m.NICKNAME
+				 FROM	WANTED_POST wp , WANTED_CATEGORY1 wc1, WANTED_CATEGORY2 wc2, "MEMBER" m,
+						 (SELECT SEQ, WANTED_SEQ 
+						  FROM 	WISHLIST 
+						  WHERE ID = #{id}) wl
+				 WHERE 	wl.WANTED_SEQ = wp.SEQ AND wp.DELFLAG = 'N' AND SUBSTR(wp.CATEGORY, 1, 1) = wc1.CODE AND wp.CATEGORY = wc2.CODE AND wp.ID = m.ID)
+		WHERE 	CEIL(RN/20)=#{pnum}
 	</select>
 	
 	<!-- 내가 지원한 구인글 시퀀스 목록(로그인) -->

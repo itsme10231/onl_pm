@@ -21,6 +21,9 @@
 	}
 	
 
+	.sideUl li{
+		padding: 10px;
+	}
 	
 	.sideTitle{
 		
@@ -38,16 +41,16 @@
 					<h4>회원정보</h4>
 				</div>
 				<ul class=".flex-sm-column sideUl">
-					<li class="nav-item">나의 정보
+					<li class="nav-item"><a href='myinfo.do'>나의 정보</a>
 
 					</li>
-					<li class="nav-item">프로필 수정
+					<li class="nav-item"><a href='myprofile.do'>프로필 관리</a>
 
 					</li>
-					<li class="nav-item">등록계좌관리
+					<li class="nav-item"><a href="myaccount.do">등록계좌관리</a>
 
 					</li>
-					<li class="nav-item">내가 찜한 글
+					<li class="nav-item"><a href='mywishlist.do'>내가 찜한 글</a>
 
 					</li>
 				</ul>

@@ -2,6 +2,7 @@ package com.nl.onl.daos;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.nl.onl.dtos.LoginDto;
 import com.nl.onl.dtos.ProfileDto;
+import com.nl.onl.dtos.WantedDto;
 
 
 @Repository
@@ -66,8 +68,8 @@ public class LoginDaoImp implements ILoginDao {
 	}
 	
 	@Override
-	public List<String> getWishList(String id) {
-		return sqlSession.selectList(nameSpace+"getWishList", id);
+	public List<WantedDto> getWishList(Map<String, String> map) {
+		return sqlSession.selectList(nameSpace+"getWishList", map);
 	}
 	
 	@Override
