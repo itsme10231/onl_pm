@@ -29,6 +29,9 @@
 		<result property="regdate" column="REGDATE" />
 		<result property="role" column="ROLE" />
 		<result property="phone" column="PHONE" />
+		<result property="rn" column="RN"/>
+		<result property="allcount" column="ALLCOUNT"/>
+		<result property="complete" column="COMPLETE"/>
 		<collection property="reportDto" resultMap="ReportDtoMap"/>
 	</resultMap>
 	
@@ -59,9 +62,9 @@
 	</select>
 	
 <!-- 	신고페이징	  -->
-<!-- 	<select id="pcountReport" resultMap="ReportDtoMap"> -->
-<!-- 		SELECT CEIL(COUNT(*)/10) FROM REPORTLIST -->
-<!-- 	</select> -->
+	<select id="pcountReport" resultType="int">
+		SELECT CEIL(COUNT(*)/10)  FROM REPORTLIST
+	</select>
 	
 <!-- 	신고상세보기 -->
 	<select id="detailReport" resultMap="ReportDtoMap"
@@ -82,7 +85,7 @@
 	</update>
 	
 <!-- 	관리자페이지 회원 전체 목록 -->
-	<select id="getAllListAdmin" resultMap="LoginDtoMap">
+	<select id="getAllListAdmin" resultMap="LoginDtoMap" parameterType="String">
 	SELECT RN, ID , NICKNAME, ALLCOUNT, COMPLETE, DELFLAG
 	FROM (
 			SELECT ROW_NUMBER() OVER(ORDER BY m.REGDATE) AS rn, m.ID, m.NICKNAME, NVL(cc.ALLCOUNT, 0) AS allcount, NVL(cc.COMPLETE, 0) AS complete ,m.DELFLAG
@@ -95,10 +98,24 @@
 	WHERE CEIL(RN/20)=#{pnum}
 	</select>
 	
-<!--	회원전체페이징 -->
-<!-- 	<select id="pcountAdmin" resultType="int"> -->
-<!-- 		SELECT CEIL(COUNT(*)/20) FROM REPORTLIST -->
-<!-- 	</select> -->
+<!-- 	회원전체페이징 -->
+	<select id="pcountAdmin" resultType="int">
+	SELECT CEIL(COUNT(*)/20) 
+	FROM (
+			SELECT ROW_NUMBER() OVER(ORDER BY
+			m.REGDATE) AS rn, m.ID, m.NICKNAME, NVL(cc.ALLCOUNT, 0) AS allcount,
+			NVL(cc.COMPLETE, 0) AS complete ,m.DELFLAG
+				FROM (
+					SELECT c.reported_id, c.allcount, COUNT(c.reported_id) AS COMPLETE
+						FROM (
+								SELECT REPORTED_ID, COUNT(SEQ) OVER(PARTITION BY REPORTED_ID) AS
+								allcount, PROCESS FROM REPORTLIST ) c
+								WHERE c.PROCESS = 'COMPLETE'
+								GROUP BY c.REPORTED_ID, c.ALLCOUNT
+			) cc , "MEMBER" m
+			WHERE m.ID = cc.REPORTED_ID(+)
+		 )
+	</select>
 	
 <!-- 	관리자페이지 회원 상세보기 -->
 	<select id="detailAdmin" resultMap="LoginDtoMap"

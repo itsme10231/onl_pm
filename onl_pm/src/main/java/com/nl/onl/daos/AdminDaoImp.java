@@ -24,6 +24,11 @@ public class AdminDaoImp implements IAdminDao{
 	}
 
 	@Override
+	public int pcountReport() {
+		return sqlSession.selectOne(nameSpace+"pcountReport");
+	}
+	
+	@Override
 	public ReportDto detailReport(String seq) {
 		return sqlSession.selectOne(nameSpace+"detailReport", seq);
 	}
@@ -38,11 +43,16 @@ public class AdminDaoImp implements IAdminDao{
 	public List<LoginDto> getAllListAdmin(String pnum) {
 		return sqlSession.selectList(nameSpace+"getAllListAdmin", pnum);
 	}
+	
+	@Override
+	public int pcountAdmin() {
+		return sqlSession.selectOne(nameSpace+"pcountAdmin");
+	}
 
 	@Override
-	public LoginDto detailAdmin(String id) {
+	public List<LoginDto> detailAdmin(String id) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne(nameSpace+"detailAdmin", id);
+		return sqlSession.selectList(nameSpace+"detailAdmin", id);
 	}
 
 	@Override

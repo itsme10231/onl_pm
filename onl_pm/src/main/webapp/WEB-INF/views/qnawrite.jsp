@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 <style type="text/css">
-h2 {
+#h2 {
 	margin-left: 450px;
 	margin-top: 50px;
 	font-size: 30px;
@@ -86,7 +86,7 @@ th {
 </head>
 <body>
 <div style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-		<h2><a href="qnalist.do?pnum=1">QNA 작성</a></h2>
+		<h2 id="h2"><a href="qnalist.do?pnum=1">QNA 작성</a></h2>
 		<form action="qnawrite.do" method="post">
 		<table>
 			<tr>

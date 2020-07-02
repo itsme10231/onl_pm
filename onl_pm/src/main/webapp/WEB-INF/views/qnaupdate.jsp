@@ -14,7 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-h2 {
+#h2 {
 	margin-left: 450px;
 	margin-top: 50px;
 	font-size: 30px;
@@ -85,7 +85,7 @@ th {
 
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-		<h2><a href="qnalist.do?pnum=1">QNA 수정</a></h2>
+		<h2 id="h2"><a href="qnalist.do?pnum=1">QNA 수정</a></h2>
 		<form action="qnaUpdate.do" method="post">
 		<input type="hidden" name="seq" value="${qlist[0].seq}">
 			<table>

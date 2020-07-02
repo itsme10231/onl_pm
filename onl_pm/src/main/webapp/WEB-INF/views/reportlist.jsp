@@ -14,7 +14,7 @@
 <title>Insert title here</title>
 <style type="text/css">
 
-	h2 {
+	#h2 {
 	margin-left: 450px;
 	margin-top: 50px;
 	font-size: 30px;
@@ -22,7 +22,7 @@
 
 #table2 {
 	border-top: 2px solid gray;
-	border-bottom: 2px solid gray;
+/* 	border-bottom: 2px solid gray; */
 	border-left: none;
 	border-right: none;
 	margin-left: 450px;
@@ -39,7 +39,7 @@
    } 
  td {
  
-  	 border-bottom: 1px solid #444444; 
+ 	 border-bottom: 1px solid #444444; 
      padding: 10px;
  
  }
@@ -58,7 +58,7 @@
 
 <div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-<h2>신고목록</h2>
+<h2 id="h2">신고목록</h2>
 <table id="table2">
 			<tr>
 				<th width="50px;">번호</th>
@@ -80,34 +80,21 @@
 				</tr>
 			</c:forEach>
 
-
-<!-- 		<tr> -->
-<!-- 			<td colspan="5" style="text-align: center;"> -->
-<%-- 				<a href='qnalist.do?pnum=<%=map.get("prePageNum")%><%=qna_code==null?"":"&qna_code="+list.get(0).getQna_code()%>'>◀</a> --%>
-<%-- 				<% --%>
-<!--  			for(int i=map.get("startPage"); i<=map.get("endPage"); i++){ -->
-<%-- 						%> --%>
-<%-- 						<a href="qnalist.do?pnum=<%=i%><%=qna_code==null?"":"&qna_code="+list.get(0).getQna_code()%>"><%=i%></a> --%>
-<%-- 						<% --%>
-<!--   					} -->
-<%-- 				%> --%>
-<%-- 				<a href="qnalist.do?pnum=<%=map.get("nextPageNum")%><%=qna_code==null?"":"&qna_code="+list.get(0).getQna_code()%>">▶</a> --%>
-<!-- 			</td> -->
-<!-- 		</tr> -->
-
-<!-- 				<tr> -->
-<!-- 			<td colspan="5" style="text-align: center;"> -->
-<%-- 				<a href="AdminController.do?command=reportlist&pnum=<%=map.get("prePageNum")%>">◀</a> --%>
-<%-- 				<% --%>
-<%-- 				for(int i=map.get("startPage") ;i<=map.get("endPage");i++){
-<%-- 						--%> 
-<%-- 						<a href="AdminController.do?command=reportlist&pnum=<%=i%>"><%=i%></a> --%>
-<%-- 						<% --%>
-<%-- 					}
-<%-- 				%> --%>
-<%-- 				<a href="AdminController.do?command=reportlist&pnum=<%=map.get("nextPageNum")%>">▶</a> --%>
-<!-- 			</td> -->
-<!-- 		</tr> -->
+				<tr> 
+			<td colspan="5" style="text-align: center;"> 
+				<a href="reportlist.do?pnum=<%=map.get("prePageNum")%>">◀</a>
+ 				<%  
+				for(int i=map.get("startPage") ;i<=map.get("endPage");i++){
+ 						%>
+ 						<a href="reportlist.do?pnum=<%=i%>"><%=i%></a> 
+ 						<% 
+					} 
+ 				%> 
+			<a href="reportlist.do?pnum=<%=map.get("nextPageNum")%>">▶</a> 
+			</td> 
+			<td>
+			</td>
+		</tr> 
 		</table>
 </div>
 </body>

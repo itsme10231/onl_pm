@@ -24,7 +24,7 @@ input::-moz-placeholder {
 	color: #a8a8a8;
 }
 /* 	크롬,익스플로러,파이어폭스 에서도 구동하게해주는 소스 */
-h2 {
+#h2 {
 	margin-left: 450px;
 	margin-top: 50px;
 	font-size: 30px;
@@ -134,7 +134,7 @@ td{
 %>
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-		<h2>사용자 QnA</h2>
+		<h2 id="h2">사용자 QnA</h2>
 <!-- 		<div id="div2"> -->
 <!-- 			<input type="text" placeholder="검색어 입력"> -->
 <!-- 			<button id="button1">검색</button> -->

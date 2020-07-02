@@ -11,6 +11,9 @@ public interface IAdminService{
 //	신고목록보기
 	public List<ReportDto> getAllListReport(String pnum);
 	
+//	신고 페이징처리
+	public int pcountReport();
+	
 //	신고상세보기
 	public ReportDto detailReport(String seq);
 	
@@ -20,8 +23,11 @@ public interface IAdminService{
 //	관리자페이지 회원전체목록
 	public List<LoginDto> getAllListAdmin(String pnum);
 	
+	//관리자페이지 회원전체목록 페이징
+	public int pcountAdmin();
+	
 //	관리자 페이지 상세보기
-	public LoginDto detailAdmin(String id);
+	public List<LoginDto> detailAdmin(String id);
 	
 //	관리자 페이지 회원 제재하기
 	public boolean updateDel(Map<String, String> map);

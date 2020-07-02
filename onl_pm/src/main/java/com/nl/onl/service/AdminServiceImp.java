@@ -21,6 +21,11 @@ public class AdminServiceImp implements IAdminService{
 	}
 
 	@Override
+	public int pcountReport() {
+		return adminDaoImp.pcountReport();
+	}
+	
+	@Override
 	public ReportDto detailReport(String seq) {
 		return adminDaoImp.detailReport(seq);
 	}
@@ -36,7 +41,12 @@ public class AdminServiceImp implements IAdminService{
 	}
 
 	@Override
-	public LoginDto detailAdmin(String id) {
+	public int pcountAdmin() {
+		return adminDaoImp.pcountAdmin();
+	}
+	
+	@Override
+	public List<LoginDto> detailAdmin(String id) {
 		return adminDaoImp.detailAdmin(id);
 	}
 

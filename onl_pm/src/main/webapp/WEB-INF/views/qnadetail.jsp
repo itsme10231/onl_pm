@@ -25,7 +25,7 @@
 </script>
 
 <style type="text/css">
-h2 {
+#h2 {
 	margin-left: 450px;
 	margin-top: 50px;
 	font-size: 30px;
@@ -101,7 +101,7 @@ th {
 
 	<div
 		style="white-space: nowrap; overflow: auto; width: 1910px; height: 900px;">
-		<h2><a href="qnalist.do?pnum=1">QNA 상세보기</a></h2>
+		<h2 id="h2"><a href="qnalist.do?pnum=1">QNA 상세보기</a></h2>
 		<table>
 			<tr>
 				<th height="40px">문의유형</th>

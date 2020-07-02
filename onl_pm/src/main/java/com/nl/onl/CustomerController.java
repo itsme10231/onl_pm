@@ -178,4 +178,14 @@ public class CustomerController {
 		
 	}
 	
+	@RequestMapping(value = "/companydetail.do", method = {RequestMethod.GET,RequestMethod.POST})
+	public String companydetail(Locale locale, Model model) {
+		return "companydetail";
+	}
+	
+	@RequestMapping(value = "/companylocation.do", method = {RequestMethod.GET,RequestMethod.POST})
+	public String companylocation(Locale locale, Model model) {
+		return "companylocation";
+	}
+	
 }

@@ -34,7 +34,70 @@ public class LoginDto implements UserDetails, Principal {
 	private ReportDto reportDto;
 	private String stored_name;
 	
+	private String rn;
+	private String allcount;
+	private String complete;
 	
+	
+	
+	public String getRn() {
+		return rn;
+	}
+
+
+	public void setRn(String rn) {
+		this.rn = rn;
+	}
+
+
+	public String getAllcount() {
+		return allcount;
+	}
+
+
+	public void setAllcount(String allcount) {
+		this.allcount = allcount;
+	}
+
+
+	public String getComplete() {
+		return complete;
+	}
+
+
+	public void setComplete(String complete) {
+		this.complete = complete;
+	}
+
+
+	public LoginDto(String id, String password, String name, String address_1, String address_2, String address_3,
+			String email, String nickname, Date birth, String delflag, Date regdate, String role, String phone,
+			String hasacc, String regflag, ReportDto reportDto, String stored_name, String rn, String allcount,
+			String complete) {
+		super();
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.address_1 = address_1;
+		this.address_2 = address_2;
+		this.address_3 = address_3;
+		this.email = email;
+		this.nickname = nickname;
+		this.birth = birth;
+		this.delflag = delflag;
+		this.regdate = regdate;
+		this.role = role;
+		this.phone = phone;
+		this.hasacc = hasacc;
+		this.regflag = regflag;
+		this.reportDto = reportDto;
+		this.stored_name = stored_name;
+		this.rn = rn;
+		this.allcount = allcount;
+		this.complete = complete;
+	}
+
+
 	public LoginDto() {
 
 	}
