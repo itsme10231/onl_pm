@@ -68,7 +68,7 @@
 		<collection property="categoryDto" resultMap="CategoryDtoMap"/>
 	</resultMap>
 	
-		<resultMap type="CategoryDto" id="CategoryDtoMap">
+	<resultMap type="CategoryDto" id="CategoryDtoMap">
 		<result column="CODE1" property="code1"/>
 		<result column="CODE2" property="code2"/>
 		<result column="CATEGORY_NAME1" property="category_name1"/>
@@ -148,7 +148,7 @@
 	</insert>
 	
 	<!-- 프로필 보기 -->
-	<select id="getProfile" parameterType="String" resultType="ProfileDto">
+	<select id="getProfile" parameterType="String" resultMap="ProfileDtoMap">
 		SELECT	 m.ID , m.NICKNAME , NVL(p.INTRO, '아직 작성하지 않았습니다.') AS INTRO, NVL(p.LOCATION_ABLE, '0') AS LOCATION_ABLE,
 				CASE 
 				WHEN NOT EXISTS (SELECT 1 FROM REVIEW_POST rp WHERE rp."TYPE" = 'SEARCH' AND m.ID  = rp.TARGET_ID ) THEN 0
@@ -161,8 +161,8 @@
 		FROM 	"MEMBER" m , PROFILE p ,
 				(SELECT STORED_NAME, ID 
 				 FROM UPLOAD_FILE 
-				 WHERE BOARD_TYPE = 'PROFILE' AND ID = 'onltest1') f
-		WHERE 	m.ID = 'onltest1' AND m.ID = p.ID(+) AND m.ID = f.ID(+) 
+				 WHERE BOARD_TYPE = 'PROFILE' AND ID = #{id}) f
+		WHERE 	m.ID = #{id} AND m.ID = p.ID(+) AND m.ID = f.ID(+) 
 	</select>
 	
 	<!-- 프로필 수정 -->

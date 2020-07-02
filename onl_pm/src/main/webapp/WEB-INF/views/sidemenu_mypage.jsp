@@ -19,6 +19,11 @@
 		font-weight: 500;
 		font-size: 18px;
 	}
+	
+	.sideUl ul{
+		font-weight: 300;
+		font-size: 15px;
+	}
 
 	
 	.sideTitle{
@@ -37,21 +42,21 @@
 					<h4>마이페이지</h4>
 				</div>
 				<ul class=".flex-sm-column sideUl">
-					<li class="nav-item">사람 구해요
+					<li class="nav-item"><a href="mywanted.do">사람 구해요</a>
 						<ul class="nav-item sideUl">
-							<li class="nav-item">모집중</li>
-							<li class="nav-item">진행중</li>
-							<li class="nav-item">완료</li>
+							<li class="nav-item"><a href="mywanted.do?state=WANTED">모집중</a></li>
+							<li class="nav-item"><a href="mywanted.do?state=PROCESS">진행중</a></li>
+							<li class="nav-item"><a href="mywanted.do?state=COMPLETE">완료</a></li>
 						</ul>
 					</li>
-					<li class="nav-item">지원글 보기
+					<li class="nav-item"><a href='myapply.do'>지원글 보기</a>
 						<ul class="nav-item sideUl">
-							<li class="nav-item">모집중</li>
-							<li class="nav-item">진행중</li>
-							<li class="nav-item">완료</li>
+							<li class="nav-item"><a href='myapply.do?state=WANTED'>모집중</a></li>
+							<li class="nav-item"><a href='myapply.do?state=PROCESS'>진행중</a></li>
+							<li class="nav-item"><a href='myapply.do?state=COMPLETE'>완료</a></li>
 						</ul>
 					</li>
-					<li class="nav-item">1대1 문의기록
+					<li class="nav-item"><a href='mychat.do'>1대1 문의기록</a>
 
 					</li>
 					<li class="nav-item"><a href="myreview.do">후기</a>
@@ -78,7 +83,7 @@
 							</li>
 						</ul>
 					</li>
-					<li class="nav-item">유저리스트
+					<li class="nav-item"><a href='userlist.do'>유저리스트</a>
 						<ul class="nav-item sideUl">
 							<li class="nav-item">블랙리스트</li>
 							<li class="nav-item">화이트리스트</li>

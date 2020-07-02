@@ -25,9 +25,9 @@ public class MyPageServiceImp implements IMyPageService{
 	}
 
 	@Override
-	public int pcount(String id) {
+	public int pcount(Map<String, String> map) {
 		
-		return mypageDaoImp.pcount(id);
+		return mypageDaoImp.pcount(map);
 	}
 
 	@Override

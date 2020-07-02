@@ -118,6 +118,19 @@ public class EchoHandler extends TextWebSocketHandler {
 				
 				//최종적으로는 DB에 채팅로그 저장
 				chatServiceImp.sendMessageT(cdto);
+				
+			}else if(((String)jObj.get("type")).equals("leave")) {
+				
+				String roomKey = checkedIn.get(id1);
+				ChatRoom room = chatRoomMap.get(roomKey);
+				
+				room.leaveRoom(id1);
+				if(room.isEmpty()) {
+					chatRoomMap.remove(roomKey);
+				}
+				
+				checkedIn.remove(id1);
+				System.out.println("Room checkout success");
 			}
 			
 		}

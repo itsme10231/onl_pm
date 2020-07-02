@@ -257,34 +257,39 @@ public class Util {
 		
 		boolean isS = false;
 		List<FileDto> flist = new ArrayList<>();
-		for(MultipartFile file:files) {
-			
-			String originName = file.getOriginalFilename();
-			
-			if(originName == null || originName.equals("")) {
-				//파일이름이 없을경우
-				isS = true;
-				break;
-			}
+		if(files.length == 0) {
+			isS = true;
+		}else {
+			for(MultipartFile file:files) {
+				
+				String originName = file.getOriginalFilename();
+				
+				if(originName == null || originName.equals("")) {
+					//파일이름이 없을경우
+					isS = true;
+					break;
+				}
 
-			String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
-			String storedName = creatUUID +originName.substring(originName.indexOf("."));
-			
-			
-			File f = new File(filePath+storedName);
-			
-			try {
+				String creatUUID = UUID.randomUUID().toString().replaceAll("-", "");
+				String storedName = creatUUID +originName.substring(originName.indexOf("."));
 				
-				file.transferTo(f);
-				flist.add(new FileDto(0, originName, storedName, null, "N", boardType, id, 0));
-				isS = true;
 				
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-				isS = false;
+				File f = new File(filePath+storedName);
+				
+				try {
+					
+					file.transferTo(f);
+					flist.add(new FileDto(0, originName, storedName, null, "N", boardType, id, 0));
+					isS = true;
+					
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+					isS = false;
+				}
+				
 			}
-			
 		}
+		System.out.println(flist);
 		return isS ? flist : null;
 	}
 	

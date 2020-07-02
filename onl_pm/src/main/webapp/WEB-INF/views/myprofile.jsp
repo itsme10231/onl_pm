@@ -68,38 +68,39 @@
 </style>
 <script type="text/javascript">
 	$(function(){
-		//이미지 가운데에 맞추기
-// 		$(".wantedImg").on("load",function(){
-		$(".profileImg").each(function(){
-			var imgWidth = this.naturalWidth;
-			var imgHeight = this.naturalHeight;
 
-			if(imgWidth > imgHeight){
-				
-				$(this).height("100%");
-				
-				if($(this).width() < 200){
-					
-					$(this).css("height","");
-					
-					$(this).width("100%");
-					$(this).css("top", "-"+(($(this).height()-150)/2)+"px");
-					
-				}else{
-					$(this).css("left", "-"+(($(this).width()-230)/2)+"px");
-				}
-				
+	});
+	
+	//이미지 가운데에 맞추기
+	$(".wantedImg").on("load",function(){
 
-			}else{
+		var imgWidth = this.naturalWidth;
+		var imgHeight = this.naturalHeight;
+
+		if(imgWidth > imgHeight){
+			
+			$(this).height("100%");
+			
+			if($(this).width() < 200){
+				
+				$(this).css("height","");
 				
 				$(this).width("100%");
 				$(this).css("top", "-"+(($(this).height()-150)/2)+"px");
-
+				
+			}else{
+				$(this).css("left", "-"+(($(this).width()-230)/2)+"px");
 			}
-		});
-// 		});
-	});
+			
 
+		}else{
+			
+			$(this).width("100%");
+			$(this).css("top", "-"+(($(this).height()-150)/2)+"px");
+
+		}
+
+	});
 </script>
 </head>
 <body>

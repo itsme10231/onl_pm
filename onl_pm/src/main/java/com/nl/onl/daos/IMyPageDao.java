@@ -14,7 +14,7 @@ public interface IMyPageDao {
 	public List<WantedDto> getAllMyList(Map<String, String> map);
 	
 //	페이징
-	public int pcount(String id);
+	public int pcount(Map<String, String> map);
 	
 //	공고 상세보기
 	public WantedDto detail(String id);

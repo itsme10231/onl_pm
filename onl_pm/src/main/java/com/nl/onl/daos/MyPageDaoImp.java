@@ -27,9 +27,9 @@ public class MyPageDaoImp implements IMyPageDao{
 	}
 
 	@Override
-	public int pcount(String id) {
+	public int pcount(Map<String, String> map) {
 		
-		return sqlSession.selectOne(namespace+"pcount", id);
+		return sqlSession.selectOne(namespace+"pcount", map);
 	}
 
 	@Override

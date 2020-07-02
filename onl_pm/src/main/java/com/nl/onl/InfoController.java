@@ -130,12 +130,15 @@ public class InfoController {
 	@RequestMapping(value = "/insertmyprofile.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String insertMyProfile(Model model, Authentication auth, ProfileDto pdto, MultipartFile[] file) {
 		boolean isS = false;
-		
+		System.out.println(pdto);
 		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		List<FileDto> flist = new ArrayList<>();
 		
 		pdto.setId(ldto.getId());
 		
-		List<FileDto> flist = onlUtil.letUpload("PROFILE", file, ldto.getId());
+		if(file.length != 0) {
+			flist = onlUtil.letUpload("PROFILE", file, ldto.getId());
+		}
 		
 		if(flist != null) {
 			//실제 수행

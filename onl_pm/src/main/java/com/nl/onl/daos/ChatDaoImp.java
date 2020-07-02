@@ -44,7 +44,7 @@ public class ChatDaoImp implements IChatDao{
 	@Override
 	public List<ChatlistDto> chatList(Map<String, String> map) {
 		
-		return sqlSession.selectList(namespace+"chatList", map);
+		return sqlSession.selectList(namespace+"getChatlist", map);
 	}
 
 	@Override

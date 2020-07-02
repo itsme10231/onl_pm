@@ -13,6 +13,8 @@ public class ChatlistDto {
 	
 	private String nickname;
 	
+	private int result_c;
+	
 	public ChatlistDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -84,6 +86,16 @@ public class ChatlistDto {
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+	
+	
+
+	public int getResult_c() {
+		return result_c;
+	}
+
+	public void setResult_c(int result_c) {
+		this.result_c = result_c;
 	}
 
 	@Override

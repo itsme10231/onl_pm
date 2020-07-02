@@ -86,7 +86,7 @@
 		float: right;
 		font-size: 16px;
 		margin-left: 50px;
-		border-left: 2px solid lightgray;
+		border-left: 1px solid lightgray;
 		padding-left: 20px;
 		display: table-cell;
 		vertical-align: middle;
@@ -150,7 +150,7 @@
 	<%@include file="sidemenu_mypage.jsp" %>
 	
 	<div class="pageContent">
-		<div class="depth">홈 > 마이페이지 > 사람 구해요 > 
+		<div class="depth">홈 > 마이페이지 > 지원했어요 > 
 			<c:choose>
 				<c:when test="${param.state ne null}">
 					${param.state eq 'WANTED' ? '모집중':''}
@@ -167,12 +167,12 @@
 				<h2 class="pageTitle wantedH">
 					<c:choose>
 						<c:when test="${param.state ne null}">
-							${param.state eq 'WANTED' ? '나의 모집중인 구인글':''}
-							${param.state eq 'PROCESS' ? '나의 진행중인 구인글':''}
-							${param.state eq 'COMPLETE' ? '나의 완료된 구인글':''}
+							${param.state eq 'WANTED' ? '모집중인 나의 지원내역':''}
+							${param.state eq 'PROCESS' ? '진행중인 나의 지원내역':''}
+							${param.state eq 'COMPLETE' ? '완료된 나의 지원내역':''}
 						</c:when>
 						<c:otherwise>
-							나의 구인글
+							나의 구인글 지원내역
 						</c:otherwise>
 					</c:choose>
 				</h2>
@@ -193,7 +193,7 @@
 				</div>
 				<c:choose>
 					<c:when test="${empty wlist}">
-						작성된 구인글이 없습니다.
+						지원한 구인글이 없습니다.
 					</c:when>
 					<c:otherwise>
 						
@@ -250,6 +250,7 @@
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>	
+				
 				<div class="pagingDiv">
 						<nav aria-label="Page navigation example">
 						  <ul class="pagination justify-content-center">
@@ -269,6 +270,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </div>
 
@@ -281,13 +283,12 @@
 			location.href="wanted.do?seq="+$(this).find("input[name='seq']").val();
 			
 		});
-		
+			
 		queryString = location.search;
 		var pnumI = queryString.indexOf("pnum");
 		if(pnumI > 0){
 			queryString = queryString.substring(0, pnumI-1);
 		}
-		
 		
 		$("body").on("click", ".page-link", function(){
 			if($(this).hasClass("pre-page")){
@@ -344,7 +345,6 @@
 				$(this).css("top", "-"+(($(this).height()-160)/2)+"px");
 	
 			}
-			
 			
 // 			console.log($(this).width());
 

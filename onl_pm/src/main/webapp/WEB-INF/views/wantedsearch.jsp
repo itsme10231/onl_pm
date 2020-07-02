@@ -294,9 +294,8 @@
 
 	$(function(){
 		
-		//이미지 가운데에 맞추기
-// 		$(".wantedImg").on("load",function(){
 		$(".wantedImg").each(function(){
+
 			var imgWidth = this.naturalWidth;
 			var imgHeight = this.naturalHeight;
 
@@ -322,8 +321,8 @@
 				$(this).css("top", "-"+(($(this).height()-150)/2)+"px");
 
 			}
+
 		});
-// 		});
 		
 		$('.slick').slick({
 		    slidesToShow: 3,
@@ -376,7 +375,8 @@
 	});
 	
 	
-
+	//이미지 가운데에 맞추기
+	
 </script>
 
 

@@ -39,6 +39,10 @@
 		overflow: hidden;
 		margin: 20px auto;
 	}
+	
+	.profileImg{
+		position: relative;
+	}
 
 	
 	.attention{
@@ -110,12 +114,15 @@
 		$("form").on("submit", function(){
 			
 			var loc = $("input[name='location_able']")
+			var locs = $(".locations");
 			loc.val("");
-			$(".locations").each(function(){
-				
-				loc.val(loc.val +$(this).val() +"&");
-				
-			});
+			
+			for(var i = 0; i < locs.length; i++){
+				if(locs.eq(i).val() != ""){
+					loc.val(loc.val() +locs.eq(i).val() +"&");
+				}
+			}
+
 			loc.val(loc.val().substring(0, loc.val().length-1));
 		});
 	});
@@ -135,7 +142,7 @@
 				<br>
 				<div class="profileDiv">
 					
-					<form action="updateprofile.do" method="post">
+					<form action="insertmyprofile.do" method="post" enctype="multipart/form-data">
 					<table class="registT table table-bordered normalT">
 						<tr>
 							<th colspan="2">
@@ -166,7 +173,7 @@
 						</tr>
 
 						<tr>
-							<td colspan="2"><input type="file" value="프로필 이미지 업로드" style="border: solid 1px lightgray;"/></td>
+							<td colspan="2"><input type="file" name="file" style="border: solid 1px lightgray;"/></td>
 						</tr>
 						<tr>
 							<td colspan="2"><input type="submit" class="btn btn-danger btn-lg" value="프로필 입력"/></td>

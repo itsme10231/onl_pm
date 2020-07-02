@@ -86,7 +86,7 @@
 		float: right;
 		font-size: 16px;
 		margin-left: 50px;
-		border-left: 2px solid lightgray;
+		border-left: 1px solid lightgray;
 		padding-left: 20px;
 		display: table-cell;
 		vertical-align: middle;
@@ -150,12 +150,11 @@
 	<%@include file="sidemenu_mypage.jsp" %>
 	
 	<div class="pageContent">
-		<div class="depth">홈 > 마이페이지 > 사람 구해요 > 
+		<div class="depth">홈 > 마이페이지 > 유저리스트 > 
 			<c:choose>
 				<c:when test="${param.state ne null}">
-					${param.state eq 'WANTED' ? '모집중':''}
-					${param.state eq 'PROCESS' ? '진행중':''}
-					${param.state eq 'COMPLETE' ? '완료':''}
+					${param.state eq 'B' ? '블랙리스트':''}
+					${param.state eq 'W' ? '화이트리스트':''}
 				</c:when>
 				<c:otherwise>
 					전체
@@ -167,89 +166,17 @@
 				<h2 class="pageTitle wantedH">
 					<c:choose>
 						<c:when test="${param.state ne null}">
-							${param.state eq 'WANTED' ? '나의 모집중인 구인글':''}
-							${param.state eq 'PROCESS' ? '나의 진행중인 구인글':''}
-							${param.state eq 'COMPLETE' ? '나의 완료된 구인글':''}
+							${param.state eq 'B' ? '블랙리스트':''}
+							${param.state eq 'W' ? '화이트리스트':''}
 						</c:when>
 						<c:otherwise>
-							나의 구인글
+							유저리스트
 						</c:otherwise>
 					</c:choose>
 				</h2>
 
-				<div class="op">
-<!-- 					<select> -->
-<!-- 						<option value="" selected="selected">전체</option> -->
-<!-- 						<option value="">모집중</option> -->
-<!-- 						<option value="">진행중</option> -->
-<!-- 						<option value="">완료</option> -->
-<!-- 					</select> -->
-					<select name="sortType">
-						<option value="regdate" selected="selected">등록일</option>
-						<option value="apply_c">지원자</option>
-						<option value="deadline">마감임박</option>
-					</select>
-					<br>
-				</div>
-				<c:choose>
-					<c:when test="${empty wlist}">
-						작성된 구인글이 없습니다.
-					</c:when>
-					<c:otherwise>
-						
-						<c:forEach step="1" varStatus="i" var="wdto" items="${wlist}">
-						
-							<c:set var="imgsrc" value="${fn:substring(wdto.category,0,1)}_${(i.index mod 3)+1}.jpg"/>
-							<div class="con">
-									<input type="hidden" name="seq" value="${wdto.seq}">
-									<div class="Cimg">
-										<img alt="대표이미지" class="wantedImg"
-										 src="resources/${wdto.fileDto.stored_name eq null? 'img&sol;':'uploadimg&sol;'}${wdto.fileDto.stored_name eq null ? imgsrc : wdto.fileDto.stored_name}">
-									</div>
-									
-									<div class="con_div1">
-										<div class="Ctitle">${wdto.title}</div>
-										<div class="Cdate">
-											등록일: <fmt:formatDate value="${wdto.regdate}" pattern="YYYY-MM-dd"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											모집기간: ~<fmt:formatDate value="${wdto.deadline}" pattern="YYYY-MM-dd"/>
-
-										</div>
-										<div class="Ccontent">
-											<c:out value='${fn:substring(wdto.content.replaceAll("\\\<.*?\\\>",""),0, 100)}' />...
-										</div>  
-									</div>
-										
-									<div class="con_div2">
-										<div>
-											<c:choose>
-												<c:when test="${wdto.state eq 'PROCESS'}">
-													<span class="attention-3">진행중</span>
-												</c:when>
-												<c:when test="${wdto.state eq 'COMPLETE'}">
-													<span class="attention-4">완료</span>
-												</c:when>
-												<c:otherwise>
-												지원자
-												<div>
-													<span class="attention-1"><a href="">${wdto.apply_c}</a></span> 명
-												</div>
-												</c:otherwise>
-											</c:choose>
-										</div>
-										<div>금액
-											<div>
-												<span class="attention-2">
-													<fmt:formatNumber type="number" maxFractionDigits="3" value="${wdto.salary}"/>
-												</span>
-												원
-											</div>
-										</div>
-									</div>
-								
-							</div>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>	
+				
+				
 				<div class="pagingDiv">
 						<nav aria-label="Page navigation example">
 						  <ul class="pagination justify-content-center">
@@ -269,6 +196,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </div>
 
@@ -281,13 +209,12 @@
 			location.href="wanted.do?seq="+$(this).find("input[name='seq']").val();
 			
 		});
-		
+			
 		queryString = location.search;
 		var pnumI = queryString.indexOf("pnum");
 		if(pnumI > 0){
 			queryString = queryString.substring(0, pnumI-1);
 		}
-		
 		
 		$("body").on("click", ".page-link", function(){
 			if($(this).hasClass("pre-page")){
@@ -344,7 +271,6 @@
 				$(this).css("top", "-"+(($(this).height()-160)/2)+"px");
 	
 			}
-			
 			
 // 			console.log($(this).width());
 
