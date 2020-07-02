@@ -41,6 +41,11 @@ public class AdminServiceImp implements IAdminService{
 	}
 
 	@Override
+	public boolean updateDel(Map<String, String> map) {
+		return adminDaoImp.updateDel(map);
+	}
+	
+	@Override
 	public boolean flagAdmin(Map<String, String> map) {
 		return adminDaoImp.flagAdmin(map);
 	}

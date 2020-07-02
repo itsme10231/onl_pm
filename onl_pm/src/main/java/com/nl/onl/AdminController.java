@@ -88,7 +88,7 @@ public class AdminController {
 		
 	
 		model.addAttribute("rdto",rdto);
-		System.out.println(rdto);
+		System.out.println(rdto.getSeq());
 		return "reportdetail";
 	}
 	
@@ -100,6 +100,26 @@ public class AdminController {
 		Map<String, String> map= new HashMap<String, String>();
 		map.put("seq", seq);
 		map.put("process", "COMPLETE");
+		System.out.println("seq "+seq);
+		boolean isS = adminServiceImp.updateReport(map);
+		if(isS) {
+			System.out.println("success");
+			return "redirect:reportlist.do";			
+		}else {
+			model.addAttribute("msg", "글처리실패");
+			return "error";
+		}
+	
+	}
+	
+	@RequestMapping(value = "/updateReject.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateReject(Authentication auth, Locale locale, Model model, String seq) {
+
+//		LoginDto uDto = (LoginDto)auth.getPrincipal();
+		
+		Map<String, String> map= new HashMap<String, String>();
+		map.put("seq", seq);
+		map.put("process", "REJECT");
 		
 		boolean isS = adminServiceImp.updateReport(map);
 		if(isS) {

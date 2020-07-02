@@ -66,7 +66,7 @@
 <!-- 	신고상세보기 -->
 	<select id="detailReport" resultMap="ReportDtoMap"
 		 parameterType="String">
-	SELECT c.CONTENT AS c_CONTENT,r.REGDATE ,r.ID ,r.REPORTED_ID ,r.CONTENT
+	SELECT c.CONTENT AS c_CONTENT,r.REGDATE ,r.ID ,r.REPORTED_ID ,r.CONTENT,r.SEQ
 	FROM REPORTLIST r,REPORT_CATEGORY c
 	WHERE r.CATEGORY_SEQ =c.CODE AND SEQ=#{seq}
 		</select>
@@ -75,10 +75,14 @@
 	<update id="updateReport" parameterType="map">
 		UPDATE REPORTLIST SET PROCESS =#{process} WHERE SEQ =#{seq}
 	</update>
-		
+	
+<!-- 	유저 제재하기 -->
+	<update id="updateDel" parameterType="map">
+		UPDATE MEMBER SET DELFLAG=#{DELFALG} WHERE ID=#{id}
+	</update>
 	
 <!-- 	관리자페이지 회원 전체 목록 -->
-	<select id="getAllListAdmin" resultMap="LoginDtoMap">
+	<select id="getAllListAdmin" resultMap="LoginDtoMap" parameterType="String">
 	SELECT RN, ID , NICKNAME, ALLCOUNT, COMPLETE, DELFLAG
 	FROM (
 			SELECT ROW_NUMBER() OVER(ORDER BY m.REGDATE) AS rn, m.ID, m.NICKNAME, NVL(cc.ALLCOUNT, 0) AS allcount, NVL(cc.COMPLETE, 0) AS complete ,m.DELFLAG

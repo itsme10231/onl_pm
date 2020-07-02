@@ -23,6 +23,9 @@ public interface IAdminDao{
 //	관리자 페이지 상세보기
 	public LoginDto detailAdmin(String id);
 	
+//	관리자 페이지 회원 제재하기
+	public boolean updateDel(Map<String, String> map);
+	
 //	관리자 페이지 회원 활동/정지 기능
 	public boolean flagAdmin(Map<String, String> map);
 	

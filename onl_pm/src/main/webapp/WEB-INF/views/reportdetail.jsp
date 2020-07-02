@@ -16,6 +16,13 @@ function updateReport(seq){
 		location.href="updateReport.do?seq="+seq;
 	}
 }
+
+function updateReject(seq){
+	var chk = confirm("정말 재고하시겠습니까?");
+	if (chk) {
+		location.href="updateReject.do?seq="+seq;
+	}
+}
 	
 	
 
@@ -109,20 +116,16 @@ th {
 				<td height="40px">${rdto.reported_id}</td>
 			</tr>
 			<tr>
-				<th height="40px">신고경로</th>
-				<td height="40px">해당객체의 고유값</td>
-			</tr>
-			<tr>
 				<th height="230px">문의내용</th>
 				<td><textarea class="form-control" rows="10" cols="60" readonly="readonly">${rdto.content}</textarea></td>
 			</tr>
 			
 		</table>
 		<div id="div2">
-			<button class="button2" type="button" onclick="updateReport('${rdto.seq}')">재고</button>
+			<button class="button2" type="button" onclick="updateReject(${rdto.seq})">재고</button>
 			</div>
 		<div class="div3">
-			<button class="button2" type="button" onclick="updateReport('${rdto.seq}')">처리</button>
+			<button class="button2" type="button" onclick="updateReport(${rdto.seq})">처리</button>
 			</div>
 	</div>
 </body>

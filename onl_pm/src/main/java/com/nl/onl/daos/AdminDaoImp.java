@@ -46,6 +46,12 @@ public class AdminDaoImp implements IAdminDao{
 	}
 
 	@Override
+	public boolean updateDel(Map<String, String> map) {
+		int count=sqlSession.update(nameSpace+"updateDel", map);
+		return count>0?true:false;
+	}
+	
+	@Override
 	public boolean flagAdmin(Map<String, String> map) {
 		int count=sqlSession.update(nameSpace+"flagAdmin", map);
 		return count>0?true:false;
