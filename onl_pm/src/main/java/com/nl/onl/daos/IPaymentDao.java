@@ -47,6 +47,8 @@ public interface IPaymentDao{
 	
 	public String getAllbal(String id);
 	
+	public AccountDto getAccount(String id);
+	
 	public boolean insertMerchant(MerchantDto mdto);
 	
 	public MerchantDto getMerchant(String seq);

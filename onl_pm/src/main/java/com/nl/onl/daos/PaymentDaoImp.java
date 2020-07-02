@@ -124,4 +124,9 @@ public class PaymentDaoImp implements IPaymentDao{
 		int isS = sqlSession.insert(nameSpace+"insertAccount", adto);
 		return isS > 0 ? true: false;
 	}
+	
+	@Override
+	public AccountDto getAccount(String id) {
+		return sqlSession.selectOne(nameSpace+"getAccount", id);
+	}
 }

@@ -218,4 +218,10 @@ public class PaymentServiceImp implements IPaymentService{
 	public boolean insertAccount(AccountDto adto) {
 		return paymentDaoImp.insertAccount(adto);
 	}
+	
+	@Override
+	public AccountDto getAccount(String id) {
+		// TODO Auto-generated method stub
+		return paymentDaoImp.getAccount(id);
+	}
 }
