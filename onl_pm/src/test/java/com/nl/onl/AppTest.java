@@ -68,7 +68,6 @@ public class AppTest {
 	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 
-		adminServiceImp.getAllListAdmin("1");
 	}
 	
 }
