@@ -25,8 +25,13 @@
 </script>
 </head>
 <body>
-<h1>INDEX</h1>
-
+	<div class="headerwrapper">
+		<div class="contentDetail" style="min-height: 1000px;">
+			<div class="centerDiv">
+				INDEX
+			</div>
+		</div>
+	</div>
 </body>
 </html>
 <%@include file="WEB-INF/views/footer.jsp"%>

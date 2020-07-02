@@ -19,21 +19,7 @@
 		font-weight: 500;
 		font-size: 18px;
 	}
-	
-	.contentDetail{
- 		border: solid lightgray 1px;
 
-		margin: 0 auto;
-		padding: 20px;
-
-		background-color: white;
-		
-		margin-bottom: 50px;
-		
-		-webkit-box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
-		-moz-box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
-		box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
-	}
 	
 	.sideTitle{
 		

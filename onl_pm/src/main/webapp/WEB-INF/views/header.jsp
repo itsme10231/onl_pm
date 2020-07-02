@@ -41,15 +41,15 @@
 		margin: 0;
 		padding: 5px 20px;
 		float: left;
-		box-sizing: border-box;
+		box-sizing: content-box;
 		position: relative;
-		z-index: 11;
+		z-index: 20;
 	}
 	
 	.innerUl{
 		display: none;
 		position: absolute;
-		z-index: 10;
+		z-index: 8;
 		list-style: none;
 		text-align: left;
 		padding-left: 20px;
@@ -60,7 +60,7 @@
 
 		width: 150px;
 		margin-top: 0px;
-		top: 60px;
+		top: 57px;
 		left: 0px;
 	}
 	
@@ -86,7 +86,7 @@
 	
 	.memberfield{
 		float: right;
-		border: 1px solid red;
+/* 		border: 1px solid red; */
 		margin-top: 10px;
 	}
 	
@@ -140,32 +140,43 @@
 	}
 	
 	.searchbox div{
-		border: solid 1px red;
+
 	}
 	
 	.headerlogo{
 		width: 100px;
 		display: inline-block;
-		
+		margin-top: -7px;
+		margin-right: 15px;
 	}
 	
 	.searchElement{
 
-
+		
+	}
+	
+	input[name='searchval']{
+		height: 50px;
 	}
 	
 	.searchbto{
 		height: 50px;
-		
-		
 		width: 100px;
 
 	}
 	
 	.searchfield{
-
-		width: 500px;
-
+/* 		display: inline-block; */
+		width: 600px;
+		position: relative;
+		margin: 0 auto;
+		left: -50px;
+		top: 33px;
+	}
+	
+	.searchfield input{
+		border: 5px solid crimson;
+		
 	}
 	
 	.searchdetail{
@@ -212,6 +223,21 @@
 		margin: 0 auto;
 	}
 	
+	.contentDetail{
+ 		border: solid lightgray 1px;
+
+		margin: 0 auto;
+		padding: 20px;
+
+		background-color: white;
+		
+		margin-bottom: 50px;
+		
+		-webkit-box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
+		-moz-box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
+		box-shadow:  0px 1px 1px 0px rgba(0,0,0,0.1);
+	}
+	
 	.pagingDiv{
 		margin-top: 50px;
 		margin-bottom: 50px;
@@ -226,6 +252,12 @@
 	h1{
 		margin-left: 80px;
 		margin-top: 30px;
+	}
+	
+	.wantedH{
+		border-left: 10px solid crimson;
+		padding-left: 5px;
+		margin: 50px 0px 30px 0px;
 	}
 	
 	header{
@@ -277,6 +309,11 @@
 	    background-color: crimson !Important;
 	    border: solid 1px crimson;
 	}
+	
+	.highlight{
+		border-top: 3px solid crimson;
+
+	}
  	
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
@@ -315,10 +352,12 @@ $(function(){
 
 	
 	$("body").on("mouseenter", ".bigC", function(e){
+		$(this).addClass("highlight");
 		$(this).find(".innerUl").stop().show();
 	});
 	
 	$("body").on("mouseleave", ".bigC", function(e){
+		$(this).removeClass("highlight");
 		$(this).find(".innerUl").stop().hide();
 	});
 	
@@ -401,6 +440,7 @@ function makeCategory(cjson){
 		<div class="loginbar">
 			<div class="headerWrapper">
 				<div class="memberfield">
+					<sec:authorize access="isAuthenticated()"><a href='mypage.do'>새로운 알림이 없습니다.</a> | </sec:authorize>
 					고객센터 | <sec:authorize access="isAnonymous()"><a href='registform.do'>회원가입</a> | </sec:authorize>
 					<sec:authorize access="isAuthenticated()"><a href='mypage.do'>마이페이지</a> | </sec:authorize>
 					<sec:authorize access="isAuthenticated()"><a href='memberinfo.do'>회원정보관리</a> | </sec:authorize>
@@ -416,25 +456,22 @@ function makeCategory(cjson){
 			
 			<div class="searchbox">
 				<div class="searchElement">
-					<div class="headerlogo">
-						<h2><a href="index.do">ONL</a></h2> 			
-					</div>
-					<div class="searchfield input-group mb-3">
+					
+					<div class="searchfield input-group mb-3" >
+						<div class="headerlogo">
+							<h2 style="font-weight:1000; font-size:50px;"><a href="index.do" style="text-decoration: none;">ONL</a></h2> 			
+						</div>
 						<input class="form-control" type="text" placeholder="검색어를 입력하세요" name="searchval" >
 						<div class="input-group-append">
-							<input class="searchbto btn btn-danger" type="button" name="searchbto" value="검색">
+							<input class="searchbto btn btn-danger" type="button" name="searchbto" value="검색" style="border-radius: 0px;">
 						</div>
 					</div>
 				</div>
-			</div><br>
+			</div>
+			<br>
 
 		</div>
-		<div class="searchdetail">
-			<p class="downarrow">상세검색<img src="/onl/resources/icon/paragraph_center.png" width="15px"></p>
-			<div class="details">
-				
-			</div>
-		</div>
+
 		
 		<div class="categoryfield">
 			<ul class='outUl nav justify-content-center' id="defaultC"><li>&nbsp;</li></ul>

@@ -50,7 +50,7 @@ import com.nl.onl.util.Util;
 public class AppTest {
 	
 	@Autowired
-	IWantedService wantedServiceImp;
+	IAdminService adminServiceImp;
 	
 //	@Autowired
 //	ILoginService loginServiceImp;
@@ -68,11 +68,7 @@ public class AppTest {
 	public void test() throws UnsupportedEncodingException {
 //		ReportDto rdto = new ReportDto(0, "O1", "O0", "1", null, null, null, "-_-");
 
-		SearchDto sdto = new SearchDto();
-		sdto.setPnum("1");
-		sdto.setTitle("코");
-		sdto.setId("onltest1");
-		System.out.println(wantedServiceImp.getWantedList(sdto));
+		adminServiceImp.getAllListAdmin("1");
 	}
 	
 }

@@ -20,13 +20,6 @@
 		height: 400px;
 	}
 	
-	
-	.wantedH{
-		border-left: 10px solid crimson;
-		padding-left: 5px;
-		margin: 50px 0px 30px 0px;
-	}
-	
 
 	.sosbox{
 		display: inline-block;
