@@ -85,8 +85,8 @@
 					</li>
 					<li class="nav-item"><a href='userlist.do'>유저리스트</a>
 						<ul class="nav-item sideUl">
-							<li class="nav-item">블랙리스트</li>
-							<li class="nav-item">화이트리스트</li>
+							<li class="nav-item"><a href='userlist.do?type=W'>블랙리스트</a></li>
+							<li class="nav-item"><a href='userlist.do?type=B'>화이트리스트</a></li>
 						</ul>
 					</li>
 					<li class="nav-item">

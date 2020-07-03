@@ -9,6 +9,8 @@ public class UserlistDto {
 	
 	private String nickname;
 	
+	private String stored_name;
+	
 	public UserlistDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -61,6 +63,16 @@ public class UserlistDto {
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+	
+	
+
+	public String getStored_name() {
+		return stored_name;
+	}
+
+	public void setStored_name(String stored_name) {
+		this.stored_name = stored_name;
 	}
 
 	@Override

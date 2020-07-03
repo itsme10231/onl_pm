@@ -12,100 +12,51 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
 
-	
-	.con{
-		border: 1px solid darkgray;
-		width: 800px;
-		height: 200px;
-		margin: 20px auto;
-		padding: 20px 30px 20px 20px;
-		overflow: auto;
-		overflow-y: hidden;
+	.userlistDiv{
+		text-align: center;
 	}
 	
-	.con:hover{
-		cursor: pointer;
+	.listItem{
+		width: 150px;
+		height: 200px;
+		display: inline-block;
+		margin: 0px 20px 20px 0px;
+		text-align: center;
+		border: 1px solid black;
+
+	}
+	
+	.listItem:hover{
 		-webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.30);
 		-moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.30);
 		box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.30);
 	}
-
 	
-	.con > div{
-		margin-right: 10px;
-/* 		display: inline-block; */
-		height: 160px;
-
-		position: relative;
-		
-	}
-
-	.op select{
-		float: right;
+	.listItem > h5{
+		margin-bottom: 15px;
 	}
 	
-	.op{
-		overflow: auto;
-		margin-right: 80px;
-		
-	}
-	
-	.Cimg{
-		width: 160px;
-		float: left;
-
+	.white{
 		border: 1px solid lightgray;
-		overflow: hidden;
-
 	}
 	
-	.wantedImg{
+	.black{
+		background-color: 444444;
+		color: white;
+	}
+	
+	.btn-outline-secondary{
+		background-color: white;
+	}
+	
+	.imgDiv{
+		width: 80px;
+		height: 80px;
+		border-radius: 40px;
+/* 		border: 1px solid black; */
+		margin: 20px auto 10px auto;
 		position: relative;
-	}
-	
-	.con_div1{
-		width:350px;
-		float: left;
-		font-size: 16px;
-
-	}
-	
-	.Ctitle{
-		padding-top: 10px;
-		font-size: 20px;
-		font-weight: 700;
-	}
-	
-	.Cdate{
-		padding-top: 20px;
-		font-size: 15px;
-	}
-	
-	.con_div2{
-		width:150px;
-		float: right;
-		font-size: 16px;
-		margin-left: 50px;
-		border-left: 1px solid lightgray;
-		padding-left: 20px;
-		display: table-cell;
-		vertical-align: middle;
-	}
-	
-	
-	.Capply{
-
-
-	}
-	.Csalary{
-
-	}
-	
-	
-	.Ccontent{
-		padding-top: 10px;
-		height: 40px;
-
+		overflow: hidden;
 	}
 	
 	.paging{
@@ -122,25 +73,7 @@
 		padding-right: 5px;
 	}
 	
-	.attention-1{
-		font-size: 40px;
-		font-weight: 700;
-	}
-	
-	.attention-2{
-		font-size: 30px;
-		font-weight: 700;
-	}
-	
-	.attention-3{
-		font-size: 50px;
-		font-weight: 1000;
-	}
-	
-	.attention-4{
-		font-size: 40px;
-		font-weight: 1000;
-	}
+
 </style>
 
 <title>Insert title here</title>
@@ -174,8 +107,46 @@
 						</c:otherwise>
 					</c:choose>
 				</h2>
-
-				
+				아직 유저리스트에 등록한 회원이 없습니다.<br><br>
+				<div class="userlistDiv">
+					<c:choose>
+						<c:when test="${empty ulist}">
+							<div class="listItem black">
+								<div class="imgDiv"></div>
+								<h5>닉네임</h5>
+								<input type="button" class="btn btn-outline-secondary" name="modify" value="변경"> <input type="button" class="btn btn-secondary" name="delete" value="삭제">
+							</div>
+							<div class="listItem white">
+								<div class="imgDiv"></div>
+								<h5>닉네임</h5>
+								<input type="button" class="btn btn-outline-danger" name="modify" value="변경"> <input type="button" class="btn btn-danger" name="delete" value="삭제">
+							</div>
+							<div class="listItem">
+								<div class="imgDiv"></div>
+								<h5>닉네임</h5>
+								<input type="button" class="btn btn-outline-danger" name="modify" value="변경"> <input type="button" class="btn btn-danger" name="delete" value="삭제">
+							</div>
+							<div class="listItem">
+								<div class="imgDiv"></div>
+								<h5>닉네임</h5>
+								<input type="button" class="btn btn-outline-danger" name="modify" value="변경"> <input type="button" class="btn btn-danger" name="delete" value="삭제">
+							</div>
+						
+						</c:when>
+						<c:otherwise>
+							<c:forEach items="${ulist}" var="udto">
+								<div class="listItem ${udto.type eq 'W' ? 'white':'black'}">
+									<div class="imgDiv">
+										<img alt="profile-image" class="profileImg" src="resources/${udto.stored_name eq null? 'icon/':'uploadimg/'}${udto.stored_name eq null? 'people2.jpg':udto.stored_name}">
+										<h5>${udto.nickname}</h5><br>
+										<input type="button" class="btn btn-outline-secondary" name="modify" value="변경"> <input type="button" class="btn btn-secondary" name="delete" value="삭제">
+										<input type="hidden" name="seq" value="${udto.seq}">
+									</div>
+								</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>	
+				</div>
 				
 				<div class="pagingDiv">
 						<nav aria-label="Page navigation example">
@@ -204,11 +175,7 @@
 
 	$(function(){
 		
-		$("body").on("click", ".con", function(){
-			
-			location.href="wanted.do?seq="+$(this).find("input[name='seq']").val();
-			
-		});
+		
 			
 		queryString = location.search;
 		var pnumI = queryString.indexOf("pnum");
@@ -219,30 +186,38 @@
 		$("body").on("click", ".page-link", function(){
 			if($(this).hasClass("pre-page")){
 				
-				location.href= "search.do" +queryString +"&pnum=${prePageNum}";
+				location.href= "userlist.do" +queryString +"&pnum=${prePageNum}";
 				
 			}else if ($(this).hasClass("first-page")){
 				
-				location.href= "search.do" +queryString +"&pnum=1";
+				location.href= "userlist.do" +queryString +"&pnum=1";
 				
 				
 			}else if ($(this).hasClass("next-page")){
 				
-				location.href= "search.do" +queryString +"&pnum=${nextPageNum}";
+				location.href= "userlist.do" +queryString +"&pnum=${nextPageNum}";
 				
 			}else if ($(this).hasClass("last-page")){
 				
-				location.href= "search.do" +queryString +"&pnum=${allP}";
+				location.href= "userlist.do" +queryString +"&pnum=${allP}";
 				
 			}else{
 				
-				location.href= "search.do" +queryString +"&pnum=" +$(this).text();
+				location.href= "userlist.do" +queryString +"&pnum=" +$(this).text();
 				
 			}
 		});
+		
+		$("body").on("click","input[name='modify']",function(){
+			$.ajax({
+				
+				url:""
+				
+			});
+		});
 	});
 	
-	$(".wantedImg").on("load",function(){
+	$(".profileImg").on("load",function(){
 		//이미지 가운데에 맞추기
 
 

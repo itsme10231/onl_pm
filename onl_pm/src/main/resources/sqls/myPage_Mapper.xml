@@ -313,22 +313,27 @@
 	
 <!-- 	유저리스트 페이징     -->
 	<select id="getUserlist" resultType="UserlistDto" parameterType="map">
-		SELECT RN, SEQ, ID, LIST_ID, "TYPE"
+		SELECT RN, SEQ, ID, LIST_ID, "TYPE", STORED_NAME
 		FROM 
-			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, SEQ, ID, LIST_ID, "TYPE" 
-			FROM USERLIST  
-			WHERE ID = #{id}
-				<if test="type!=null">
+			(SELECT ROW_NUMBER () OVER(ORDER BY SEQ ) AS RN, u.SEQ, f.ID, u.LIST_ID, u."TYPE" , f.STORED_NAME
+			FROM USERLIST u, "MEMBER" m , 
+				 (SELECT STORED_NAME, POST_SEQ, ID
+				 FROM (SELECT ROW_NUMBER() OVER(PARTITION BY POST_SEQ ORDER BY REGDATE ASC) AS RN_F, STORED_NAME, POST_SEQ , ID
+						FROM UPLOAD_FILE 
+						WHERE BOARD_TYPE = 'PROFILE' AND DELFLAG = 'N')
+				 WHERE RN_F = 1) f
+			WHERE u.ID = #{id} AND u.LIST_ID = m.ID AND u.LIST_ID = f.ID
+				<if test="type!=null and !type.equals('')">
 					<choose>
 						<when test="type.equals('B')">
-							AND "TYPE" = 'B'
+							AND u."TYPE" = 'B'
 						</when>
 						<otherwise>
-							AND "TYPE" = 'W'
+							AND u."TYPE" = 'W'
 						</otherwise>
 					</choose>
 				</if>)
-		WHERE CEIL(RN/10)=#{pnum}	
+		WHERE CEIL(RN/12)=#{pnum}	
 	</select>
 	
 <!-- 	유저리스트삭제 -->
@@ -343,39 +348,22 @@
 		SET "TYPE" = #{type} 
 		WHERE SEQ = #{seq}
 	</update>
+	
+	<select id="getUserlistCount" resultType="int" parameterType="map">
+		SELECT	CEIL(COUNT(LIST_ID)/9)
+		FROM 	USERLIST
+		WHERE 	ID = #{id}
+		<if test="type!=null and !type.equals('')">
+			<choose>
+				<when test="type.equals('B')">
+					AND "TYPE" = 'B'
+				</when>
+				<otherwise>
+					AND "TYPE" = 'W'
+				</otherwise>
+			</choose>
+		</if>
+	</select>
 
-<!-- 	블랙리스트 페이징-->
-<!-- 	<select id="blackList" parameterType="int"> -->
-<!-- 		SELECT RN, SEQ, LIST_ID -->
-<!-- 		FROM  -->
-<!-- 			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN, SEQ, LIST_ID -->
-<!-- 			FROM USERLIST  -->
-<!-- 			WHERE "TYPE" = 'B') -->
-<!-- 		WHERE CEIL (RN/10)=#{pnum} -->
-<!-- 	</select> -->
-
-<!-- 	블랙리스트 -->
-<!-- 	<select id="blackList"> -->
-<!-- 		SELECT SEQ, LIST_ID -->
-<!-- 		FROM USERLIST  -->
-<!-- 		WHERE "TYPE" = 'B' -->
-<!-- 	</select> -->
-
-<!-- 	화이트리스트 페이징-->
-<!-- 	<select id="whiteList" parameterType="int"> -->
-<!-- 		SELECT RN, SEQ, LIST_ID -->
-<!-- 		FROM  -->
-<!-- 			(SELECT ROW_NUMBER () OVER (ORDER BY SEQ) AS RN,SEQ, LIST_ID -->
-<!-- 			FROM USERLIST  -->
-<!-- 			WHERE "TYPE" = 'W') -->
-<!-- 		WHERE CEIL (RN/10)=#{pnum} -->
-<!-- 	</select> -->
-
-<!-- 	화이트리스트 -->
-<!-- 	<select id="whiteList"> -->
-<!-- 		SELECT SEQ, LIST_ID -->
-<!-- 		FROM USERLIST  -->
-<!-- 		WHERE "TYPE" = 'W' -->
-<!-- 	</select> -->
 
 </mapper>

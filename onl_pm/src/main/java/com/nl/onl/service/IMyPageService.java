@@ -65,4 +65,6 @@ public List<WantedDto> getAllMyList(Map<String, String> map);
 	
 //	블랙/화이트리스트 변경
 	public boolean changeUserlist(Map<String, String> map);
+	
+	public int getUserlistCount(Map<String, String> map);
 }

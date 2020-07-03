@@ -133,5 +133,10 @@ public class MyPageDaoImp implements IMyPageDao{
 		int count = sqlSession.selectOne(namespace+"changeUserlist", map);
 		return count > 0? true:false;
 	}
+	
+	@Override
+	public int getUserlistCount(Map<String, String> map) {
+		return sqlSession.selectOne(namespace+"getUserlistCount", map);
+	}
 
 }

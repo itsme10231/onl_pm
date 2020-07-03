@@ -131,5 +131,10 @@ public class MyPageServiceImp implements IMyPageService{
 		
 		return mypageDaoImp.changeUserlist(map);
 	}
+	
+	@Override
+	public int getUserlistCount(Map<String, String> map) {
+		return mypageDaoImp.getUserlistCount(map);
+	}
 
 }
