@@ -95,13 +95,13 @@ public class MyPageDaoImp implements IMyPageDao{
 	@Override
 	public List<ReviewDto> getReview(Map<String, String> map) {
 		
-		return sqlSession.selectOne(namespace+"getReview", map);
+		return sqlSession.selectList(namespace+"getReview", map);
 	}
 
 	@Override
 	public List<ReviewDto> receiveReview(Map<String, String> map) {
 		
-		return sqlSession.selectOne(namespace+"receiveReview", map);
+		return sqlSession.selectList(namespace+"receiveReview", map);
 	}
 
 	@Override

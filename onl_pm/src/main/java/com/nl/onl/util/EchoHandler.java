@@ -122,15 +122,7 @@ public class EchoHandler extends TextWebSocketHandler {
 			}else if(((String)jObj.get("type")).equals("leave")) {
 				
 				String roomKey = checkedIn.get(id1);
-				ChatRoom room = chatRoomMap.get(roomKey);
-				
-				room.leaveRoom(id1);
-				if(room.isEmpty()) {
-					chatRoomMap.remove(roomKey);
-				}
-				
-				checkedIn.remove(id1);
-				System.out.println("Room checkout success");
+				checkOut(roomKey, id1);
 			}
 			
 		}
@@ -144,14 +136,10 @@ public class EchoHandler extends TextWebSocketHandler {
 			String id = ldto.getId();
 			
 			String roomKey = checkedIn.get(id);
-			ChatRoom room = chatRoomMap.get(roomKey);
 			
-			room.leaveRoom(id);
-			if(room.isEmpty()) {
-				chatRoomMap.remove(roomKey);
-			}
+			checkOut(roomKey, id);
 			
-			checkedIn.remove(id);
+			
 			loginSessionsMap.remove(id);
 			System.out.println("Room checkout success");
 		}
@@ -180,5 +168,21 @@ public class EchoHandler extends TextWebSocketHandler {
 			
 			
 			return result;
+		}
+		
+		//체크아웃
+		public void checkOut(String roomKey, String id) {
+			
+			if(roomKey != null && !roomKey.equals("")) {
+				ChatRoom room = chatRoomMap.get(roomKey);
+				
+				room.leaveRoom(id);
+				if(room.isEmpty()) {
+					chatRoomMap.remove(roomKey);
+				}
+				
+				checkedIn.remove(id);
+			}
+			
 		}
 }

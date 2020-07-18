@@ -169,6 +169,7 @@ public class MypageController {
 		map.put("type", type);
 		
 		List<UserlistDto> ulist = myPageServiceImp.getUserlist(map);
+//		System.out.println("userlist print");
 		System.out.println(ulist);
 		
 		model.addAttribute("ulist", ulist);
@@ -185,26 +186,66 @@ public class MypageController {
 	}
 	
 	@Secured("ROLE_USER")
-	@RequestMapping(value="/userlist.do", method= {RequestMethod.POST})
+	@RequestMapping(value="/userlist_modify.do", method= {RequestMethod.POST})
 	@ResponseBody
-	public String modifyUserlist(Model model, String seq, String type) {
+	public String modifyUserlist(Model model, String seq, String type, String btnType) {
 		
-		Map<String, String> map = new HashMap<>();
+		boolean isS = false;
 		
-		map.put("seq", seq);
-		
-		if(type.equals("W")) {
-			map.put("type", "B");
+		if(btnType.equals("modify")) {
+			Map<String, String> map = new HashMap<>();
+			
+			map.put("seq", seq);
+			
+			if(type.equals("W")) {
+				map.put("type", "B");
+			}else {
+				map.put("type", "W");
+			}
+			
+			isS = myPageServiceImp.changeUserlist(map);
 		}else {
-			map.put("type", "W");
+			
+			isS = myPageServiceImp.delUserlist(seq);
+			
 		}
-		
-		boolean isS = myPageServiceImp.changeUserlist(map);
 		
 		if(isS) {
 			return "success";
 		}else {
 			return "fail";
 		}
+	}
+	
+	
+	@Secured("ROLE_USER")
+	@RequestMapping(value="/myreview.do", method= {RequestMethod.GET})
+	public String myReview(Model model, Authentication auth, String pnum, String type) {
+		LoginDto ldto = (LoginDto)auth.getPrincipal();
+		String id = ldto.getId();
+		
+		pnum = (pnum == null? "1":pnum);
+		
+		Map<String, String> map = new HashMap<>();
+		
+		map.put("id", id);
+		map.put("pnum", pnum);
+		map.put("type", type);
+		
+		List<UserlistDto> ulist = myPageServiceImp.getUserlist(map);
+//		System.out.println("userlist print");
+		System.out.println("userlist: " +ulist);
+		
+		model.addAttribute("ulist", ulist);
+		model.addAttribute("pnum", pnum);
+		
+		int allP = myPageServiceImp.getUserlistCount(map);
+		
+		Map<String, Integer> pageMap = onlUtil.pagingValue(allP, pnum, 5);
+		model.addAttribute("allP", allP);
+		model.addAttribute("pnum", pnum);
+		model.addAllAttributes(pageMap);
+		
+		return "myreview";
 	}
 }

@@ -432,6 +432,8 @@ public class Util {
 				result.append(line);
 				result.append("\n");
 			}
+			
+			System.out.println("rest_api_result");
 			System.out.println(result);
 			JSONParser parser = new JSONParser();
 			jObj = (JSONObject)parser.parse(result.toString());

@@ -59,6 +59,11 @@
 		overflow: hidden;
 	}
 	
+	.white>.imgDiv{
+		border: solid 1px lightgray;
+	
+	}
+	
 	.paging{
 		margin: 0 auto;
 		width: 500px;
@@ -85,9 +90,9 @@
 	<div class="pageContent">
 		<div class="depth">홈 > 마이페이지 > 유저리스트 > 
 			<c:choose>
-				<c:when test="${param.state ne null}">
-					${param.state eq 'B' ? '블랙리스트':''}
-					${param.state eq 'W' ? '화이트리스트':''}
+				<c:when test="${param.type ne null}">
+					${param.type eq 'B' ? '블랙리스트':''}
+					${param.type eq 'W' ? '화이트리스트':''}
 				</c:when>
 				<c:otherwise>
 					전체
@@ -98,26 +103,31 @@
 			<div class="centerDiv">
 				<h2 class="pageTitle wantedH">
 					<c:choose>
-						<c:when test="${param.state ne null}">
-							${param.state eq 'B' ? '블랙리스트':''}
-							${param.state eq 'W' ? '화이트리스트':''}
+						<c:when test="${param.type ne null}">
+							${param.type eq 'B' ? '블랙리스트':''}
+							${param.type eq 'W' ? '화이트리스트':''}
 						</c:when>
 						<c:otherwise>
 							유저리스트
 						</c:otherwise>
 					</c:choose>
 				</h2>
-				아직 유저리스트에 등록한 회원이 없습니다.<br><br>
+				
 				<div class="userlistDiv">
 					<c:choose>
 						<c:when test="${empty ulist}">
+							아직 유저리스트에 등록한 회원이 없습니다.<br><br>
 							<div class="listItem black">
-								<div class="imgDiv"></div>
+								<div class="imgDiv">
+									<img alt="profile-image" class="profileImg" src="resources/icon/people2.jpg">
+								</div>
 								<h5>닉네임</h5>
 								<input type="button" class="btn btn-outline-secondary" name="modify" value="변경"> <input type="button" class="btn btn-secondary" name="delete" value="삭제">
 							</div>
 							<div class="listItem white">
-								<div class="imgDiv"></div>
+								<div class="imgDiv">
+									<img alt="profile-image" class="profileImg" src="resources/icon/people2.jpg">
+								</div>
 								<h5>닉네임</h5>
 								<input type="button" class="btn btn-outline-danger" name="modify" value="변경"> <input type="button" class="btn btn-danger" name="delete" value="삭제">
 							</div>
@@ -127,7 +137,9 @@
 								<input type="button" class="btn btn-outline-danger" name="modify" value="변경"> <input type="button" class="btn btn-danger" name="delete" value="삭제">
 							</div>
 							<div class="listItem">
-								<div class="imgDiv"></div>
+								<div class="imgDiv">
+									
+								</div>
 								<h5>닉네임</h5>
 								<input type="button" class="btn btn-outline-danger" name="modify" value="변경"> <input type="button" class="btn btn-danger" name="delete" value="삭제">
 							</div>
@@ -138,10 +150,11 @@
 								<div class="listItem ${udto.type eq 'W' ? 'white':'black'}">
 									<div class="imgDiv">
 										<img alt="profile-image" class="profileImg" src="resources/${udto.stored_name eq null? 'icon/':'uploadimg/'}${udto.stored_name eq null? 'people2.jpg':udto.stored_name}">
-										<h5>${udto.nickname}</h5><br>
-										<input type="button" class="btn btn-outline-secondary" name="modify" value="변경"> <input type="button" class="btn btn-secondary" name="delete" value="삭제">
-										<input type="hidden" name="seq" value="${udto.seq}">
 									</div>
+									<h5>${udto.nickname}</h5><br>
+									<input type="button" class="ulist-modify btn btn-outline-secondary" name="modify" value="변경"> <input type="button" class="ulist-delete btn btn-danger" name="modify" value="삭제">
+									<input type="hidden" name="seq" value="${udto.seq}">
+									
 								</div>
 							</c:forEach>
 						</c:otherwise>
@@ -208,12 +221,68 @@
 			}
 		});
 		
+		
 		$("body").on("click","input[name='modify']",function(){
-			$.ajax({
+			
+			if(confirm("유저리스트를 갱신하시겠습니까?")){
 				
-				url:""
+				var userDiv = $(this).parent();
 				
-			});
+				var btnType = "";
+				var type = "";
+				var seq = $(this).siblings("input[name='seq']").val();
+				
+				if($(this).hasClass("ulist-modify")){
+					btnType = "modify";
+				}else{
+					btnType = "delete";
+				}
+				
+				if(userDiv.hasClass("white")){
+					type = "W";
+				}else{
+					type = "B";
+				}
+				
+				$.ajax({
+					
+					url: "userlist_modify.do",
+					method: "post",
+					data: {
+						"btnType": btnType,
+						"seq": seq,
+						"type": type
+					},
+					dataType: "text",
+					success: function(msg){
+						if(msg = "success"){
+							if(btnType = "modify"){
+								
+								userDiv.toggleClass("white");
+								userDiv.toggleClass("black");
+								
+							}else{
+								$(this).parent().remove();
+							}
+							
+							alert("유저리스트 갱신에 성공하였습니다.");
+							
+						}else{
+							alert("유저리스트 갱신에 실패하였습니다.");
+						}
+					},
+					fail: function(msg){
+						alert("서버 오류: 관리자에게 문의하세요.");
+					}
+					
+				});
+				
+			}else{
+				
+				return;
+				
+			}
+			
 		});
 	});
 	
@@ -232,6 +301,7 @@
 				if(this.width >= 160){
 					
 					$(this).css("left", "-"+(($(this).width()-160)/2)+"px");
+					
 					
 				}else{
 					$(this).css("height","");

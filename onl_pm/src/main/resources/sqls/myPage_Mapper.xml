@@ -279,8 +279,12 @@
 			 AND "TYPE" = #{type}
 			</if>
 			)
-		WHERE CEIL(RN/10)=#{pnum}
+		WHERE CEIL(RN/#{printnum})=#{pnum}
 	</select>
+	
+<!-- 	리뷰 상세보기: 내가 받은 리뷰목록에서 바로 열람가능 -->
+
+
 	
 <!-- 	찜글보기 페이징 수정-->
 	<select id="getWishlist" resultMap="WishDtoMap" parameterType="map">
